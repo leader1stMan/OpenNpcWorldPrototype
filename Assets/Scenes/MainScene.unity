@@ -1150,7 +1150,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 341524279873860435}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 675054777}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b4f6979b3638c1748a9905755eb444d0, type: 3}
@@ -2757,6 +2757,25 @@ Transform:
   m_Father: {fileID: 2139815656}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &675054777 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 340976799474820994, guid: 345fccf1aa215da4d8ebb68901fd4bda,
+    type: 3}
+  m_PrefabInstance: {fileID: 341524279873860435}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &675054779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 675054777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09617263a8d906b4ea544048f07b5ac7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quests: []
 --- !u!1 &676660946
 GameObject:
   m_ObjectHideFlags: 0
@@ -8864,6 +8883,23 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2650718595673628856}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1958132156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958132155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fa58638d949dc94db73bddb2b783f86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: treason
+  description: hi
+  itemRewards: []
+  coinsReward: 0
+  state: 0
 --- !u!54 &1958132157
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -12085,7 +12121,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 341524279873860435}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 675054777}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d68c60e76f7855946bdb7142eae32708, type: 3}
