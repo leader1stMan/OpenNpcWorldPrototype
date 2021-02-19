@@ -5,8 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Sentence.asset", menuName = "Sentence")]
 public class Sentence : ScriptableObject
 {
+    public string id;
     public string text;
     public string answer;
+    public bool hasColor;
+    public Color color;
 
     public List<Sentence> choices;
 
@@ -24,4 +27,9 @@ public class Sentence : ScriptableObject
     public int GetPaths() { return choices.Count; }
 
     public Sentence GetSentence(int number) { return choices[number]; }
+    public string GetId() { return id;}
+    public bool GetHasColor() { return hasColor;}
+
+    public enum Color { Green, Pink, Red};
+    public Color GetColor(){ return color;}
 }
