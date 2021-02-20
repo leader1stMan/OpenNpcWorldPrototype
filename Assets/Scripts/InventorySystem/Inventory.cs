@@ -4,20 +4,24 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    [System.Serializable]
     public struct ItemData
     {
         public Item Item;
         public int Count;
+        public float Value;
 
-        public ItemData(Item Item, int Count)
+        public ItemData(Item Item, int Count, float Value)
         {
             this.Item = Item;
             this.Count = Count;
+            this.Value = Value;
         }
         public ItemData(ItemPickup PickUp)
         {
             this.Item = PickUp.Item;
             this.Count = PickUp.Count;
+            this.Value = PickUp.Value;
         }
     };
 
@@ -62,12 +66,12 @@ public class Inventory : MonoBehaviour
         InventoryList.Clear();
         for (int i = 0; i < MaxNumSlots; i++)
         {
-            InventoryList.Add(new ItemData(null, 0));
+            InventoryList.Add(EmptyItemData);
         }
         EquippedList.Clear();
         for (int i = 0; i < InventoryEquipPanel.transform.childCount; i++)
         {
-            EquippedList.Add(new ItemData(null, 0));
+            EquippedList.Add(EmptyItemData);
         }
 
         RefreshInventoryUI();
@@ -203,7 +207,7 @@ public class Inventory : MonoBehaviour
         AddItem(new ItemData(PickedItem));
     }
 
-    void AddItem(ItemData Itemdata)
+    public void AddItem(ItemData Itemdata)
     {
         for (int i = 0; i < InventoryList.Count; i++)
         {
@@ -256,7 +260,7 @@ public class Inventory : MonoBehaviour
                 // Refresh item inventory and refresh UI
                 if (InventoryList[i].Count == 0)
                 {
-                    InventoryList[i] = new ItemData(null, 0);
+                    InventoryList[i] = EmptyItemData;
                 }
                 RefreshInventoryUI();
 
@@ -311,7 +315,7 @@ public class Inventory : MonoBehaviour
         if (Itemdata.Item)      // If item to equip is valid
         {
             EquippedList[EquipIndex] = Itemdata;
-            InventoryList[FindItemSlot(Itemdata.Item)] = new ItemData(null, 0);
+            InventoryList[FindItemSlot(Itemdata.Item)] = EmptyItemData;
             Itemdata.Item.OnItemEquipped();
 
             RefreshInventoryUI();
@@ -330,7 +334,7 @@ public class Inventory : MonoBehaviour
                 if (InventoryList[OptionalIndex].Item) AddItem(EquippedList[EquipIndex]);
                 else InventoryList[OptionalIndex] = EquippedList[EquipIndex];
             }
-            EquippedList[EquipIndex] = new ItemData(null, 0);
+            EquippedList[EquipIndex] = EmptyItemData;
 
             RefreshInventoryUI();
         }
@@ -366,4 +370,6 @@ public class Inventory : MonoBehaviour
     {
 
     }
+
+    public ItemData EmptyItemData => new ItemData(null, 0, 0);  
 }

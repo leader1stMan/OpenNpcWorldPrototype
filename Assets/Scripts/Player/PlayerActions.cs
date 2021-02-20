@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System;
+using System.Threading.Tasks;
 
 public class PlayerActions : MonoBehaviour
 {
@@ -20,15 +22,23 @@ public class PlayerActions : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out hit,InteractionRange, Mask))
             {
-                DialogueManager dialogue = hit.transform.GetComponentInParent<DialogueManager>();
+                Transform Target = hit.transform;
+                DialogueManager dialogue = Target.GetComponentInParent<DialogueManager>();
                 if(dialogue==null)
-                    dialogue = hit.transform.GetComponentInChildren<DialogueManager>();
+                    dialogue = Target.GetComponentInChildren<DialogueManager>();
                 if (dialogue == null)
                     return;
                 Vector3 rot = dialogue.transform.eulerAngles;
                 dialogue.transform.LookAt(transform);
                 dialogue.transform.eulerAngles = new Vector3(rot.x, dialogue.transform.eulerAngles.y, rot.z);
                 dialogue.say("Hello there. How are you");
+
+                MerchantShop Shop = Target.GetComponent<MerchantShop>();
+                
+                if (Shop != null)
+                {
+                    StartCoroutine(Shop.Interact());
+                }
             }
         }
         QuestWindowToggle();
