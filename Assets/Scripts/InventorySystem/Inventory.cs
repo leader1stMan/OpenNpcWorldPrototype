@@ -100,7 +100,6 @@ public class Inventory : MonoBehaviour
             tempSlot.transform.SetParent(InventoryItemPanel);
         }
         InventoryStatusTextField.text = "Carrying : " + GetInventoryWeight() + ", Capacity : " + CarryCapacity.ToString();
-        Debug.Log(InventoryEquipPanel.transform.childCount);
         // Refresh the equip panel
         for (int i=0; i < InventoryEquipPanel.transform.childCount; i++)
         {

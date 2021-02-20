@@ -2,43 +2,55 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class SentenceGoal
+[System.Serializable]
+public class SentenceGoal
 {
-    static private string id;
-    static private string color;
-    static private DialogueManager dialogue;
-    static int red=0;
-    static int green=0;
-    static int pink=0;
-    public static void sentence(string []id_goal) //When dialogue reached, goal complete
+    public List<Sentence> trackedSentences;
+    public Sentence selectedSentence = null;
+
+    public delegate void GoalCompletedHandler();
+    GoalCompletedHandler goalHandlers;
+
+    public SentenceGoal()
+    { }
+
+    public SentenceGoal(List<Sentence> sentences)
     {
-        test();
-        foreach(string ids in id_goal)
-        {            
-            if(ids == id)
-            {
-                Debug.Log("Dialogue: " + id_goal + " complete");
-            }
+        foreach (Sentence s in sentences)
+        {
+            s.goal = this;
         }
     }
 
-    static void test()
+    public void completeSentence(Sentence sentence)
     {
-        id = dialogue.sentence1.GetId();
-        if(dialogue.sentence1.GetHasColor())
+        selectedSentence = sentence;
+        goalHandlers?.Invoke();
+    }
+
+    public void AddHandler(GoalCompletedHandler a)
+    {
+        goalHandlers += a;
+    }
+
+    public void RemoveHandler(GoalCompletedHandler a)
+    {
+        if (goalHandlers == null) return;
+        goalHandlers -= a;
+    }
+
+    public void AddSentenceToTrack(Sentence sentence)
+    {
+        trackedSentences.Add(sentence);
+    }
+
+    public void AddSentenceToTrack(List<Sentence> sentences)
+    {
+        int index = 0;
+        foreach (Sentence s in sentences)
         {
-            if((int) dialogue.sentence1.GetColor() == 0) //Green
-            {
-                green++;
-            }
-            else if((int) dialogue.sentence1.GetColor() == 1)
-            {
-                pink++;
-            }
-            else
-            {
-                red++;
-            }
+            trackedSentences.Add(sentences[index]);
+            index++;
         }
     }
 }

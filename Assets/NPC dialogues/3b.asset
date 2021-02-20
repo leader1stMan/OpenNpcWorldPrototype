@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb67e22c87943d842b22e74f76b976e4, type: 3}
   m_Name: 3b
   m_EditorClassIdentifier: 
-  text: 
-  answer: 
+  text: no
+  answer: no
+  goal:
+    trackedSentences: []
+    selectedSentence: {fileID: 0}
   choices: []
   quest: {fileID: 0}

@@ -14,5 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: give me money
   answer: no
-  choices: []
+  goal:
+    trackedSentences: []
+    selectedSentence: {fileID: 11400000}
+  choices:
+  - {fileID: 11400000, guid: 6cad69c8e7eddff48a98e97fb81a0b9c, type: 2}
+  - {fileID: 11400000, guid: b515dfb6cefb17a4c924739add039f34, type: 2}
+  - {fileID: 11400000, guid: 251dc9c1ec6613f4a88094379eaf969c, type: 2}
   quest: {fileID: 0}

@@ -8900,6 +8900,11 @@ MonoBehaviour:
   itemRewards: []
   coinsReward: 0
   state: 0
+  goal1:
+    trackedSentences: []
+    selectedSentence: {fileID: 0}
+  trackedSentences1:
+  - {fileID: 11400000, guid: 251dc9c1ec6613f4a88094379eaf969c, type: 2}
 --- !u!54 &1958132157
 Rigidbody:
   m_ObjectHideFlags: 0

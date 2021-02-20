@@ -133,9 +133,9 @@ public class DialogueManager : MonoBehaviour
             StartCoroutine(Type());
         }
 
-        if (sentence1.quest != null)
+        if (sentence1.goal != null)
         {
-            //start quest
+            sentence1.goal.completeSentence(sentence1);
         }
     }
 
@@ -157,8 +157,6 @@ public class DialogueManager : MonoBehaviour
     }
     private void Choices(int index)
     {
-        Debug.Log(index);
-
         var options = _dialogue.GetComponentsInChildren<Button>(true);
 
         foreach (Button a in options)
