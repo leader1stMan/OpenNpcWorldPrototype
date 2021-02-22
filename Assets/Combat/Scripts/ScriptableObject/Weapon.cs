@@ -30,7 +30,12 @@ public class Weapon : AttackDefinition
 
         if (defenderStats == null)
             return;
-        
+
+        if (defenderStats.isBlocking)
+        {
+            Debug.Log("block");
+            return;
+        }
 
         var attack = CreateAttack(attackerStats, defenderStats);
 

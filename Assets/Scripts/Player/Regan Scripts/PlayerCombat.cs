@@ -6,11 +6,13 @@ public class PlayerCombat : MonoBehaviour
     public Animator anim;
     public AttackDefinition Attack;
     public CharacterStats stats;
+    public Camera camera;
     public float attackCooldown = 0f;
 
     void Awake()
     {
         stats = GetComponent<CharacterStats>();
+        camera = GetComponentInChildren<Camera>();
     }
 
     void Update()
@@ -31,7 +33,7 @@ public class PlayerCombat : MonoBehaviour
             {
                 if (stats.GetWeapon().type == WeaponType.LongRange)
                 {
-                    stats.GetWeapon().ExecuteAttack(gameObject, gameObject.transform.position + new Vector3(0, 0.4f, 0), gameObject.transform.rotation, LayerMask.NameToLayer("Player Projectile"));
+                    stats.GetWeapon().ExecuteAttack(gameObject, gameObject.transform.position + new Vector3(0, 0.4f, 0), camera.transform.rotation, LayerMask.NameToLayer("Player Projectile"));
                 }
                 else
                 {
