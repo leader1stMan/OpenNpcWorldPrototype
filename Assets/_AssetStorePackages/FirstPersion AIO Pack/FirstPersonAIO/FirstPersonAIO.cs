@@ -315,7 +315,7 @@ public class BETA_SETTINGS{
 
         if (Input.GetMouseButtonDown(0))
         {
-            anim.SetBool("isAttacking", true);
+            //anim.SetBool("isAttacking", true);
             int layerMask = LayerMask.GetMask("Player");
             layerMask = ~layerMask;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
@@ -323,10 +323,6 @@ public class BETA_SETTINGS{
                 GameObject attackable = hit.collider.gameObject;
                 OnClickAttackable.Invoke(attackable);
             }
-        }
-        else
-        {
-            anim.SetBool("isAttacking", false);
         }
 
         #endregion

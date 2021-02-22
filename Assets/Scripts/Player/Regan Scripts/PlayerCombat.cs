@@ -36,8 +36,7 @@ public class PlayerCombat : MonoBehaviour
                 else
                 {
                     stats.GetWeapon().ExecuteAttack(gameObject, target);
-                }
-            }
+                }            }
             else
             {
                 var attack = Attack.CreateAttack(stats, target.GetComponent<CharacterStats>());
@@ -53,6 +52,8 @@ public class PlayerCombat : MonoBehaviour
                 attackCooldown = stats.GetWeapon().Cooldown;
             else
                 attackCooldown = Attack.Cooldown;
+
+            anim.SetTrigger("Attack");
         }
     }
 
