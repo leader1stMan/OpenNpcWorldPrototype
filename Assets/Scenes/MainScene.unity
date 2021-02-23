@@ -7269,7 +7269,6 @@ GameObject:
   - component: {fileID: 932696402}
   - component: {fileID: 932696401}
   - component: {fileID: 932696400}
-  - component: {fileID: 932696399}
   m_Layer: 0
   m_Name: Bed
   m_TagString: Untagged
@@ -7277,19 +7276,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!135 &932696399
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 932696398}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 2.57
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &932696400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7624,9 +7610,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 239108003}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
+      - m_Target: {fileID: 1743904249861331}
+        m_TargetAssemblyTypeName: PlayerActions, Assembly-CSharp
+        m_MethodName: SetSleepPanelState
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15576,7 +15562,7 @@ MonoBehaviour:
   PlayerCamera: {fileID: 20724643678251639}
   panel: {fileID: 239108003}
   inputField: {fileID: 1924406887}
-  bedInNear: {fileID: 0}
+  InteractableObject: {fileID: 0}
 --- !u!114 &1743904249861332
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bed : MonoBehaviour
+public class Bed : MonoBehaviour, IInteractable
 {
     public DayAndNightControl timeController;
 
@@ -10,35 +10,10 @@ public class Bed : MonoBehaviour
 
     private List<GameObject> characters = new List<GameObject>();
 
-    private void OnTriggerEnter(Collider other)
+
+    public void Interact(PlayerActions player)
     {
-        if (!other.GetComponentInParent<PlayerActions>() || !other.GetComponentInParent<FirstPersonAIO>())
-            return;
-
-        characters.Add(other.GetComponentInParent<PlayerActions>().gameObject);
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (!other.GetComponentInChildren<PlayerActions>() || !other.GetComponentInChildren<FirstPersonAIO>())
-            return;
-
-        other.GetComponentInChildren<PlayerActions>().bedInNear = this;
-
-        if (Input.GetKeyDown(other.GetComponentInChildren<PlayerActions>().InteractButton))
-            other.GetComponentInChildren<PlayerActions>().InteractWithBed();
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (!other.GetComponentInChildren<PlayerActions>())
-            return;
-
-        other.GetComponentInChildren<PlayerActions>().bedInNear = null;
-
-        other.GetComponentInChildren<PlayerActions>().SetSleepPanelState(false);
-
-        characters.Remove(other.GetComponentInParent<PlayerActions>().gameObject);
+        player.SetSleepPanelState();
     }
 
     public void ChooseSleep(float amount, PlayerActions id)
@@ -61,26 +36,13 @@ public class Bed : MonoBehaviour
 
     IEnumerator Sleep(PlayerActions id)
     {
-        foreach (var item in characters)
-        {
-            if (item.GetComponentInParent<PlayerActions>() == id)
-            {
-                item.GetComponentInChildren<FirstPersonAIO>().canJump = false;
-                item.GetComponentInChildren<FirstPersonAIO>().playerCanMove = false;
-                break;
-            }
-        }
+
+        id.gameObject.GetComponentInChildren<FirstPersonAIO>().canJump = false;
+        id.gameObject.GetComponentInChildren<FirstPersonAIO>().playerCanMove = false;
 
         yield return new WaitForSecondsRealtime(waitSecondsRealtime);
-
-        foreach (var item in characters)
-        {
-            if (item.GetComponentInParent<PlayerActions>() == id)
-            {
-                item.GetComponentInChildren<FirstPersonAIO>().canJump = true;
-                item.GetComponentInChildren<FirstPersonAIO>().playerCanMove = true;
-                break;
-            }
-        }
+        
+        id.gameObject.GetComponentInChildren<FirstPersonAIO>().canJump = true;
+        id.gameObject.GetComponentInChildren<FirstPersonAIO>().playerCanMove = true;
     }
 }

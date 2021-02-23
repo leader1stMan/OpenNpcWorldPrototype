@@ -16,7 +16,7 @@ public class PlayerActions : MonoBehaviour
     public InputField inputField;
 
     [Header("Assigned automatically")]
-    public Bed bedInNear;
+    public GameObject InteractableObject;
 
     private void Awake()
     {
@@ -24,6 +24,12 @@ public class PlayerActions : MonoBehaviour
     }
 
     private void Update()
+    {
+        CheckDialouge();
+        InterationWithObjects();
+    }
+
+    public void CheckDialouge()
     {
         if (Input.GetKeyDown(InteractButton))
         {
@@ -43,9 +49,19 @@ public class PlayerActions : MonoBehaviour
         }
     }
 
-    public void InteractWithBed()
+    public void InterationWithObjects()
     {
-        SetSleepPanelState();
+        RaycastHit hit;
+        if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out hit, InteractionRange) && Input.GetKeyDown(InteractButton))
+        {
+            if (hit.collider.gameObject.GetComponentInChildren<IInteractable>() != null)
+            {
+                InteractableObject = hit.collider.gameObject;
+
+                IInteractable interactable = hit.collider.gameObject.GetComponentInChildren<IInteractable>();
+                interactable.Interact(this);
+            }
+        }
     }
 
     public void SetSleepPanelState()
@@ -66,7 +82,7 @@ public class PlayerActions : MonoBehaviour
 
     public void ChooseSleep()
     {
-        panel.SetActive(false);
-        bedInNear.ChooseSleep(inputField.GetComponentInChildren<AmountField>().Amount, this);
+        InteractableObject.GetComponentInChildren<Bed>().ChooseSleep(inputField.GetComponentInChildren<AmountField>().Amount, this);
+        SetSleepPanelState(false);
     }
 }
