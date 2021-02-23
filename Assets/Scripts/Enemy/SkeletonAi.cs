@@ -3,8 +3,6 @@
 public class SkeletonAi : EnemyBase
 {
     public Animator anim;
-
-    public float enemyAttack = 20;
     
     protected override void Update()
     {
@@ -47,7 +45,7 @@ public class SkeletonAi : EnemyBase
 
         }
     }
-    public override void Attack()
+    public override void Attack(GameObject target)
     {
 
 
@@ -55,25 +53,20 @@ public class SkeletonAi : EnemyBase
         anim.SetBool("isRunning", false);
         anim.SetBool("isWalking", false);
         anim.SetBool("isAttacking", true);
-       //Idk if this is a good way of damaging
-        DealDamage();
+        //Idk if this is a good way of damaging
+        stats.GetWeapon().ExecuteAttack(gameObject, target);
     }
 
     
     public override void DealDamage()
     {
-        Collider[] cols = Physics.OverlapSphere(transform.position, AttackRange, WhatCanThisEnemyAttack);
+        Collider[] cols = Physics.OverlapSphere(transform.position, stats.GetWeapon().Range, WhatCanThisEnemyAttack);
         if (cols.Length <= 0)
             return;
         foreach (Collider col in cols)
         {
             if (col.transform == this.transform)
                 continue;
-
-            if (!PlayerCombat.isBlock)
-            {
-                col.gameObject.GetComponentInParent<Health>().Damage(enemyAttack);
-            }
         }
     }
 }

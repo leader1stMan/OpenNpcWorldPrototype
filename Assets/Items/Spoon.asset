@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848f469ed5b8d974d83f74be9058ee35, type: 3}
+  m_Name: Spoon
+  m_EditorClassIdentifier: 
+  ItemId: 0
+  ItemName: Spoon
+  Description: This is a spoon (Or so it is called...)
+  bCanTake: 1
+  bCanDrop: 1
+  Weight: 2
+  ItemMesh: {fileID: 4300000, guid: 61b866e0f3885c84a86dac3479ea950f, type: 3}
+  ItemMaterial: {fileID: -8469494145858465668, guid: 61b866e0f3885c84a86dac3479ea950f,
+    type: 3}
+  ItemImage: {fileID: 21300000, guid: 0bd01162062a550449bc425bdf6c0317, type: 3}

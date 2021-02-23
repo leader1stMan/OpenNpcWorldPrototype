@@ -1,46 +1,5 @@
-﻿/// Original Code written and designed by Aeden C Graves.
-///
-///
-/// CHANGE LOG:
-///
-/// DATE || msg: "" || Author Signature: SNG || version VERSION
-///
-/// 10/17/19 || msg: "Fixed inconsistant jumping/ground detection. Fixed headbobing axis amplification. Added toggle crouching." || Author Signature: Aedan Graves || version: 19.9.20f >> 19.10.17f 
-/// 09/20/19 || msg: "Added support Email to the bottom of the inspector. Fixed issues with sticking to the walls. Removed the need for external assigning of a min and max friction material" || Author Signature: Aedan Graves || version: 19.9.13 >> 19.9.20f
-/// 09/13/19 || msg: "New Editor script, Fixed Stamina, Fixed Crouching, Put 'FOV Kick' Under reconstruction, made dynamic foot steps easier to understand." || Author Signature: Aedan Graves || version: 19.7.28cu >> 19.9.13cu
-/// 07/28/19 || msg: "Added function to effect mouse sensitivity bassed on the cameras FOV." || Author Signature: Aedan Graves || version: 19.6.7cu >> 19.7.28cu
-/// 06/07/19 || msg: "Added ability to toggle the ability to jump from the editor." || Author Signature: Adam Worrell || 19.5.12feu >> version 19.6.7cu
-/// 05/12/19 || msg: "Fixed non dymanic footsteping. Remade crouching system to be more efficiant and added an input over ride. || Author Signature: Aedan Graves || version 19.3.22 cl >> 19.5.12feu
-/// 03/22/19 || msg: "Cleaned up code" || Author Signature: Aedan Graves || version 19.3.19cu >> 19.3.22cl
-/// 03/19/19 || msg: "Added a rudimentary slope detection system." || Author Signature: Aedan Graves || version 19.3.18a >> 19.3.19cu
-/// 03/18/19 || msg: "Fixed Stamina" || Author Signature: Aedan Graves || version 19.3.11p >> 19.3.18a
-/// 03/02/19 || msg: "Improved camera System" || Author Signature: Aecan Graves || version 19.3.2 >> 19.3.11p
-/// 03/02/19 || msg: "Lowered maximum walk, sprint, and jump values" || Author Signature: Aedan Graves || version: 19.2.21 >> 19.3.2
-/// 02/21/19 || msg: "Removed dynamic speed curve. Modified headbob logic || Author Signature: Aedan Graves || version: 19.2.15 >> 19.2.21
-/// 02/15/19 || msg: "Added Camera shake. Made it possable to disable camera movement when jumping and landing." || Author Signature: Aedan Graves || version: 19.2.12 >> 19.2.15
-/// 02/12/19 || msg: "Seperated Dynamic Footsteps from the Headbob calculations." || Author Signature: Aedan Graves || version: 1.6b >> 19.2.12
-/// 02/08/19 || msg: "Added some more tooltips." || Author Signature: Aedan C Graves || version 1.6a >> 1.6b
-/// 02/04/19 || msg: "Changed crouch funtion to use an In Editor defined input axis" || Author Signature: Aedan Graves || version 1.6 >> 1.6a
-/// 12/13/18 || msg: "Added 'Custom' entry for Dynamic footstep system" || Author Signature: Aedan Graves || version 1.5b >> 1.6
-/// 12/11/18 || msg: "Added Volume control to Footstep and Jump/land SFX." || Author Signature: Aedan Graves || version 1.5a >> 1.5b
-/// 02/18/18 || msg: "Updated mouse rotation to allow pre-play rotiation." || Author Signature: Aedan Graves || version 1.5 >> 1.5a
-/// 01/31/18 || msg: "Changed Dynamic footstep system to use physics materials." || Author Signature: Aedan Graves || version 1.4c >> 1.5
-/// 12/19/17 || msg: "Added headbob passthrough variables" || Auther Signature: Aeden Graves || version 1.4b >> 1.4c
-/// 12/02/17 || msg: "Made camera movement toggleable" || Auther Signature: Aeden Graves || version 1.4a >> 1.4b
-/// 10/16/17 || msg: "Made all sounds optional." || Author Signature: Aedan Graves || version 1.4 >> 1.4a
-/// 10/09/17 || msg: "Added Optional FOV Kick" || Author Signature: Aedan Graves || version 1.3b >> 1.4
-/// 10/08/17 || msg: "Improved Dynamic Footsteps." || Author Signature: Aedan Graves || version 1.3a >> 1.3b
-/// 10/07/17 || msg: "BetaTesting Class" || Author Signature: Aedan Graves || version 1.3 >> 1.3a
-/// 10/07/17 || msg: "Added Optional Dynamic Footsteps. Added optional Dynamic Speed Curve." || Author Signature: Aedan C Graves || version 1.2 >> 1.3
-/// 10/03/17 || msg: "Added optional Crouch." || Author Signature: Aedan Graves || version v1.1 >> v1.2
-/// 09/26/17 || msg: "Fixed Headbobbing in mid air. Added a option for head bobbing, Added optional Stamina. Added Auto Crosshair Feature." || Author Signature: Aedan Graves|| version v1.0 >> v1.1
-/// 09/21/17 || msg: "Finished SMB FPS Logic." || Author Signature: Aedan Graves || version v0.0 >> v1.0
-///
-/// 
-/// 
-/// Made changes that you think should come "Out of the box"? E-mail the modified Script with A new entry on the top of the Change log to: modifiedassets@aedangraves.info
-
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using System.Linq;
 using System.Collections;
@@ -52,8 +11,6 @@ using System.Collections.Generic;
 [RequireComponent(typeof(CapsuleCollider)),RequireComponent(typeof(Rigidbody)),AddComponentMenu("First Person AIO")]
 
 public class FirstPersonAIO : MonoBehaviour {
-
-    public string versionNum = "19.10.17f";
 
     #region Variables
 
@@ -179,6 +136,7 @@ public class FirstPersonAIO : MonoBehaviour {
     Transform myTransform;
     bool isMoving;
 
+    public EventGameObject OnClickAttackable;
     #endregion
 
     #region Audio Settings
@@ -254,8 +212,8 @@ public class BETA_SETTINGS{
         #endregion
 
         #region BETA_SETTINGS - Awake
-    
-#endregion
+
+        #endregion
 
     }
 
@@ -351,7 +309,26 @@ public class BETA_SETTINGS{
             playerCamera.transform.localRotation = Quaternion.Euler(-followAngles.x + originalRotation.x,0,0);
             transform.localRotation =  Quaternion.Euler(0, followAngles.y+originalRotation.y, 0);
         }
-    
+
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            anim.SetBool("isAttacking", true);
+            int layerMask = LayerMask.GetMask("Player");
+            layerMask = ~layerMask;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+            {
+                GameObject attackable = hit.collider.gameObject;
+                OnClickAttackable.Invoke(attackable);
+            }
+        }
+        else
+        {
+            anim.SetBool("isAttacking", false);
+        }
+
         #endregion
 
         #region Movement Settings - Update
@@ -741,407 +718,7 @@ public class BETA_SETTINGS{
     }
 
 }
-#if UNITY_EDITOR
-    [CustomEditor(typeof(FirstPersonAIO)),InitializeOnLoadAttribute]
-    public class FPAIO_Editor : Editor{
-        FirstPersonAIO t;
-        SerializedObject SerT;
-        static bool showCrouchMods = false;
-        static bool showFOVKickSet = false;
-        static bool showAdvanced = false;
-        static bool showStaticFS = false;
-        SerializedProperty staticFS;
-        static bool showWoodFS = false;
-        SerializedProperty woodFS;
-        static bool showMetalFS = false;
-        SerializedProperty metalFS;
-        static bool showGrassFS = false;
-        SerializedProperty grassFS;
-        static bool showDirtFS = false;
-        SerializedProperty dirtFS;
-        static bool showConcreteFS = false;
-        SerializedProperty concreteFS;
-        static bool showMudFS = false;
-        SerializedProperty mudFS;
-        static bool showCustomFS = false;
-        SerializedProperty customFS;
-        void OnEnable(){
-            t = (FirstPersonAIO)target;
-            SerT = new SerializedObject(t);
-            staticFS = SerT.FindProperty("footStepSounds");
-            woodFS = SerT.FindProperty("dynamicFootstep.woodClipSet");
-            metalFS = SerT.FindProperty("dynamicFootstep.metalAndGlassClipSet");
-            grassFS = SerT.FindProperty("dynamicFootstep.grassClipSet");
-            dirtFS = SerT.FindProperty("dynamicFootstep.dirtAndGravelClipSet");
-            concreteFS = SerT.FindProperty("dynamicFootstep.rockAndConcreteClipSet");
-            mudFS = SerT.FindProperty("dynamicFootstep.woodClipSet");
-            customFS = SerT.FindProperty("dynamicFootstep.customClipSet");
 
-            #if _FPAIO == false
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone,"_FPAIO");
-            #endif
-        }
-        public override void OnInspectorGUI(){
-            SerT.Update();
-            EditorGUILayout.Space();
-           
-            GUILayout.Label("First Person AIO",new GUIStyle(GUI.skin.label){alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16});
-            GUILayout.Label("version: "+ t.versionNum,new GUIStyle(GUI.skin.label){alignment = TextAnchor.MiddleCenter});
-            EditorGUILayout.Space();
-
-
-            EditorGUILayout.LabelField("",GUI.skin.horizontalSlider);
-            GUILayout.Label("Camera Setup",new GUIStyle(GUI.skin.label){alignment = TextAnchor.MiddleCenter,fontStyle = FontStyle.Bold, fontSize = 13},GUILayout.ExpandWidth(true));
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-            t.enableCameraMovement = EditorGUILayout.ToggleLeft(new GUIContent("Enable Camera Movement","Determines whether the player can move camera or not."),t.enableCameraMovement);
-            EditorGUILayout.Space();
-            GUI.enabled = t.enableCameraMovement;
-            t.verticalRotationRange = EditorGUILayout.Slider(new GUIContent("Vertical Rotation Range","Determines how much range does the camera have to move vertically."),t.verticalRotationRange,90,180);
-            t.mouseSensitivityInternal = t.mouseSensitivity = EditorGUILayout.Slider(new GUIContent("Mouse Sensitivity","Determines how sensitive the mouse is."),t.mouseSensitivity, 1,15);
-            //t.mouseSensitivity = EditorGUILayout.Slider(new GUIContent("Mouse Sensitivity","Determines how sensitive the mouse is."),t.mouseSensitivity, 1,15);
-            t.fOVToMouseSensitivity = EditorGUILayout.Slider(new GUIContent("FOV to Mouse Sensitivity","Determines how much the camera's Field Of View will effect the mouse sensitivity. \n\n0 = no effect, 1 = full effect on sensitivity."),t.fOVToMouseSensitivity,0,1);
-            t.cameraSmoothing = EditorGUILayout.Slider(new GUIContent("Camera Smoothing","Determines how smooth the camera movement is."),t.cameraSmoothing,1,25);
-            t.playerCamera = (Camera)EditorGUILayout.ObjectField(new GUIContent("Player Camera", "Camera attached to this controller"),t.playerCamera,typeof(Camera),true);
-            if(!t.playerCamera){EditorGUILayout.HelpBox("A Camera is required for operation.",MessageType.Error);}
-            t.enableCameraShake = EditorGUILayout.ToggleLeft(new GUIContent("Enable Camera Shake?", "Call this Coroutine externally with duration ranging from 0.01 to 1, and a magnitude of 0.01 to 0.5."), t.enableCameraShake);
-            t.lockAndHideCursor = EditorGUILayout.ToggleLeft(new GUIContent("Lock and Hide Cursor","For debuging or if You don't plan on having a pause menu or quit button."),t.lockAndHideCursor);
-            t.autoCrosshair = EditorGUILayout.ToggleLeft(new GUIContent("Auto Crosshair","Determines if a basic crosshair will be generated."),t.autoCrosshair);
-            if(t.autoCrosshair){EditorGUI.indentLevel++; EditorGUILayout.BeginHorizontal(); EditorGUILayout.PrefixLabel(new GUIContent("Crosshair","Sprite to use as a crosshair."));t.Crosshair = (Sprite)EditorGUILayout.ObjectField(t.Crosshair,typeof(Sprite),false); EditorGUILayout.EndHorizontal(); EditorGUI.indentLevel--;}
-            GUI.enabled = true;
-            EditorGUILayout.Space();
-
-
-            EditorGUILayout.LabelField("",GUI.skin.horizontalSlider);
-            GUILayout.Label("Movement Setup",new GUIStyle(GUI.skin.label){alignment = TextAnchor.MiddleCenter,fontStyle = FontStyle.Bold, fontSize = 13},GUILayout.ExpandWidth(true));
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-            t.playerCanMove = EditorGUILayout.ToggleLeft(new GUIContent("Enable Player Movement","Determines if the player is allowed to move."),t.playerCanMove);
-            GUI.enabled = t.playerCanMove;
-            t.walkByDefault = EditorGUILayout.ToggleLeft(new GUIContent("Walk By Default","Determines if the default mode of movement is 'Walk' or 'Srpint'."),t.walkByDefault);
-            t.walkSpeed = EditorGUILayout.Slider(new GUIContent("Walk Speed","Determines how fast the player walks."),t.walkSpeed,0.1f,10);
-            t.sprintSpeed = EditorGUILayout.Slider(new GUIContent("Sprint Speed","Determines how fast the player sprints."),t.sprintSpeed,0.1f,20);
-            t.canJump = EditorGUILayout.ToggleLeft(new GUIContent("Can Player Jump?","Determines if the player is allowed to jump."),t.canJump);
-            GUI.enabled = t.playerCanMove && t.canJump; EditorGUI.indentLevel++;
-            t.jumpPower = EditorGUILayout.Slider(new GUIContent("Jump Power","Determines how high the player can jump."),t.jumpPower,0.1f,15);
-            t.canHoldJump = EditorGUILayout.ToggleLeft(new GUIContent("Hold Jump","Determines if the jump button needs to be pressed down to jump, or if the player can hold the jump button to automaticly jump every time the it hits the ground."),t.canHoldJump);
-            EditorGUI.indentLevel --;GUI.enabled = t.playerCanMove;
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-            showCrouchMods = EditorGUILayout.BeginFoldoutHeaderGroup(showCrouchMods,new GUIContent("Crouch Modifiers","Stat modifiers that will apply when player is crouching."));
-            if(showCrouchMods){
-                t._crouchModifiers.useCrouch = EditorGUILayout.ToggleLeft(new GUIContent("Enable Coruch","Determines if the player is allowed to crouch."),t._crouchModifiers.useCrouch);
-                GUI.enabled = t.playerCanMove && t._crouchModifiers.useCrouch;
-                t._crouchModifiers.crouchKey = (KeyCode)EditorGUILayout.EnumPopup(new GUIContent("Crouch Key","Determines what key needs to be pressed to crouch"),t._crouchModifiers.crouchKey);
-                t._crouchModifiers.toggleCrouch = EditorGUILayout.ToggleLeft(new GUIContent("Toggle Crouch?","Determines if the crouching behaviour is on a toggle or momentary basis."),t._crouchModifiers.toggleCrouch);
-                t._crouchModifiers.crouchWalkSpeedMultiplier = EditorGUILayout.Slider(new GUIContent("Crouch Movement Speed Multiplier","Determines how fast the player can move while crouching."),t._crouchModifiers.crouchWalkSpeedMultiplier,0.01f,1.5f);
-                t._crouchModifiers.crouchJumpPowerMultiplier = EditorGUILayout.Slider(new GUIContent("Crouching Jump Power Mult.","Determines how much the player's jumping power is increased or reduced while crouching."),t._crouchModifiers.crouchJumpPowerMultiplier,0,1.5f);
-                t._crouchModifiers.crouchOverride = EditorGUILayout.ToggleLeft(new GUIContent("Force Crouch Override","A Toggle that will override the crouch key to force player to crouch."),t._crouchModifiers.crouchOverride);
-            }
-            GUI.enabled = t.playerCanMove;
-            EditorGUILayout.EndFoldoutHeaderGroup();      
-            EditorGUILayout.Space();
-            showFOVKickSet = EditorGUILayout.BeginFoldoutHeaderGroup(showFOVKickSet, new GUIContent("FOV Kick Settings","Settings for FOV Kick"));
-            if(showFOVKickSet){
-                GUILayout.Label("Under Development",new GUIStyle(GUI.skin.label){alignment = TextAnchor.MiddleCenter,fontStyle = FontStyle.Bold, fontSize = 13},GUILayout.ExpandWidth(true));
-                GUI.enabled = false;
-                t.fOVKick.useFOVKick = EditorGUILayout.ToggleLeft(new GUIContent("Enable FOV Kick","Determines if the camera's Field of View will kick when entering a sprint."),t.fOVKick.useFOVKick);
-                //GUI.enabled = t.playerCanMove&&t.fOVKick.useFOVKick;
-                t.fOVKick.FOVKickAmount = EditorGUILayout.Slider(new GUIContent("Kick Amount","Determines how much the camera's FOV will kick upon entering a sprint."),t.fOVKick.FOVKickAmount,0,10);
-                t.fOVKick.changeTime = EditorGUILayout.Slider(new GUIContent("Change Time","Determines the duration of the FOV kick"),t.fOVKick.changeTime,0.01f,5);
-                t.fOVKick.KickCurve = EditorGUILayout.CurveField(new GUIContent("Kick Curve",""),t.fOVKick.KickCurve);
-            }
-            GUI.enabled =t.playerCanMove;
-            EditorGUILayout.EndFoldoutHeaderGroup();
-            EditorGUILayout.Space();
-            showAdvanced = EditorGUILayout.BeginFoldoutHeaderGroup(showAdvanced,new GUIContent("Advanced Movement","Advanced movenet settings"));
-            if(showAdvanced){
-                t.useStamina = EditorGUILayout.ToggleLeft(new GUIContent("Enable Stamina","Determines if spriting will be limited by stamina."),t.useStamina);
-                GUI.enabled = t.playerCanMove && t.useStamina; EditorGUI.indentLevel++;
-                t.staminaLevel = EditorGUILayout.Slider(new GUIContent("Stamina Level","Determines how much stamina the player has. if left 0, stamina will not be used."),t.staminaLevel,0,100);
-                t.staminaDepletionSpeed = EditorGUILayout.Slider(new GUIContent("Stamina Depletion Speed","Determines how quickly the player's stamina depletes."),t.staminaDepletionSpeed,0.1f,9);
-                t.drawStaminaMeter = EditorGUILayout.ToggleLeft(new GUIContent("Draw Stamina Meter","Determines if a basic stamina meter will be generated."),t.drawStaminaMeter);
-                GUI.enabled = t.playerCanMove; EditorGUI.indentLevel --;
-                EditorGUILayout.Space();
-                t.advanced.gravityMultiplier = EditorGUILayout.Slider(new GUIContent("Gravity Multiplier","Determines how much the physics engine's gravitational force is multiplied."),t.advanced.gravityMultiplier,0.1f,5);
-                t.advanced.maxSlopeAngle = EditorGUILayout.Slider(new GUIContent("Max Slope Angle","EXPERIMENTAL! Determines the maximum angle the player can walk up. If left 0, the slope detection/limiting system will not be used."),t.advanced.maxSlopeAngle,0,89);
-            }
-            EditorGUILayout.EndFoldoutHeaderGroup();
-            GUI.enabled = true;
-            EditorGUILayout.Space();
-
-
-            EditorGUILayout.LabelField("",GUI.skin.horizontalSlider);
-            GUILayout.Label("Headbobbing Setup",new GUIStyle(GUI.skin.label){alignment = TextAnchor.MiddleCenter,fontStyle = FontStyle.Bold, fontSize = 13},GUILayout.ExpandWidth(true));
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-            t.useHeadbob = EditorGUILayout.ToggleLeft(new GUIContent("Enable Headbobbing","Determines if headbobbing will be used."),t.useHeadbob);
-            GUI.enabled = t.useHeadbob;
-            t.head = (Transform)EditorGUILayout.ObjectField(new GUIContent("Head Transform","A transform representing the head. The camera should be a child to this transform."),t.head,typeof(Transform),true);
-            if(!t.head){EditorGUILayout.HelpBox("A Head Transform is required for headbobbing.",MessageType.Error);}
-            GUI.enabled = t.useHeadbob && t.head;
-            t.headbobFrequency = EditorGUILayout.Slider(new GUIContent("Headbob Frequency","Determines how fast the headbobbing cycle is."),t.headbobFrequency,0.1f,10);
-            t.headbobSwayAngle = EditorGUILayout.Slider(new GUIContent("Tilt Angle","Determines the angle the head will tilt."),t.headbobSwayAngle,0,10);
-            t.headbobHeight = EditorGUILayout.Slider(new GUIContent("Headbob Hight","Determines the highest point the head will reach in the headbob cycle."),t.headbobHeight,0,10);
-            t.headbobSideMovement = EditorGUILayout.Slider(new GUIContent("Headbob Horizontal Movement","Determines how much vertical movement will occur in the headbob cycle."),t.headbobSideMovement,0,10);
-            t.useJumdLandMovement = EditorGUILayout.ToggleLeft(new GUIContent("Enable Jump/Land Movement","Determines if the headbob system will react to jumping or landing."),t.useJumdLandMovement);
-            GUI.enabled = t.useHeadbob && t.head && t.useJumdLandMovement;
-            t.jumpAngle = EditorGUILayout.Slider(new GUIContent("Jump Angle","Determines the angle the head will rotate to when player jumps."),t.jumpAngle,0,10);
-            t.landAngle = EditorGUILayout.Slider(new GUIContent("Land Angle","Determines the angle the head will rotate to when player lands."),t.landAngle,50,90);
-            GUI.enabled = true;
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("",GUI.skin.horizontalSlider);
-
-
-            GUILayout.Label("Audio/SFX Setup",new GUIStyle(GUI.skin.label){alignment = TextAnchor.MiddleCenter,fontStyle = FontStyle.Bold, fontSize = 13},GUILayout.ExpandWidth(true));
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-            t.Volume = EditorGUILayout.Slider(new GUIContent("Volume","Volume to play audio at."),t.Volume,0,10);
-            EditorGUILayout.Space();
-            t.fsmode = (FirstPersonAIO.FSMode)EditorGUILayout.EnumPopup(new GUIContent("Footstep Mode","Determines the method used to trigger footsetps."),t. fsmode);
-            EditorGUILayout.Space();
-        
-            if(t.fsmode == FirstPersonAIO.FSMode.Static){
-                showStaticFS = EditorGUILayout.BeginFoldoutHeaderGroup(showStaticFS,new GUIContent("Footstep Clips","Audio clips available as footstep sounds."));
-                if(showStaticFS){
-                    GUILayout.BeginVertical("box");
-                    for(int i=0; i<staticFS.arraySize; i++){
-                    SerializedProperty LS_ref = staticFS.GetArrayElementAtIndex(i);
-                    EditorGUILayout.BeginHorizontal("box");
-                    LS_ref.objectReferenceValue = EditorGUILayout.ObjectField("Clip "+(i+1)+":",LS_ref.objectReferenceValue,typeof(AudioClip),false);
-                    if(GUILayout.Button(new GUIContent("X", "Remove this clip"),GUILayout.MaxWidth(20))){ this.t.footStepSounds.RemoveAt(i);}
-                    EditorGUILayout.EndHorizontal();
-                    }
-
-                    EditorGUILayout.Space();
-                    EditorGUILayout.BeginHorizontal();
-                    
-                    if(GUILayout.Button(new GUIContent("Add Clip", "Add new clip entry"))){ this.t.footStepSounds.Add(null);}
-                    if(GUILayout.Button(new GUIContent("Remove All Clips", "Remove all clip entries"))){ this.t.footStepSounds.Clear();}
-                    EditorGUILayout.EndHorizontal();
-                    GUILayout.EndVertical();
-                } 
-                EditorGUILayout.EndFoldoutHeaderGroup();
-                t.jumpSound = (AudioClip)EditorGUILayout.ObjectField(new GUIContent("Jump Clip","An audio clip that will play when jumping."),t.jumpSound,typeof(AudioClip),false);
-                t.landSound = (AudioClip)EditorGUILayout.ObjectField(new GUIContent("Land Clip","An audio clip that will play when landing."),t.landSound,typeof(AudioClip),false);
-
-            }else{
-                showWoodFS = EditorGUILayout.BeginFoldoutHeaderGroup(showWoodFS,new GUIContent("Wood Clips","Audio clips available as footsteps when walking on a collider with the Physic Material assigned to 'Wood Physic Material'"));
-                if(showWoodFS){
-                    GUILayout.BeginVertical("box");
-                    t.dynamicFootstep.woodPhysMat = (PhysicMaterial)EditorGUILayout.ObjectField(new GUIContent("Wood Physic Material","Determines what Physic Material will trigger this set of clips"),t.dynamicFootstep.woodPhysMat,typeof(PhysicMaterial),false);
-                    if(! t.dynamicFootstep.woodPhysMat){EditorGUILayout.HelpBox("A Physic Material must be assigned first.",MessageType.Warning);}
-                    GUI.enabled = t.dynamicFootstep.woodPhysMat; 
-                    for(int i=0; i<woodFS.arraySize; i++){ 
-                    SerializedProperty LS_ref = woodFS.GetArrayElementAtIndex(i);
-                    EditorGUILayout.BeginHorizontal("box");
-                    LS_ref.objectReferenceValue = EditorGUILayout.ObjectField("Clip "+(i+1)+":",LS_ref.objectReferenceValue,typeof(AudioClip),false);
-                    if(GUILayout.Button(new GUIContent("X", "Remove this clip"),GUILayout.MaxWidth(20))){ t.dynamicFootstep.woodClipSet.RemoveAt(i);}
-                    EditorGUILayout.EndHorizontal();
-                    }
-
-                    EditorGUILayout.Space();
-                    EditorGUILayout.BeginHorizontal();
-                    
-                    if(GUILayout.Button(new GUIContent("Add Clip", "Add new clip entry"))){ t.dynamicFootstep.woodClipSet.Add(null);}
-                    if(GUILayout.Button(new GUIContent("Remove All Clips", "Remove all clip entries"))){ t.dynamicFootstep.woodClipSet.Clear();}
-                    EditorGUILayout.EndHorizontal();
-                    GUILayout.EndVertical();
-                } 
-                GUI.enabled = true;
-                EditorGUILayout.EndFoldoutHeaderGroup();
-                EditorGUILayout.Space();
-            
-                showMetalFS = EditorGUILayout.BeginFoldoutHeaderGroup(showMetalFS,new GUIContent("Metal & Glass Clips","Audio clips available as footsteps when walking on a collider with the Physic Material assigned to 'Metal & Glass Physic Material'"));
-                if(showMetalFS){
-                    GUILayout.BeginVertical("box");
-                    t.dynamicFootstep.metalAndGlassPhysMat = (PhysicMaterial)EditorGUILayout.ObjectField(new GUIContent("Metal & Glass Physic Material","Determines what Physic Material will trigger this set of clips"),t.dynamicFootstep.metalAndGlassPhysMat,typeof(PhysicMaterial),false);
-                    if(! t.dynamicFootstep.metalAndGlassPhysMat){EditorGUILayout.HelpBox("A Physic Material must be assigned first.",MessageType.Warning);}                    
-                    GUI.enabled = t.dynamicFootstep.metalAndGlassPhysMat;
-                    for(int i=0; i<metalFS.arraySize; i++){ 
-                    SerializedProperty LS_ref = metalFS.GetArrayElementAtIndex(i);
-                    EditorGUILayout.BeginHorizontal("box");
-                    LS_ref.objectReferenceValue = EditorGUILayout.ObjectField("Clip "+(i+1)+":",LS_ref.objectReferenceValue,typeof(AudioClip),false);
-                    if(GUILayout.Button(new GUIContent("X", "Remove this clip"),GUILayout.MaxWidth(20))){ t.dynamicFootstep.metalAndGlassClipSet.RemoveAt(i);}
-                    EditorGUILayout.EndHorizontal();
-                    }
-
-                    EditorGUILayout.Space();
-                    EditorGUILayout.BeginHorizontal();
-                    
-                    if(GUILayout.Button(new GUIContent("Add Clip", "Add new clip entry"))){ t.dynamicFootstep.metalAndGlassClipSet.Add(null);}
-                    if(GUILayout.Button(new GUIContent("Remove All Clips", "Remove all clip entries"))){ t.dynamicFootstep.metalAndGlassClipSet.Clear();}
-                    EditorGUILayout.EndHorizontal();
-                    GUILayout.EndVertical();
-                } 
-                GUI.enabled = true;
-                EditorGUILayout.EndFoldoutHeaderGroup();
-                EditorGUILayout.Space();
-
-                showGrassFS = EditorGUILayout.BeginFoldoutHeaderGroup(showGrassFS,new GUIContent("Grass Clips","Audio clips available as footsteps when walking on a collider with the Physic Material assigned to 'Grass Physic Material'"));
-                if(showGrassFS){
-                    GUILayout.BeginVertical("box");
-                    t.dynamicFootstep.grassPhysMat = (PhysicMaterial)EditorGUILayout.ObjectField(new GUIContent("Grass Physic Material","Determines what Physic Material will trigger this set of clips"),t.dynamicFootstep.grassPhysMat,typeof(PhysicMaterial),false);
-                    if(! t.dynamicFootstep.grassPhysMat){EditorGUILayout.HelpBox("A Physic Material must be assigned first.",MessageType.Warning);}                    
-                    GUI.enabled = t.dynamicFootstep.grassPhysMat;
-                    for(int i=0; i<grassFS.arraySize; i++){ 
-                    SerializedProperty LS_ref = grassFS.GetArrayElementAtIndex(i);
-                    EditorGUILayout.BeginHorizontal("box");
-                    LS_ref.objectReferenceValue = EditorGUILayout.ObjectField("Clip "+(i+1)+":",LS_ref.objectReferenceValue,typeof(AudioClip),false);
-                    if(GUILayout.Button(new GUIContent("X", "Remove this clip"),GUILayout.MaxWidth(20))){ t.dynamicFootstep.grassClipSet.RemoveAt(i);}
-                    EditorGUILayout.EndHorizontal();
-                    }
-
-                    EditorGUILayout.Space();
-                    EditorGUILayout.BeginHorizontal();
-                    
-                    if(GUILayout.Button(new GUIContent("Add Clip", "Add new clip entry"))){ t.dynamicFootstep.grassClipSet.Add(null);}
-                    if(GUILayout.Button(new GUIContent("Remove All Clips", "Remove all clip entries"))){ t.dynamicFootstep.grassClipSet.Clear();}
-                    EditorGUILayout.EndHorizontal();
-                    GUILayout.EndVertical();
-                } 
-                GUI.enabled = true;
-                EditorGUILayout.EndFoldoutHeaderGroup();
-                EditorGUILayout.Space();
-
-                showDirtFS = EditorGUILayout.BeginFoldoutHeaderGroup(showDirtFS,new GUIContent("Dirt & Gravel Clips","Audio clips available as footsteps when walking on a collider with the Physic Material assigned to 'Dirt & Gravel Physic Material'"));
-                if(showDirtFS){
-                    GUILayout.BeginVertical("box");
-                    t.dynamicFootstep.dirtAndGravelPhysMat = (PhysicMaterial)EditorGUILayout.ObjectField(new GUIContent("Dirt & Gravel Physic Material","Determines what Physic Material will trigger this set of clips"),t.dynamicFootstep.dirtAndGravelPhysMat,typeof(PhysicMaterial),false);
-                    if(! t.dynamicFootstep.dirtAndGravelPhysMat){EditorGUILayout.HelpBox("A Physic Material must be assigned first.",MessageType.Warning);}                    
-                    GUI.enabled = t.dynamicFootstep.dirtAndGravelPhysMat;
-                    for(int i=0; i<dirtFS.arraySize; i++){ 
-                    SerializedProperty LS_ref = dirtFS.GetArrayElementAtIndex(i);
-                    EditorGUILayout.BeginHorizontal("box");
-                    LS_ref.objectReferenceValue = EditorGUILayout.ObjectField("Clip "+(i+1)+":",LS_ref.objectReferenceValue,typeof(AudioClip),false);
-                    if(GUILayout.Button(new GUIContent("X", "Remove this clip"),GUILayout.MaxWidth(20))){ t.dynamicFootstep.dirtAndGravelClipSet.RemoveAt(i);}
-                    EditorGUILayout.EndHorizontal();
-                    }
-
-                    EditorGUILayout.Space();
-                    EditorGUILayout.BeginHorizontal();
-                    
-                    if(GUILayout.Button(new GUIContent("Add Clip", "Add new clip entry"))){ t.dynamicFootstep.dirtAndGravelClipSet.Add(null);}
-                    if(GUILayout.Button(new GUIContent("Remove All Clips", "Remove all clip entries"))){ t.dynamicFootstep.dirtAndGravelClipSet.Clear();}
-                    EditorGUILayout.EndHorizontal();
-                    GUILayout.EndVertical();
-                } 
-                GUI.enabled = true;
-                EditorGUILayout.EndFoldoutHeaderGroup();
-                EditorGUILayout.Space();
-
-                showConcreteFS = EditorGUILayout.BeginFoldoutHeaderGroup(showConcreteFS,new GUIContent("Rock & Concrete Clips","Audio clips available as footsteps when walking on a collider with the Physic Material assigned to 'Rock & Concrete Physic Material'"));
-                if(showConcreteFS){
-                    GUILayout.BeginVertical("box");
-                    t.dynamicFootstep.rockAndConcretePhysMat = (PhysicMaterial)EditorGUILayout.ObjectField(new GUIContent("Rock & Concrete Physic Material","Determines what Physic Material will trigger this set of clips"),t.dynamicFootstep.rockAndConcretePhysMat,typeof(PhysicMaterial),false);
-                    if(! t.dynamicFootstep.rockAndConcretePhysMat){EditorGUILayout.HelpBox("A Physic Material must be assigned first.",MessageType.Warning);}                    
-                    GUI.enabled = t.dynamicFootstep.rockAndConcretePhysMat;
-                    for(int i=0; i<concreteFS.arraySize; i++){ 
-                    SerializedProperty LS_ref = concreteFS.GetArrayElementAtIndex(i);
-                    EditorGUILayout.BeginHorizontal("box");
-                    LS_ref.objectReferenceValue = EditorGUILayout.ObjectField("Clip "+(i+1)+":",LS_ref.objectReferenceValue,typeof(AudioClip),false);
-                    if(GUILayout.Button(new GUIContent("X", "Remove this clip"),GUILayout.MaxWidth(20))){ t.dynamicFootstep.rockAndConcreteClipSet.RemoveAt(i);}
-                    EditorGUILayout.EndHorizontal();
-                    }
-
-                    EditorGUILayout.Space();
-                    EditorGUILayout.BeginHorizontal();
-                    
-                    if(GUILayout.Button(new GUIContent("Add Clip", "Add new clip entry"))){ t.dynamicFootstep.rockAndConcreteClipSet.Add(null);}
-                    if(GUILayout.Button(new GUIContent("Remove All Clips", "Remove all clip entries"))){ t.dynamicFootstep.rockAndConcreteClipSet.Clear();}
-                    EditorGUILayout.EndHorizontal();
-                    GUILayout.EndVertical();
-                } 
-                GUI.enabled = true;
-                EditorGUILayout.EndFoldoutHeaderGroup();
-                EditorGUILayout.Space();
-
-                showMudFS = EditorGUILayout.BeginFoldoutHeaderGroup(showMudFS,new GUIContent("Mud Clips","Audio clips available as footsteps when walking on a collider with the Physic Material assigned to 'Mud Physic Material'"));
-                if(showMudFS){
-                    GUILayout.BeginVertical("box");
-                    t.dynamicFootstep.mudPhysMat = (PhysicMaterial)EditorGUILayout.ObjectField(new GUIContent("Mud Physic Material","Determines what Physic Material will trigger this set of clips"),t.dynamicFootstep.mudPhysMat,typeof(PhysicMaterial),false);
-                    if(! t.dynamicFootstep.mudPhysMat){EditorGUILayout.HelpBox("A Physic Material must be assigned first.",MessageType.Warning);}                    
-                    GUI.enabled = t.dynamicFootstep.mudPhysMat;
-                    for(int i=0; i<mudFS.arraySize; i++){ 
-                    SerializedProperty LS_ref = mudFS.GetArrayElementAtIndex(i);
-                    EditorGUILayout.BeginHorizontal("box");
-                    LS_ref.objectReferenceValue = EditorGUILayout.ObjectField("Clip "+(i+1)+":",LS_ref.objectReferenceValue,typeof(AudioClip),false);
-                    if(GUILayout.Button(new GUIContent("X", "Remove this clip"),GUILayout.MaxWidth(20))){ t.dynamicFootstep.mudClipSet.RemoveAt(i);}
-                    EditorGUILayout.EndHorizontal();
-                    }
-
-                    EditorGUILayout.Space();
-                    EditorGUILayout.BeginHorizontal();
-                    
-                    if(GUILayout.Button(new GUIContent("Add Clip", "Add new clip entry"))){ t.dynamicFootstep.mudClipSet.Add(null);}
-                    if(GUILayout.Button(new GUIContent("Remove All Clips", "Remove all clip entries"))){ t.dynamicFootstep.mudClipSet.Clear();}
-                    EditorGUILayout.EndHorizontal();
-                    GUILayout.EndVertical();
-                } 
-                GUI.enabled = true;
-                EditorGUILayout.EndFoldoutHeaderGroup();
-                EditorGUILayout.Space();
-
-                showCustomFS = EditorGUILayout.BeginFoldoutHeaderGroup(showCustomFS,new GUIContent("Custom Material Clips","Audio clips available as footsteps when walking on a collider with the Physic Material assigned to 'Custom Physic Material'"));
-                if(showCustomFS){
-                    GUILayout.BeginVertical("box");
-                    t.dynamicFootstep.customPhysMat = (PhysicMaterial)EditorGUILayout.ObjectField(new GUIContent("Custom Physic Material","Determines what Physic Material will trigger this set of clips"),t.dynamicFootstep.customPhysMat,typeof(PhysicMaterial),false);
-                    if(! t.dynamicFootstep.customPhysMat){EditorGUILayout.HelpBox("A Physic Material must be assigned first.",MessageType.Warning);}                    
-                    GUI.enabled = t.dynamicFootstep.customPhysMat;
-                    for(int i=0; i<customFS.arraySize; i++){ 
-                    SerializedProperty LS_ref = customFS.GetArrayElementAtIndex(i);
-                    EditorGUILayout.BeginHorizontal("box");
-                    LS_ref.objectReferenceValue = EditorGUILayout.ObjectField("Clip "+(i+1)+":",LS_ref.objectReferenceValue,typeof(AudioClip),false);
-                    if(GUILayout.Button(new GUIContent("X", "Remove this clip"),GUILayout.MaxWidth(20))){ t.dynamicFootstep.customClipSet.RemoveAt(i);}
-                    EditorGUILayout.EndHorizontal();
-                    }
-
-                    EditorGUILayout.Space();
-                    EditorGUILayout.BeginHorizontal();
-                    
-                    if(GUILayout.Button(new GUIContent("Add Clip", "Add new clip entry"))){ t.dynamicFootstep.customClipSet.Add(null);}
-                    if(GUILayout.Button(new GUIContent("Remove All Clips", "Remove all clip entries"))){ t.dynamicFootstep.customClipSet.Clear();}
-                    EditorGUILayout.EndHorizontal();
-                    GUILayout.EndVertical();
-                }
-                GUI.enabled = true;
-                EditorGUILayout.EndFoldoutHeaderGroup();
-                EditorGUILayout.Space();
-
-                showStaticFS = EditorGUILayout.BeginFoldoutHeaderGroup(showStaticFS,new GUIContent("Fallback Footstep Clips","Audio clips available as footsteps in case a collider with an unrecognized/null Physic Material is walked on."));
-                if(showStaticFS){
-                    GUILayout.BeginVertical("box");
-                    for(int i=0; i<staticFS.arraySize; i++){
-                    SerializedProperty LS_ref = staticFS.GetArrayElementAtIndex(i);
-                    EditorGUILayout.BeginHorizontal("box");
-                    LS_ref.objectReferenceValue = EditorGUILayout.ObjectField("Clip "+(i+1)+":",LS_ref.objectReferenceValue,typeof(AudioClip),false);
-                    if(GUILayout.Button(new GUIContent("X", "Remove this clip"),GUILayout.MaxWidth(20))){ this.t.footStepSounds.RemoveAt(i);}
-                    EditorGUILayout.EndHorizontal();
-                    }
-
-                    EditorGUILayout.Space();
-                    EditorGUILayout.BeginHorizontal();
-                    
-                    if(GUILayout.Button(new GUIContent("Add Clip", "Add new clip entry"))){ this.t.footStepSounds.Add(null);}
-                    if(GUILayout.Button(new GUIContent("Remove All Clips", "Remove all clip entries"))){ this.t.footStepSounds.Clear();}
-                    EditorGUILayout.EndHorizontal();
-                    GUILayout.EndVertical();
-                } 
-                EditorGUILayout.EndFoldoutHeaderGroup();
-
-            }
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-            EditorGUILayout.BeginVertical("Box");
-            GUILayout.Label(new GUIContent("Support Address","Need help? No Problem! We're always happy to help with any issue you may have."),new GUIStyle(GUI.skin.label){alignment = TextAnchor.MiddleCenter},GUILayout.ExpandWidth(true));
-            EditorGUILayout.SelectableLabel(new GUIContent("support@aedangraves.info","Need help? No Problem! We're always happy to help with any issue you may have.").text,new GUIStyle(GUI.skin.label){alignment = TextAnchor.MiddleCenter,fontStyle = FontStyle.Bold, fontSize = 13},GUILayout.ExpandWidth(true));
-            EditorGUILayout.EndVertical();
-            if(GUI.changed){EditorUtility.SetDirty(t); Undo.RecordObject(t,"FPAIO Change"); SerT.ApplyModifiedProperties();}
-        }
-    }
-#endif
-
-
-
+[System.Serializable]
+public class EventGameObject : UnityEvent<GameObject> { }
 

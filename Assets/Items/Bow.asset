@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a8c640423a72274d9e5f3b3f11cedb3, type: 3}
+  m_Name: Bow
+  m_EditorClassIdentifier: 
+  ItemId: 5623
+  ItemName: Bow
+  Description: This is a bow
+  bCanTake: 1
+  bCanDrop: 1
+  Weight: 0
+  ItemMesh: {fileID: 4300000, guid: 8048c1f5000214742a1e0a457b039d11, type: 3}
+  ItemMaterial: {fileID: 2100000, guid: d7d5e72666737d040ba68a6bfc9d685a, type: 2}
+  ItemImage: {fileID: 0}
+  EquipType: 3
+  damageModifier: 0
+  armorModifier: 0
+  healthModifier: 0
+  weapon: {fileID: 11400000, guid: 2b9b62229886429419972221f33b1c3b, type: 2}

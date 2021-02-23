@@ -58,7 +58,6 @@ public class DayAndNightControl : MonoBehaviour {
 	void Update () {
 		UpdateLight();
 		//currentTime += (Time.deltaTime / SecondsInAFullDay) * timeMultiplier;
-
 		if (currentTime >= 1) {
 			currentTime = 0;//once we hit "midnight"; any time after that sunrise will begin.
 			currentDay++; //make the day counter go up

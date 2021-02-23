@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a8c640423a72274d9e5f3b3f11cedb3, type: 3}
+  m_Name: TestArmor
+  m_EditorClassIdentifier: 
+  ItemId: 3
+  ItemName: TestArmor
+  Description: This is an armor
+  bCanTake: 1
+  bCanDrop: 1
+  Weight: 2
+  ItemMesh: {fileID: 4300000, guid: 19e8f6ae4592f114098b8b949511d596, type: 3}
+  ItemMaterial: {fileID: 2100000, guid: cd7481125ba8a8242ace03065324d6e7, type: 2}
+  ItemImage: {fileID: 0}
+  EquipType: 1
