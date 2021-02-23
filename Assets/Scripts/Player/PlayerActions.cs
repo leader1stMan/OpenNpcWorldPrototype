@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerActions : MonoBehaviour
 {
@@ -12,6 +13,18 @@ public class PlayerActions : MonoBehaviour
     public GameObject QuestUiWindow;
     private bool questWindowActive = false;
     public Quest quest;
+
+    [Header("Interaction with Bed")]
+    public GameObject panel;
+    public InputField inputField;
+
+    [Header("Assigned automatically")]
+    public Bed bedInNear;
+
+    private void Awake()
+    {
+        SetSleepPanelState(false);
+    }
 
     private void Update()
     {
@@ -52,5 +65,32 @@ public class PlayerActions : MonoBehaviour
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
+    }
+    public void InteractWithBed()
+    {
+        SetSleepPanelState();
+    }
+
+    public void SetSleepPanelState()
+    {
+        panel.SetActive(!panel.activeInHierarchy);
+
+        Cursor.visible = panel.activeInHierarchy;
+        Cursor.lockState = (panel.activeInHierarchy == false) ? CursorLockMode.Locked : CursorLockMode.None;
+    }
+
+    public void SetSleepPanelState(bool state)
+    {
+        panel.SetActive(state);
+
+        Cursor.visible = state;
+        Cursor.lockState = (state == false) ? CursorLockMode.Locked : CursorLockMode.None;
+    }
+
+    public void ChooseSleep()
+    {
+        Debug.Log("hi");
+        panel.SetActive(false);
+        bedInNear.ChooseSleep(inputField.GetComponentInChildren<AmountField>().Amount, this);
     }
 }
