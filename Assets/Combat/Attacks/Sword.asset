@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 346eab38fcf993b4b87d5523a5270005, type: 3}
+  m_Name: Sword
+  m_EditorClassIdentifier: 
+  Cooldown: 5
+  minDamage: 20
+  maxDamage: 40
+  criticalMultipliyer: 2
+  criticalChance: 0.4
+  Range: 3
+  weaponPref: {fileID: 0}
+  type: 1
+  ProjectileToFire: {fileID: 0}
+  ProjectileSpeed: 0
