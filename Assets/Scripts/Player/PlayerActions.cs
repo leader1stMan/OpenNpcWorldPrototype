@@ -8,6 +8,7 @@ public class PlayerActions : MonoBehaviour
 
     public LayerMask Mask;
     public float InteractionRange;
+    public Inventory PlayerInventroy;
 
     public Camera PlayerCamera;
 
@@ -23,21 +24,31 @@ public class PlayerActions : MonoBehaviour
             if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out hit,InteractionRange, Mask))
             {
                 Transform Target = hit.transform;
-                DialogueManager dialogue = Target.GetComponentInParent<DialogueManager>();
-                if(dialogue==null)
-                    dialogue = Target.GetComponentInChildren<DialogueManager>();
-                if (dialogue == null)
-                    return;
-                Vector3 rot = dialogue.transform.eulerAngles;
-                dialogue.transform.LookAt(transform);
-                dialogue.transform.eulerAngles = new Vector3(rot.x, dialogue.transform.eulerAngles.y, rot.z);
-                dialogue.say("Hello there. How are you");
 
                 MerchantShop Shop = Target.GetComponent<MerchantShop>();
-                
-                if (Shop != null)
-                {
+
+                if (Shop != null) 
+                {                       
                     StartCoroutine(Shop.Interact());
+                    PlayerInventroy.InventoryPanel.SetActive(true);
+                    Cursor.visible = true;
+                    Cursor.lockState = CursorLockMode.Confined;
+
+                    Vector3 rot = Target.eulerAngles;
+                    Target.LookAt(transform);
+                    Target.eulerAngles = new Vector3(rot.x, Target.eulerAngles.y, rot.z);
+                }
+                else
+                {
+                    DialogueManager dialogue = Target.GetComponentInParent<DialogueManager>();
+                    if (dialogue == null)
+                        dialogue = Target.GetComponentInChildren<DialogueManager>();
+                    if (dialogue == null)
+                        return;
+                    Vector3 rot = dialogue.transform.eulerAngles;
+                    dialogue.transform.LookAt(transform);
+                    dialogue.transform.eulerAngles = new Vector3(rot.x, dialogue.transform.eulerAngles.y, rot.z);
+                    dialogue.say("Hello there. How are you");
                 }
             }
         }

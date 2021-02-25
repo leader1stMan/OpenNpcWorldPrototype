@@ -17,14 +17,23 @@ public class MerchantShop : MonoBehaviour
 
     bool IsInteracted;
 
+    float PlayerOriginalMouseSensitivity;
+    float PlayerOriginalMouseSensitivityInternal;
+
+    FirstPersonAIO firstPerson;
+
     void Start()
-    {    
+    {
+        firstPerson = Player.GetComponent<FirstPersonAIO>();
+
+        PlayerOriginalMouseSensitivity = firstPerson.mouseSensitivity;
+        PlayerOriginalMouseSensitivityInternal = firstPerson.mouseSensitivityInternal;
+
         ShopPanel.SetActive(false);
 
         foreach (Inventory.ItemData item in Items)
-        {
             ItemsCount.Add(item.Count);
-        }
+        
     }
 
     // Update is called once per frame
@@ -36,6 +45,10 @@ public class MerchantShop : MonoBehaviour
             {
                 IsInteracted = false;
                 ShopPanel.SetActive(false);
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                Player.GetComponent<Inventory>().InventoryPanel.SetActive(false);
+                FreezeCamera(false);
             }
         }
     }
@@ -46,10 +59,12 @@ public class MerchantShop : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined;
         IsInteracted = true;
 
+        FreezeCamera(true);
+
+
         for (int i = 0; i < SlotPanel.transform.childCount; i++)
-        {
             Destroy(SlotPanel.transform.GetChild(i).gameObject);
-        }
+        
 
         yield return new WaitForSeconds(0.3f);
 
@@ -81,6 +96,20 @@ public class MerchantShop : MonoBehaviour
                      
             Transform Slot = EventSystem.current.currentSelectedGameObject.GetComponent<Transform>();
             Slot.GetChild(1).GetComponent<TextMeshProUGUI>().text = temp.ToString();
+        }
+    }
+
+    void FreezeCamera(bool IsFrozen)
+    {
+        if (IsFrozen)
+        {
+            firstPerson.mouseSensitivity = 0;
+            firstPerson.mouseSensitivityInternal = 0;
+        }
+        else
+        {
+            firstPerson.mouseSensitivity = PlayerOriginalMouseSensitivity;
+            firstPerson.mouseSensitivityInternal = PlayerOriginalMouseSensitivityInternal;
         }
     }
 }
