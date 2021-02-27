@@ -15,7 +15,7 @@ public class DialogueManager : MonoBehaviour
     public Queue<string> sentences;
     public string[] FromFileDialogue;
     private int index;
-    private float _textSpeed = 2f;
+    public float _textSpeed = 0f;
     private string sentence;
     public bool _isdialogue = false;
     private FirstPersonAIO player;
@@ -50,7 +50,7 @@ public class DialogueManager : MonoBehaviour
         }
         player.playerCanMove = false;
         _isdialogue = true;
-        UpdateFile();
+        //UpdateFile();
         dialogueScript._name.text = caller.name;
         //Debug.Log(caller.name);
         player.lockAndHideCursor = false;
@@ -125,18 +125,31 @@ public class DialogueManager : MonoBehaviour
             index++;
         }
     }
-    private void DisplayNextSentence()
+    public void DisplayNextSentence()
     {
         if (sentence1.answer != null)
         {
             sentence = sentence1.answer;
-            StartCoroutine(Type());
+            //StartCoroutine(Type());
+            Typee();
         }
 
         if (sentence1.goal != null)
         {
             sentence1.goal.completeSentence(sentence1);
         }
+    }
+
+    void Typee()
+    {
+        displayingdialogue = true;
+        dialogueScript.DialogueText.text = "";
+        foreach (char letter in sentence)
+        {
+            dialogueScript.DialogueText.text += letter;
+        }
+        displayingdialogue = false;
+
     }
 
     IEnumerator Type()
@@ -161,6 +174,7 @@ public class DialogueManager : MonoBehaviour
 
         foreach (Button a in options)
         {
+            a.onClick.RemoveAllListeners();
             a.gameObject.SetActive(false);
             a.interactable = false;
         }

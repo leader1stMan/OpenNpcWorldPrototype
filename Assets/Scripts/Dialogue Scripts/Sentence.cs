@@ -9,9 +9,13 @@ public class Sentence : ScriptableObject
     public string answer;
 
     public SentenceGoal goal;
+    public Sentence nextSentence;
     public List<Sentence> choices;
 
     public Quest quest;
+
+    public string questParameter;
+
     public Sentence(string newText)
     {
         choices = new List<Sentence>();

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb67e22c87943d842b22e74f76b976e4, type: 3}
+  m_Name: Gauvain-b
+  m_EditorClassIdentifier: 
+  text: You have a big purse, I'm sure that we can find an agreement
+  answer: It looks big but it is not well filled.
+  goal:
+    trackedSentences: []
+    selectedSentence: {fileID: 11400000}
+  nextSentence: {fileID: 0}
+  choices:
+  - {fileID: 11400000, guid: a65b82f9a6864084e8b672d2b0dc515c, type: 2}
+  - {fileID: 11400000, guid: b64e8949c1eb3fc42b3cdd2dcb1ab822, type: 2}
+  quest: {fileID: 0}
