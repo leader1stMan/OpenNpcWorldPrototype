@@ -10,17 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fb67e22c87943d842b22e74f76b976e4, type: 3}
-  m_Name: Qauvain-question-1
+  m_Name: Qauvain-question-4d
   m_EditorClassIdentifier: 
-  text: 
-  answer: Are merchant prices too high?
+  text: I guess so.
+  answer: 
   goal:
     trackedSentences: []
-    selectedSentence: {fileID: 11400000}
-  nextSentence: {fileID: 0}
-  choices:
-  - {fileID: 11400000, guid: 8929cf2db654c2f4c9fde045eb1f7cde, type: 2}
-  - {fileID: 11400000, guid: d640c6588f9ac6a46b9b82b114c9b603, type: 2}
-  - {fileID: 11400000, guid: bfd3f4408884184478d423738ce792e5, type: 2}
+    selectedSentence: {fileID: 0}
+  nextSentence: {fileID: 11400000, guid: a0cd98f8dc8a96f4cb0ba17da32365f3, type: 2}
+  choices: []
   quest: {fileID: 0}
-  questParameter: 
+  questParameter: green

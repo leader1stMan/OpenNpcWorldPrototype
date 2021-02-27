@@ -127,11 +127,19 @@ public class DialogueManager : MonoBehaviour
     }
     public void DisplayNextSentence()
     {
-        if (sentence1.answer != null)
+        if (sentence1.answer != null && sentence1.answer.Length > 0)
         {
             sentence = sentence1.answer;
-            //StartCoroutine(Type());
             Typee();
+        }
+        else
+        {
+            if (sentence1.nextSentence != null)
+            {
+                sentence1 = sentence1.nextSentence;
+                sentence = sentence1.answer;
+                Typee();
+            }
         }
 
         if (sentence1.goal != null)

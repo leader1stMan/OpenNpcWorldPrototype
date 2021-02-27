@@ -14,6 +14,10 @@ public class SentenceGoal
     public SentenceGoal()
     { }
 
+    public SentenceGoal(Sentence sentence)
+    {
+        sentence.goal = this;
+    }
     public SentenceGoal(List<Sentence> sentences)
     {
         foreach (Sentence s in sentences)
