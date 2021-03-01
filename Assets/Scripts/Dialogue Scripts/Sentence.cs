@@ -12,8 +12,6 @@ public class Sentence : ScriptableObject
     public Sentence nextSentence;
     public List<Sentence> choices;
 
-    public Quest quest;
-
     public string questParameter;
 
     public Sentence(string newText)
