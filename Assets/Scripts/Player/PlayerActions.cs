@@ -31,6 +31,7 @@ public class PlayerActions : MonoBehaviour
                 {                       
                     StartCoroutine(Shop.Interact());
                     PlayerInventroy.InventoryPanel.SetActive(true);
+                    PlayerInventroy.ShopAccessed = true;
                     Cursor.visible = true;
                     Cursor.lockState = CursorLockMode.Confined;
 

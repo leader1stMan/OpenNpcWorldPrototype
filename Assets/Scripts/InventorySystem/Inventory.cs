@@ -9,19 +9,16 @@ public class Inventory : MonoBehaviour
     {
         public Item Item;
         public int Count;
-        public float Value;
 
-        public ItemData(Item Item, int Count, float Value)
+        public ItemData(Item Item, int Count)
         {
             this.Item = Item;
             this.Count = Count;
-            this.Value = Value;
         }
         public ItemData(ItemPickup PickUp)
         {
             this.Item = PickUp.Item;
             this.Count = PickUp.Count;
-            this.Value = PickUp.Value;
         }
     };
 
@@ -46,6 +43,8 @@ public class Inventory : MonoBehaviour
     KeyCode InteractButton;
     float InteractionRange;
     Camera PlayerCamera;
+
+    public bool ShopAccessed;
 
     // Start is called before the first frame update
     void Start()
@@ -98,10 +97,13 @@ public class Inventory : MonoBehaviour
         ClearItemButtons();
         foreach(ItemData i in InventoryList)
         {
-            GameObject tempSlot = Instantiate<GameObject>(ItemSlotPrefab);
-            GameObject tempItem = tempSlot.transform.GetChild(0).gameObject;
-            tempItem.GetComponent<ItemButtonHandler>().Init(i, this);
-            tempSlot.transform.SetParent(InventoryItemPanel);
+            if (i.Count != 0)
+            {
+                GameObject tempSlot = Instantiate<GameObject>(ItemSlotPrefab);
+                GameObject tempItem = tempSlot.transform.GetChild(0).gameObject;
+                tempItem.GetComponent<ItemButtonHandler>().Init(i, this);
+                tempSlot.transform.SetParent(InventoryItemPanel);
+            }
         }
         InventoryStatusTextField.text = "Carrying : " + GetInventoryWeight() + ", Capacity : " + CarryCapacity.ToString();
         //Debug.Log(InventoryEquipPanel.transform.childCount);
@@ -225,6 +227,22 @@ public class Inventory : MonoBehaviour
         AddToFreeSlot(Itemdata);
 
         RefreshInventoryUI();
+    }
+
+    public void RemoveItem(ItemData Itemdata)
+    {
+        for (int i = 0; i < InventoryList.Count; i++)
+        {
+            if (InventoryList[i].Item && InventoryList[i].Item.ItemId == Itemdata.Item.ItemId)
+            {
+                ItemData temp = InventoryList[i];
+                temp.Count -= Itemdata.Count;
+                InventoryList[i] = temp;
+
+                RefreshInventoryUI();
+                return;                                     // Item type exists in inventory. Add count to it and return.
+            }
+        }
     }
 
     void AddToFreeSlot(ItemData ItemData)
@@ -360,10 +378,21 @@ public class Inventory : MonoBehaviour
         return (int)temp.EquipType == EquipIndex;
     }
 
-    public void UseItem(ItemData Itemdata)
+    public void UseOrSell(ItemData Itemdata)
     {
-        Itemdata.Item.OnItemUsed();
-        Debug.Log("ItemUsed");
+        if (ShopAccessed)
+        {
+            PlayerProgress.Currency += Itemdata.Item.ItemValue / 2;
+            RemoveItem(new ItemData(Itemdata.Item, 1));
+            MerchantShop.InfoText.text = $"Credits: {PlayerProgress.Currency}";
+
+            Debug.Log(Itemdata.Count);
+            RefreshInventoryUI();
+        }
+        else
+        {
+            Itemdata.Item.OnItemUsed();
+        }
     }
 
     void CraftItem(ItemData ItemToCraft)
@@ -371,5 +400,5 @@ public class Inventory : MonoBehaviour
 
     }
 
-    public ItemData EmptyItemData => new ItemData(null, 0, 0);  
+    public ItemData EmptyItemData => new ItemData(null, 0);  
 }

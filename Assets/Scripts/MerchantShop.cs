@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class MerchantShop : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class MerchantShop : MonoBehaviour
 {
     public List<Inventory.ItemData> Items = new List<Inventory.ItemData>();
 
@@ -14,14 +14,13 @@ public class MerchantShop : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public GameObject ItemSlotPrefab;
     public GameObject SlotPanel;
 
-    public EventTrigger a;
     bool IsInteracted;
 
     float PlayerOriginalMouseSensitivity;
     float PlayerOriginalMouseSensitivityInternal;
 
     FirstPersonAIO firstPerson;
-    TextMeshProUGUI InfoText;
+    public static TextMeshProUGUI InfoText;
 
     void Start()
     {
@@ -47,7 +46,9 @@ public class MerchantShop : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
                 Player.GetComponent<Inventory>().InventoryPanel.SetActive(false);
+                Player.GetComponent<Inventory>().ShopAccessed = false;
                 FreezeCamera(false);
+
             }
         }
     }
@@ -72,15 +73,21 @@ public class MerchantShop : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             GameObject Slot = Instantiate(ItemSlotPrefab, SlotPanel.transform);
             Button SlotBtn = Slot.transform.GetChild(0).GetComponent<Button>();
 
-            Slot.transform.name = "a";
+            EventTrigger trigger = SlotBtn.GetComponent<EventTrigger>();
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.PointerEnter;
+            entry.callback.AddListener((data) => { GetButtonNameByHover((PointerEventData)data); });
+            trigger.triggers.Add(entry);
 
+            Slot.transform.name = i.ToString();
             SlotBtn.name = i.ToString();
             SlotBtn.onClick.AddListener(() => Buy());
-            
-            
+                      
             Slot.transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Items[i].Item.name;
             Slot.transform.GetChild(0).transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = Items[i].Count.ToString();
         }
+
+        InfoText.text = $"Credits: {PlayerProgress.Currency}";
     }
 
     public void Buy()
@@ -89,16 +96,16 @@ public class MerchantShop : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
         int temp = Items[ItemIndex].Count;
 
-        if (temp > 0 && PlayerProgress.Currency >= Items[ItemIndex].Value)
+        if (temp > 0 && PlayerProgress.Currency >= Items[ItemIndex].Item.ItemValue)
         {
-            Player.GetComponent<Inventory>().AddItem(new Inventory.ItemData(Items[ItemIndex].Item, 1, Items[ItemIndex].Value));
+            Player.GetComponent<Inventory>().AddItem(new Inventory.ItemData(Items[ItemIndex].Item, 1));
             temp--;
-            Items[ItemIndex] = new Inventory.ItemData(Items[ItemIndex].Item, temp, Items[ItemIndex].Value);
+            Items[ItemIndex] = new Inventory.ItemData(Items[ItemIndex].Item, temp);
                      
             Transform Slot = EventSystem.current.currentSelectedGameObject.GetComponent<Transform>();
             Slot.GetChild(1).GetComponent<TextMeshProUGUI>().text = temp.ToString();
-            PlayerProgress.Currency -= Items[ItemIndex].Value;
-            InfoText.text = $"Credits: {PlayerProgress.Currency}  Cost: {Items[ItemIndex].Value}";
+            PlayerProgress.Currency -= Items[ItemIndex].Item.ItemValue;
+            InfoText.text = $"Credits: {PlayerProgress.Currency}  Cost: {Items[ItemIndex].Item.ItemValue}";
         }
     }
 
@@ -116,20 +123,9 @@ public class MerchantShop : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         }
     }
 
-    public void GetButtonNameByHover(Button button)
+    public void GetButtonNameByHover(PointerEventData data)
     {
-       // int ItemIndex = int.Parse(button.name);
-        //Debug.Log($"{button.name}  Credits: {PlayerProgress.Currency}  Cost: {Items[ItemIndex].Value}");
-        //InfoText.text = $"asdasd";
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        Debug.Log("Triggered");
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        //throw new System.NotImplementedException();
+        Transform Slot = data.pointerCurrentRaycast.gameObject.transform.parent.parent;
+        InfoText.text = $"Credits: {PlayerProgress.Currency}  Cost: {Items[int.Parse(Slot.GetChild(0).name)].Item.ItemValue}";
     }
 }
