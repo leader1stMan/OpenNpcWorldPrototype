@@ -3258,28 +3258,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c7e666f06026574a936495fa01fdeec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Items:
-  - Item: {fileID: 11400000, guid: 8df36030d36a2174a8ec8b4d56e3cd62, type: 2}
-    Count: 1
-    Value: 100
-  - Item: {fileID: 11400000, guid: 54c9d35dbd6991644b3b9372b36b2077, type: 2}
-    Count: 2
-    Value: 100
-  - Item: {fileID: 11400000, guid: 54c9d35dbd6991644b3b9372b36b2077, type: 2}
-    Count: 2
-    Value: 100
-  - Item: {fileID: 11400000, guid: 54c9d35dbd6991644b3b9372b36b2077, type: 2}
-    Count: 2
-    Value: 100
-  - Item: {fileID: 11400000, guid: 54c9d35dbd6991644b3b9372b36b2077, type: 2}
-    Count: 2
-    Value: 100
-  ItemsCount: 
+  Items: []
   Player: {fileID: 0}
   ShopPanel: {fileID: 0}
   ItemSlotPrefab: {fileID: 1201470083506443664, guid: 58c07ce2eedfaba46adbaecd88e4eda2,
     type: 3}
   SlotPanel: {fileID: 0}
+  a: {fileID: 0}
 --- !u!1001 &7523313585022400928
 PrefabInstance:
   m_ObjectHideFlags: 0

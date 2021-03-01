@@ -5,22 +5,23 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class MerchantShop : MonoBehaviour
+public class MerchantShop : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public List<Inventory.ItemData> Items = new List<Inventory.ItemData>();
-    public List<int> ItemsCount = new List<int>();
 
     public GameObject Player;
     public GameObject ShopPanel;
     public GameObject ItemSlotPrefab;
     public GameObject SlotPanel;
 
+    public EventTrigger a;
     bool IsInteracted;
 
     float PlayerOriginalMouseSensitivity;
     float PlayerOriginalMouseSensitivityInternal;
 
     FirstPersonAIO firstPerson;
+    TextMeshProUGUI InfoText;
 
     void Start()
     {
@@ -29,11 +30,9 @@ public class MerchantShop : MonoBehaviour
         PlayerOriginalMouseSensitivity = firstPerson.mouseSensitivity;
         PlayerOriginalMouseSensitivityInternal = firstPerson.mouseSensitivityInternal;
 
-        ShopPanel.SetActive(false);
+        InfoText = ShopPanel.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
 
-        foreach (Inventory.ItemData item in Items)
-            ItemsCount.Add(item.Count);
-        
+        ShopPanel.SetActive(false);      
     }
 
     // Update is called once per frame
@@ -70,25 +69,27 @@ public class MerchantShop : MonoBehaviour
 
         for (int i = 0; i < Items.Count; i++)
         {
-                GameObject Slot = Instantiate(ItemSlotPrefab, SlotPanel.transform);
-                Button SlotBtn = Slot.transform.GetChild(0).GetComponent<Button>();
+            GameObject Slot = Instantiate(ItemSlotPrefab, SlotPanel.transform);
+            Button SlotBtn = Slot.transform.GetChild(0).GetComponent<Button>();
 
-                Slot.transform.name = "a";
+            Slot.transform.name = "a";
 
-                SlotBtn.name = i.ToString();
-                SlotBtn.onClick.AddListener(() => Buy());
-
-                Slot.transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Items[i].Item.name;
-                Slot.transform.GetChild(0).transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = Items[i].Count.ToString();
+            SlotBtn.name = i.ToString();
+            SlotBtn.onClick.AddListener(() => Buy());
+            
+            
+            Slot.transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = Items[i].Item.name;
+            Slot.transform.GetChild(0).transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = Items[i].Count.ToString();
         }
     }
 
     public void Buy()
     {
         int ItemIndex = int.Parse(EventSystem.current.currentSelectedGameObject.name);
+
         int temp = Items[ItemIndex].Count;
 
-        if (temp > 0)
+        if (temp > 0 && PlayerProgress.Currency >= Items[ItemIndex].Value)
         {
             Player.GetComponent<Inventory>().AddItem(new Inventory.ItemData(Items[ItemIndex].Item, 1, Items[ItemIndex].Value));
             temp--;
@@ -96,6 +97,8 @@ public class MerchantShop : MonoBehaviour
                      
             Transform Slot = EventSystem.current.currentSelectedGameObject.GetComponent<Transform>();
             Slot.GetChild(1).GetComponent<TextMeshProUGUI>().text = temp.ToString();
+            PlayerProgress.Currency -= Items[ItemIndex].Value;
+            InfoText.text = $"Credits: {PlayerProgress.Currency}  Cost: {Items[ItemIndex].Value}";
         }
     }
 
@@ -111,5 +114,22 @@ public class MerchantShop : MonoBehaviour
             firstPerson.mouseSensitivity = PlayerOriginalMouseSensitivity;
             firstPerson.mouseSensitivityInternal = PlayerOriginalMouseSensitivityInternal;
         }
+    }
+
+    public void GetButtonNameByHover(Button button)
+    {
+       // int ItemIndex = int.Parse(button.name);
+        //Debug.Log($"{button.name}  Credits: {PlayerProgress.Currency}  Cost: {Items[ItemIndex].Value}");
+        //InfoText.text = $"asdasd";
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log("Triggered");
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        //throw new System.NotImplementedException();
     }
 }
