@@ -16880,6 +16880,16 @@ PrefabInstance:
       propertyPath: Items.Array.data[2].Count
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7523313584288638857, guid: 478b1810b02a9744db780642269305f4,
+        type: 3}
+      propertyPath: work
+      value: 
+      objectReference: {fileID: 1632026779}
+    - target: {fileID: 7523313584288638857, guid: 478b1810b02a9744db780642269305f4,
+        type: 3}
+      propertyPath: home
+      value: 
+      objectReference: {fileID: 8435884943738212976}
     - target: {fileID: 7523313584288638858, guid: 478b1810b02a9744db780642269305f4,
         type: 3}
       propertyPath: m_LocalPosition.x
