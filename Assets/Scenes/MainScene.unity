@@ -594,6 +594,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1706849248}
     m_Modifications:
+    - target: {fileID: 1928269307111726560, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: sentence1
+      value: 
+      objectReference: {fileID: 11400000, guid: 42d389bab4d12ac4380b0ebe6d670f78,
+        type: 2}
     - target: {fileID: 2588335023231186052, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -608,6 +614,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849520, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: m_TagString
+      value: Npc
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849521, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -692,7 +703,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: npcName
-      value: Prestley
+      value: Theodore
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -8857,6 +8868,18 @@ MonoBehaviour:
   isTalking: 0
   isFirst: 0
   Dialogue: 0
+--- !u!114 &1893211637 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+    type: 3}
+  m_PrefabInstance: {fileID: 213333397}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1893211628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 096c17a238bc7e946806a109840208bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1923667918 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 690046979554682701, guid: a1829140362afcf4db1b77d3c60234a7,
@@ -8975,12 +8998,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b58501402a2d8ee4d85b5621bb26caf7, type: 2}
   - {fileID: 11400000, guid: 3cb7491f6633bfd42816d6723f26a450, type: 2}
   - {fileID: 11400000, guid: d2a0725911c04db4b90dced64203747e, type: 2}
+  goAwaySentence: {fileID: 11400000, guid: b19f52f0f220d7441a1080e213661ee4, type: 2}
+  againstKingSentence: {fileID: 11400000, guid: 785cfd268c6aaec4eadfd44afb77dfb1,
+    type: 2}
   questionCompleteQuestion: {fileID: 11400000, guid: fdda6088259098346adbd1738c9118e9,
     type: 2}
   redEnding: {fileID: 11400000, guid: 617cbfb4e4e72e644bd5fa39c8b27418, type: 2}
   orangeEnding: {fileID: 11400000, guid: 01cc0d4060c2be148bf8cbb8aabcfeda, type: 2}
   kingEnding: {fileID: 11400000, guid: 3fcd09328dd573f42bff94a1f8614926, type: 2}
   control: {fileID: 1564688453}
+  Theodore: {fileID: 1893211637}
+  TheodoreStartSentence: {fileID: 11400000, guid: 42d389bab4d12ac4380b0ebe6d670f78,
+    type: 2}
 --- !u!54 &1958132157
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -12317,7 +12346,7 @@ PrefabInstance:
         type: 3}
       propertyPath: sentence1
       value: 
-      objectReference: {fileID: 11400000, guid: 0933f09bdd1a0dd4692616c73d66b817,
+      objectReference: {fileID: 11400000, guid: 0c690bd68ec9d8f4ca5c50ecef85d755,
         type: 2}
     - target: {fileID: 1928269307111726560, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}

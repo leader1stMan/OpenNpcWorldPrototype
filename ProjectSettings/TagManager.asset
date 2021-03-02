@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Npc
   - Enemy
+  - Theodore
   layers:
   - Default
   - TransparentFX

@@ -13,6 +13,8 @@ public class TreasonQuest : Quest
     public List<Sentence> redSentences;
     public List<Sentence> pinkSentences;
     public List<Sentence> greenSentences;
+    public Sentence goAwaySentence;
+    public Sentence againstKingSentence;
     public Sentence questionCompleteQuestion;
     private DialogueManager dialogue;
     public Sentence redEnding;
@@ -24,6 +26,9 @@ public class TreasonQuest : Quest
     private int redQuestions = 0;
     private int pinkQuestions = 0;
     private int greenQuestions = 0;
+    public NPC Theodore;
+    private DialogueManager TheodoreDialogue;
+    public Sentence TheodoreStartSentence;
     // Start is called before the first frame update
     void Awake()
     {
@@ -65,6 +70,7 @@ public class TreasonQuest : Quest
         startDay = control.currentDay;
         firstPartCompleted = true;
         goal1.RemoveHandler(CompleteFirstGoal);
+        dialogue.sentence1 = goAwaySentence;
     }
 
     void GreenSentenceCalled()
@@ -111,6 +117,8 @@ public class TreasonQuest : Quest
 
     void AgainstEnding()
     {
-
+        dialogue.sentence1 = againstKingSentence;
+        TheodoreDialogue = Theodore.GetComponent<DialogueManager>();
+        TheodoreDialogue.sentence1 = TheodoreStartSentence;
     }
 }

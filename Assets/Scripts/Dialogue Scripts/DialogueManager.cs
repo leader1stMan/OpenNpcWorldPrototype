@@ -130,21 +130,25 @@ public class DialogueManager : MonoBehaviour
         if (sentence1.answer != null && sentence1.answer.Length > 0)
         {
             sentence = sentence1.answer;
+            if (sentence1.goal != null)
+            {
+                sentence1.goal.completeSentence(sentence1);
+            }
+
             Typee();
         }
         else
         {
             if (sentence1.nextSentence != null)
             {
+                if (sentence1.goal != null)
+                {
+                    sentence1.goal.completeSentence(sentence1);
+                }
                 sentence1 = sentence1.nextSentence;
-                sentence = sentence1.answer;
-                Typee();
-            }
-        }
 
-        if (sentence1.goal != null)
-        {
-            sentence1.goal.completeSentence(sentence1);
+                DisplayNextSentence();
+            }
         }
     }
 

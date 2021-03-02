@@ -16,10 +16,13 @@ public class SentenceGoal
 
     public SentenceGoal(Sentence sentence)
     {
+        trackedSentences = new List<Sentence>();
+        trackedSentences.Add(sentence);
         sentence.goal = this;
     }
     public SentenceGoal(List<Sentence> sentences)
     {
+        trackedSentences = sentences;
         foreach (Sentence s in sentences)
         {
             s.goal = this;
