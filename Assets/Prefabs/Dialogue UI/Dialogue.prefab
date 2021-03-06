@@ -492,6 +492,12 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9178072402931728111, guid: 39a4104c64e2afd45ae699c6019b63a4,
+        type: 3}
+      propertyPath: m_text
+      value: I would like to ask you for help but in these times it is difficult
+        to trust.
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39a4104c64e2afd45ae699c6019b63a4, type: 3}
 --- !u!224 &8422049361896221510 stripped
