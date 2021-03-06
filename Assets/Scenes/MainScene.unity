@@ -598,7 +598,7 @@ PrefabInstance:
         type: 3}
       propertyPath: sentence1
       value: 
-      objectReference: {fileID: 11400000, guid: 42d389bab4d12ac4380b0ebe6d670f78,
+      objectReference: {fileID: 11400000, guid: 69eb25213af7bf04ca0956fb28441559,
         type: 2}
     - target: {fileID: 2588335023231186052, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -8947,21 +8947,6 @@ MonoBehaviour:
   itemRewards: []
   coinsReward: 0
   state: 0
-  goal1:
-    trackedSentences: []
-    selectedSentence: {fileID: 0}
-  redGoal:
-    trackedSentences: []
-    selectedSentence: {fileID: 0}
-  pinkGoal:
-    trackedSentences: []
-    selectedSentence: {fileID: 0}
-  greenGoal:
-    trackedSentences: []
-    selectedSentence: {fileID: 0}
-  questionEndGoal:
-    trackedSentences: []
-    selectedSentence: {fileID: 0}
   trackedSentences1:
   - {fileID: 11400000, guid: 69bcb0acc4f37d5448d042f7ff0faf3b, type: 2}
   - {fileID: 11400000, guid: f9889c52982a6084683e430b22b6fda4, type: 2}
@@ -8998,18 +8983,33 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b58501402a2d8ee4d85b5621bb26caf7, type: 2}
   - {fileID: 11400000, guid: 3cb7491f6633bfd42816d6723f26a450, type: 2}
   - {fileID: 11400000, guid: d2a0725911c04db4b90dced64203747e, type: 2}
+  AlchemistsSentences:
+  - {fileID: 11400000, guid: df1ef97a32cdfa641b1c1ec2bfc7f3f2, type: 2}
+  - {fileID: 11400000, guid: ab9fc7904b725d74596781b7ca9b22c1, type: 2}
+  TheodoreQuestComplete:
+  - {fileID: 11400000, guid: cb121bd8fb2fd164f9858cf7f74e06ab, type: 2}
+  - {fileID: 11400000, guid: 1e8d40c7db4b37241916c925563ec3c9, type: 2}
+  - {fileID: 11400000, guid: bb1bf4c1b6885654f8b683cb8f5737ea, type: 2}
+  - {fileID: 11400000, guid: d79f07e5a5ad7d94aba1777c3e8956ca, type: 2}
   goAwaySentence: {fileID: 11400000, guid: b19f52f0f220d7441a1080e213661ee4, type: 2}
   againstKingSentence: {fileID: 11400000, guid: 785cfd268c6aaec4eadfd44afb77dfb1,
     type: 2}
+  neutralEnding: {fileID: 11400000, guid: 4f02b2d93ede6d14397cc897e194c644, type: 2}
   questionCompleteQuestion: {fileID: 11400000, guid: fdda6088259098346adbd1738c9118e9,
+    type: 2}
+  GauvainWithPotion: {fileID: 11400000, guid: aea1b034a0126714c8346c4d1e38d34a, type: 2}
+  GauvainWithoutPotion: {fileID: 11400000, guid: d0f323b1e5fea0b4984ac0af2da2b7d7,
     type: 2}
   redEnding: {fileID: 11400000, guid: 617cbfb4e4e72e644bd5fa39c8b27418, type: 2}
   orangeEnding: {fileID: 11400000, guid: 01cc0d4060c2be148bf8cbb8aabcfeda, type: 2}
   kingEnding: {fileID: 11400000, guid: 3fcd09328dd573f42bff94a1f8614926, type: 2}
-  control: {fileID: 1564688453}
-  Theodore: {fileID: 1893211637}
   TheodoreStartSentence: {fileID: 11400000, guid: 42d389bab4d12ac4380b0ebe6d670f78,
     type: 2}
+  AlchemistStartSentence: {fileID: 11400000, guid: be98d084a5d623a4a93384b6bebef720,
+    type: 2}
+  control: {fileID: 1564688453}
+  Theodore: {fileID: 1893211637}
+  Alchemist: {fileID: 2059886989}
 --- !u!54 &1958132157
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9488,6 +9488,18 @@ MonoBehaviour:
   isTalking: 0
   isFirst: 0
   Dialogue: 0
+--- !u!114 &2059886989 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2101472378}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2059886980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 096c17a238bc7e946806a109840208bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2101472378
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9495,10 +9507,61 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1706849248}
     m_Modifications:
+    - target: {fileID: 456198, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 456198, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.000060652645
+      objectReference: {fileID: 0}
+    - target: {fileID: 456198, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 456198, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.16862705
+      objectReference: {fileID: 0}
+    - target: {fileID: 456198, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 465148, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.6218662
+      objectReference: {fileID: 0}
+    - target: {fileID: 465148, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.27343562
+      objectReference: {fileID: 0}
+    - target: {fileID: 465148, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 101.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 465148, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -19.89
+      objectReference: {fileID: 0}
+    - target: {fileID: 10851780, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
+      propertyPath: m_Intensity
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 232238514371497085, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -0.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 1928269307111726560, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: sentence1
+      value: 
+      objectReference: {fileID: 11400000, guid: f92015d1eba4ee84abb6ccd746ecbe46,
+        type: 2}
+    - target: {fileID: 1928269307111726560, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: displayingdialogue
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2588335023231186052, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -9603,7 +9666,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: npcName
-      value: Sven
+      value: Alchemist
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -11825,46 +11888,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
-    - target: {fileID: 456198, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 456198, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.000060652645
-      objectReference: {fileID: 0}
-    - target: {fileID: 456198, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 456198, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.16862705
-      objectReference: {fileID: 0}
-    - target: {fileID: 456198, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 465148, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.6218662
-      objectReference: {fileID: 0}
-    - target: {fileID: 465148, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.27343562
-      objectReference: {fileID: 0}
-    - target: {fileID: 465148, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 101.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 465148, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -19.89
-      objectReference: {fileID: 0}
-    - target: {fileID: 10851780, guid: 1dce2846dc915b44ea1a12401fe517e1, type: 3}
-      propertyPath: m_Intensity
-      value: 3
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd5633ded9ea10e42be05f617848635f, type: 3}
 --- !u!4 &2101472379 stripped
@@ -12346,7 +12369,7 @@ PrefabInstance:
         type: 3}
       propertyPath: sentence1
       value: 
-      objectReference: {fileID: 11400000, guid: 0c690bd68ec9d8f4ca5c50ecef85d755,
+      objectReference: {fileID: 11400000, guid: 0933f09bdd1a0dd4692616c73d66b817,
         type: 2}
     - target: {fileID: 1928269307111726560, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}

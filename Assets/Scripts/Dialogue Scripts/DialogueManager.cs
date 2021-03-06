@@ -143,7 +143,7 @@ public class DialogueManager : MonoBehaviour
             {
                 if (sentence1.goal != null)
                 {
-                    sentence1.goal.completeSentence(sentence1);
+                    sentence1.goal.completeSentence(sentence1); 
                 }
                 sentence1 = sentence1.nextSentence;
 

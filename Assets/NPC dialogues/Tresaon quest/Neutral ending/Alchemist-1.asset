@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb67e22c87943d842b22e74f76b976e4, type: 3}
+  m_Name: Alchemist-1
+  m_EditorClassIdentifier: 
+  text: 
+  answer: A clove of garlic, a little cow's bile, a tarantula's foot, a drop of viper
+    venom...
+  goal:
+    trackedSentences: []
+    selectedSentence: {fileID: 0}
+  nextSentence: {fileID: 0}
+  choices:
+  - {fileID: 11400000, guid: d15ea70e82dfb81448c89e64a63666f3, type: 2}
+  - {fileID: 11400000, guid: af71b5cccf093444e9568ff84da4e620, type: 2}
+  - {fileID: 11400000, guid: a2ea31a3af5ff224cb90aca78bd4cdf9, type: 2}
+  questParameter: 
