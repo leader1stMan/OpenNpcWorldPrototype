@@ -1,35 +1,50 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using TMPro;
 
 public class PlayerActions : MonoBehaviour
 {
-    public KeyCode InteractButton = KeyCode.E;
 
     public LayerMask Mask;
-    public float InteractionRange;
-
     public Camera PlayerCamera;
-
     public GameObject QuestUiWindow;
     private bool questWindowActive = false;
     public Quest quest;
+    //Dialogue    
+    public GameObject dialogue_gameobject;
+    public KeyCode InteractButton = KeyCode.E;
+    public float InteractionRange;
 
+    public bool _indialogue = false;
+    private RaycastHit _currenthit;
     private void Update()
     {
-        if (Input.GetKeyDown(InteractButton))
+        if (Input.GetKeyDown(InteractButton) && !_indialogue)
         {
             RaycastHit hit;
-            if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out hit,InteractionRange, Mask))
+            if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out hit, InteractionRange, Mask))
             {
+                _currenthit = hit;
                 DialogueManager dialogue = hit.transform.GetComponentInParent<DialogueManager>();
-                if(dialogue==null)
+                if (dialogue == null)
                     dialogue = hit.transform.GetComponentInChildren<DialogueManager>();
                 if (dialogue == null)
                     return;
-                Vector3 rot = dialogue.transform.eulerAngles;
-                dialogue.transform.LookAt(transform);
-                dialogue.transform.eulerAngles = new Vector3(rot.x, dialogue.transform.eulerAngles.y, rot.z);
-                dialogue.say("Hello there. How are you");
+                if (dialogue._isdialogue == false)
+                {
+                    dialogue_gameobject.SetActive(true);
+                    _indialogue = true;
+                    Vector3 rot = dialogue.transform.eulerAngles;
+                    dialogue.transform.LookAt(transform);
+                    dialogue.transform.eulerAngles = new Vector3(rot.x, dialogue.transform.eulerAngles.y, rot.z);
+                    dialogue.say(_currenthit.transform.gameObject);
+                }
             }
+        }
+        if (_indialogue == true)
+        {
+            PressSpeakButton(_currenthit.transform.GetComponentInParent<DialogueManager>());
         }
         QuestWindowToggle();
     }
@@ -51,6 +66,34 @@ public class PlayerActions : MonoBehaviour
             questWindowActive = false;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+    private void PressSpeakButton(DialogueManager dialogue)
+    {
+        var pointer = new PointerEventData(EventSystem.current);
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (dialogue.displayingdialogue)
+            {
+                dialogue._textSpeed = 0f;
+            }
+            else if (!dialogue.sentence1.HasPaths())
+            {
+                if (dialogue.sentence1.nextSentence != null)
+                {
+                    dialogue.sentence1 = dialogue.sentence1.nextSentence;
+                    dialogue.DisplayNextSentence();
+                }
+                else
+                {
+                    dialogue.EndDialogue();
+                }
+            }
+            else
+            {
+                dialogue.displayingdialogue = true;
+                dialogue.OptionsActive();
+            }
         }
     }
 }

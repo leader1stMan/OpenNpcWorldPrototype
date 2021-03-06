@@ -10,7 +10,7 @@ public class NPC : NpcData
 
     public NavMeshAgent agent { get; private set; }
     private Animator anim;
-
+    private DialogueManager dialogue;
     [SerializeField] private float speedAnimDevider = 1;
     [SerializeField] private float stopDistance;
     [SerializeField] private float stopDistanceRandomAdjustment;
@@ -19,7 +19,7 @@ public class NPC : NpcData
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
-      
+        dialogue = GetComponent<DialogueManager>();  
 
         FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork;
         FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome;
@@ -51,26 +51,32 @@ public class NPC : NpcData
 
     private void GoToWork()
     {
-        if (currentState == NpcStates.GoingToWork)
-            return;
+        if(dialogue._isdialogue == false)
+        {
+            if (currentState == NpcStates.GoingToWork)
+                return;
 
-        currentState = NpcStates.GoingToWork;
-        SetMoveTarget(work);
-        if(ShowDebugMessages)
-        Debug.Log(name + " is going to work");
+            currentState = NpcStates.GoingToWork;
+            SetMoveTarget(work);
+            if(ShowDebugMessages)
+            Debug.Log(name + " is going to work");
+        }
     }
 
     private void GoHome()
     {
-        if (currentState == NpcStates.GoingHome)
-            return;
+        if(dialogue._isdialogue == false)
+        {
+            if (currentState == NpcStates.GoingHome)
+                return;
 
-        currentState = NpcStates.GoingHome;
-        anim.SetBool("Working", false);
+            currentState = NpcStates.GoingHome;
+            anim.SetBool("Working", false);
 
-        SetMoveTarget(home);
-        if(ShowDebugMessages)
-        Debug.Log(name + " is going home");
+            SetMoveTarget(home);
+            if(ShowDebugMessages)
+            Debug.Log(name + " is going home");
+        }
     }
     private void OnDestroy()
     {

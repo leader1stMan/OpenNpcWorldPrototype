@@ -2,19 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName ="New Quest",menuName ="New Quest")]
-public class Quest:ScriptableObject
+public class Quest : MonoBehaviour
 {
-    public bool isActive;
-
     public string title;
     public string description;
-    public int reward;
 
-    public QuestGoal goal;
+    public List<Item> itemRewards;
+    public int coinsReward;
 
-    public void Complete()
+    public QuestState state;
+
+    public static Quest instance;
+
+    private void Awake()
     {
-        isActive = false;
+        instance = this;
     }
 }
+
+public enum QuestState { Unknown, Ongoing, Complete};

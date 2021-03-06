@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb67e22c87943d842b22e74f76b976e4, type: 3}
+  m_Name: Gauvain-b1
+  m_EditorClassIdentifier: 
+  text: It all depends on how much you offer me. I don't like to waste time for a
+    nothing.
+  answer: It will depend on your answers, whether they will satisfy me or not.
+  goal:
+    trackedSentences: []
+    selectedSentence: {fileID: 11400000}
+  nextSentence: {fileID: 0}
+  choices:
+  - {fileID: 11400000, guid: 844e2258cd7a9fd40a23b214db8f0f27, type: 2}
+  - {fileID: 11400000, guid: d4ef3202c68e5d147ba521a376c4bd76, type: 2}
+  - {fileID: 11400000, guid: e39c91116c076d74d9dbc996043dad97, type: 2}
+  quest: {fileID: 0}

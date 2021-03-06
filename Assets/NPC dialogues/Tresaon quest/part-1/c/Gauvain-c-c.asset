@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb67e22c87943d842b22e74f76b976e4, type: 3}
+  m_Name: Gauvain-c-c
+  m_EditorClassIdentifier: 
+  text: It is certainly good to be vigilant, but I am wary of your curiosity.
+  answer: You think I'm a crook? You hurt me. I didn't think a person of your stature
+    would judge so quickly, without reason.
+  goal:
+    trackedSentences: []
+    selectedSentence: {fileID: 11400000}
+  nextSentence: {fileID: 0}
+  choices:
+  - {fileID: 11400000, guid: d34890a25963bc443948f00778f86694, type: 2}
+  - {fileID: 11400000, guid: cd25a231b2bbe8e438d7974dee38bde7, type: 2}
+  - {fileID: 11400000, guid: 2915a47f96f79134b9301de50c71fd66, type: 2}
+  quest: {fileID: 0}
+  questParameter: 

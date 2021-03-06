@@ -52,7 +52,7 @@ public class QuestGiver : MonoBehaviour
         questWindow.SetActive(true);
         title.text = y.title;
         description.text = y.description;
-        reward.text = y.reward.ToString();
+        //reward.text = y.reward.ToString();
         Button a = AcceptBtn.GetComponent<Button>();
         a.onClick.AddListener(() => AcceptQuest(y));
     }
@@ -61,7 +61,7 @@ public class QuestGiver : MonoBehaviour
         
         quest = q;
         questWindow.SetActive(false);
-        quest.isActive = true;
+        //quest.isActive = true;
         player.quest = quest;
     }
 }
