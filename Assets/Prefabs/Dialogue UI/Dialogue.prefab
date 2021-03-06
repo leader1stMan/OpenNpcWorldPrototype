@@ -90,6 +90,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7661056522706546067, guid: 68f10d4feed18384699bbbc7a39229af,
+        type: 3}
+      propertyPath: m_text
+      value: FarmerNPC
+      objectReference: {fileID: 0}
     - target: {fileID: 7661056522706546076, guid: 68f10d4feed18384699bbbc7a39229af,
         type: 3}
       propertyPath: m_LocalPosition.x
