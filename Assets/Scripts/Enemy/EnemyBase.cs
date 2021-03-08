@@ -128,16 +128,15 @@ public abstract class EnemyBase : MonoBehaviour
                 ChangeState(EnemyState.Idle);
                 return;
             }
-            if (attackCooldown <= 0)
+            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range)
             {
-                if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range)
+                if (attackCooldown <= 0)
                 {
                     Attack(currentTarget.gameObject);
                     attackCooldown = stats.GetWeapon().Cooldown;
                 }
-                else  ChangeState(EnemyState.Chasing);
-
             }
+            else  ChangeState(EnemyState.Chasing);
         }
         else if (CurrentState == EnemyState.Idle)
         {
@@ -192,7 +191,7 @@ public abstract class EnemyBase : MonoBehaviour
         }
         else
         {
-            RaycastHit hit;
+            /*RaycastHit hit;
             if(VisualiseAgentActions)
             Debug.DrawRay(transform.position, (currentTarget.position - transform.position).normalized * VisionRange, Color.red);
             if (Physics.Raycast(transform.position, (currentTarget.position - transform.position).normalized, out hit,VisionRange))
@@ -205,6 +204,11 @@ public abstract class EnemyBase : MonoBehaviour
                     currentTarget = null;
                     ChangeState(EnemyState.Idle);
                 }
+            }*/
+            if(Vector3.Distance(transform.position, currentTarget.transform.position) > VisionRange)
+            {
+                currentTarget = null;
+                ChangeState(EnemyState.Idle);
             }
         }
     }
