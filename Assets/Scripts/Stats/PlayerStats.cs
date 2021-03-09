@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class PlayerStats : CharacterStats
 {
+    public int level;
+    public int health;
+    public Vector3 position;
+
+    public GameObject GameManager;
     void Start()
     {
         EquipmentController.instance.onEquipmentChanged += OnEquipmentChanged;
@@ -34,5 +39,21 @@ public class PlayerStats : CharacterStats
             Damage.RemoveModifier(oldItem.damageModifier);
             weapon = null;
         }
+    }
+    public void SavePlayer()
+    {
+        SaveSystem.SavePlayer(this);
+        GameManager.GetComponent<PauseMenu>().PopulateSavedGames();
+    }
+    public void LoadPlayer(PlayerData data)
+    {
+
+        level = data.level;
+        health = data.health;
+
+        position.x = data.positon[0];
+        position.y = data.positon[1];
+        position.z = data.positon[2];
+
     }
 }

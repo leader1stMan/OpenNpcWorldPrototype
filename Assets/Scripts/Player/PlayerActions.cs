@@ -13,6 +13,8 @@ public class PlayerActions : MonoBehaviour
     private bool questWindowActive = false;
     public Quest quest;
 
+    public GameObject PausePanel;
+
     private void Update()
     {
         if (Input.GetKeyDown(InteractButton))
@@ -30,6 +32,11 @@ public class PlayerActions : MonoBehaviour
                 dialogue.transform.eulerAngles = new Vector3(rot.x, dialogue.transform.eulerAngles.y, rot.z);
                 dialogue.say("Hello there. How are you");
             }
+        }else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PausePanel.SetActive(true);
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined;
         }
         QuestWindowToggle();
     }
