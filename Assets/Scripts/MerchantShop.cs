@@ -41,6 +41,7 @@ public class MerchantShop : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, Player.transform.position) > 3)
             {
+                firstPerson.enabled = true;
                 IsInteracted = false;
                 ShopPanel.SetActive(false);
                 Cursor.visible = false;
@@ -55,6 +56,7 @@ public class MerchantShop : MonoBehaviour
 
     public IEnumerator Interact()
     {
+        firstPerson.enabled = false;
         ShopPanel.SetActive(true);
         Cursor.lockState = CursorLockMode.Confined;
         IsInteracted = true;
