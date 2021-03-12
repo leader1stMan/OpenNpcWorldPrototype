@@ -63,8 +63,14 @@ public class Projectile : MonoBehaviour
         // Move the arrow in x and y
         Vector3 PrevPosition = transform.position;
         float dx = horizontalSpeed * Mathf.Cos(Direction.x) * Time.deltaTime;
-        transform.Translate(Vector3.forward * dx);
-        transform.Translate(Vector3.up * (horizontalSpeed * Mathf.Sin(Direction.x) - GravityFactor)* Time.deltaTime);
+        Vector3 XAxis = Vector3.forward;
+        Vector3 YAxis = Vector3.up;
+
+        XAxis.y = 0;
+        YAxis.x = 0; YAxis.z = 0;
+
+        transform.Translate(XAxis * dx);
+        transform.Translate(YAxis * (horizontalSpeed * Mathf.Sin(Direction.x) - GravityFactor)* Time.deltaTime);
 
         // Rotate the arrow to face the direction of motion
         //transform.rotation = new Quaternion(Vector3.Angle(transform.forward, transform.position - PrevPosition), 0, 0, 1);
