@@ -8,14 +8,17 @@ public class PlayerActions : MonoBehaviour
 
     public LayerMask Mask;
     public float InteractionRange;
-    public Inventory PlayerInventroy;
+    public PlayerInventory PlayerInventroy;
 
     public Camera PlayerCamera;
 
     public GameObject QuestUiWindow;
     private bool questWindowActive = false;
-    public Quest quest;
 
+    private void Awake()
+    {
+        PlayerInventroy = GetComponent<PlayerInventory>();
+    }
     private void Update()
     {
         if (Input.GetKeyDown(InteractButton))

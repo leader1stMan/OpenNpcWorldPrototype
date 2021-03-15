@@ -4,26 +4,35 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.AI;
 
 public class MerchantShop : MonoBehaviour
 {
-    public List<Inventory.ItemData> Items = new List<Inventory.ItemData>();
+    public List<ItemData> Items = new List<ItemData>();
 
     public GameObject Player;
     public GameObject ShopPanel;
     public GameObject ItemSlotPrefab;
     public GameObject SlotPanel;
+    public MerchantInventory merchantInventory;
 
     bool IsInteracted;
 
     float PlayerOriginalMouseSensitivity;
     float PlayerOriginalMouseSensitivityInternal;
 
+    NavMeshAgent agent;
     FirstPersonAIO firstPerson;
+    PlayerInventory inventory;
     public static TextMeshProUGUI InfoText;
+
+    public float CostIncreasment = 100;
 
     void Start()
     {
+        merchantInventory = GetComponent<MerchantInventory>();
+        inventory = Player.GetComponent<PlayerInventory>();
+        agent = GetComponent<NavMeshAgent>();
         firstPerson = Player.GetComponent<FirstPersonAIO>();
 
         PlayerOriginalMouseSensitivity = firstPerson.mouseSensitivity;
@@ -41,13 +50,14 @@ public class MerchantShop : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, Player.transform.position) > 3)
             {
-                firstPerson.enabled = true;
+                agent.isStopped = false;
+                firstPerson.playerCanMove = true;
                 IsInteracted = false;
                 ShopPanel.SetActive(false);
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
-                Player.GetComponent<Inventory>().InventoryPanel.SetActive(false);
-                Player.GetComponent<Inventory>().ShopAccessed = false;
+                Player.GetComponent<PlayerInventory>().InventoryPanel.SetActive(false);
+                Player.GetComponent<PlayerInventory>().ShopAccessed = false;
                 FreezeCamera(false);
 
             }
@@ -56,14 +66,18 @@ public class MerchantShop : MonoBehaviour
 
     public IEnumerator Interact()
     {
-        firstPerson.enabled = false;
-        ShopPanel.SetActive(true);
-        Cursor.lockState = CursorLockMode.Confined;
+        merchantInventory.OpenInventory();
+        inventory.shop = this;
+        agent.isStopped = true;
+        firstPerson.playerCanMove = false;
+        //ShopPanel.SetActive(true);
+        //Cursor.lockState = CursorLockMode.Confined;
         IsInteracted = true;
 
         FreezeCamera(true);
 
-
+        yield return new WaitForSeconds(0.3f);
+        /*
         for (int i = 0; i < SlotPanel.transform.childCount; i++)
             Destroy(SlotPanel.transform.GetChild(i).gameObject);
         
@@ -90,6 +104,7 @@ public class MerchantShop : MonoBehaviour
         }
 
         InfoText.text = $"Credits: {PlayerProgress.Currency}";
+        */
     }
 
     public void Buy()
@@ -98,17 +113,45 @@ public class MerchantShop : MonoBehaviour
 
         int temp = Items[ItemIndex].Count;
 
-        if (temp > 0 && PlayerProgress.Currency >= Items[ItemIndex].Item.ItemValue)
+        if (temp > 0 && PlayerProgress.Currency >= Items[ItemIndex].Item.ItemValue * (100 + CostIncreasment) / 100)
         {
-            Player.GetComponent<Inventory>().AddItem(new Inventory.ItemData(Items[ItemIndex].Item, 1));
+            Player.GetComponent<PlayerInventory>().AddItem(new ItemData(Items[ItemIndex].Item, 1));
             temp--;
-            Items[ItemIndex] = new Inventory.ItemData(Items[ItemIndex].Item, temp);
-                     
-            Transform Slot = EventSystem.current.currentSelectedGameObject.GetComponent<Transform>();
-            Slot.GetChild(1).GetComponent<TextMeshProUGUI>().text = temp.ToString();
-            PlayerProgress.Currency -= Items[ItemIndex].Item.ItemValue;
-            InfoText.text = $"Credits: {PlayerProgress.Currency}  Cost: {Items[ItemIndex].Item.ItemValue}";
+            if (temp == 0)
+            {
+                Items.Remove(Items[ItemIndex]);
+                Destroy(EventSystem.current.currentSelectedGameObject.GetComponent<Transform>());
+                PlayerProgress.Currency -= Items[ItemIndex].Item.ItemValue * (100 + CostIncreasment) / 100;
+                InfoText.text = $"Credits: {PlayerProgress.Currency}";
+            }
+            else
+            {
+                Items[ItemIndex] = new ItemData(Items[ItemIndex].Item, temp); 
+                Transform Slot = EventSystem.current.currentSelectedGameObject.GetComponent<Transform>();
+                Slot.GetChild(1).GetComponent<TextMeshProUGUI>().text = temp.ToString();
+                PlayerProgress.Currency -= Items[ItemIndex].Item.ItemValue * (100 + CostIncreasment) / 100;
+                InfoText.text = $"Credits: {PlayerProgress.Currency}  Cost: {Items[ItemIndex].Item.ItemValue * (100 + CostIncreasment) / 100}";
+            }
         }
+    }
+    public void Sell(ItemData item)
+    {
+        int index = 0;
+        foreach (ItemData i in Items)
+        {
+            if (i.Item == item.Item)
+            {
+                Items[index] = new ItemData(Items[index].Item, i.Count + 1);
+                Transform Slot = EventSystem.current.currentSelectedGameObject.GetComponent<Transform>();
+                Slot.GetChild(1).GetComponent<TextMeshProUGUI>().text = (i.Count + 1).ToString();
+
+                PlayerProgress.Currency += item.Item.ItemValue;
+                InfoText.text = $"Credits: {PlayerProgress.Currency}  Cost: {Items[index].Item.ItemValue}";
+                return;
+            }
+            index++;
+        }
+        Items.Add(new ItemData(item.Item, 1));
     }
 
     void FreezeCamera(bool IsFrozen)

@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class ItemButtonHandler : MonoBehaviour
 {
-    Inventory.ItemData ItemData;
-    Inventory Inventory;
+    ItemData ItemData;
+    PlayerInventory Inventory;
+    MerchantInventory MerchantInventory;
     public bool bIsItemButton = true;
     public bool bIsEquipField = false;
 
@@ -14,14 +15,45 @@ public class ItemButtonHandler : MonoBehaviour
     Vector3 Position;
     GameObject LastCollidedObject = null;
 
-    public ItemButtonHandler(Inventory.ItemData ItemData)
+    public ItemButtonHandler(ItemData ItemData)
     {
         this.ItemData = ItemData;
     }
 
-    public void Init(Inventory.ItemData Itemdata, Inventory Inventory)
+    public void Init(ItemData Itemdata, PlayerInventory Inventory)
     {
         this.Inventory = Inventory;
+
+        if ((!Itemdata.Item) && bIsItemButton)
+        {
+            // If this is null button and supposed to store items destroy all children as they are not of use
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                GameObject.Destroy(transform.GetChild(i).gameObject);
+            }
+
+            GetComponent<Image>().color = new Color(1, 1, 1, 0);
+            return;
+        }
+        else if ((!Itemdata.Item) && bIsEquipField)
+        {
+            this.ItemData = Itemdata;
+            GetComponentInChildren<TMPro.TMP_Text>().text = "";
+            GetComponent<Image>().sprite = null;
+            GetComponentsInChildren<TMPro.TMP_Text>()[1].text = "";
+            GetComponent<Image>().color = new Color(1, 1, 1, 0);
+
+            return;
+        }
+        this.ItemData = Itemdata;
+        GetComponentInChildren<TMPro.TMP_Text>().text = ItemData.Item.ItemName;
+        GetComponent<Image>().sprite = ItemData.Item.ItemImage;
+        GetComponentsInChildren<TMPro.TMP_Text>()[1].text = ItemData.Count.ToString();
+        GetComponent<Image>().color = new Color(1, 1, 1, 1);
+    }
+    public void Init(ItemData Itemdata, MerchantInventory Inventory)
+    {
+        MerchantInventory = Inventory;
 
         if ((!Itemdata.Item) && bIsItemButton)
         {
