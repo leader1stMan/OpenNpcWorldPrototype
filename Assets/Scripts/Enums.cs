@@ -4,7 +4,11 @@
     GoingToWork,
     Working,
     GoingHome,
-    InteractingWithPlayer
+    InteractingWithPlayer,
+    Scared,
+    Petrified,
+    Attacking,
+    Defending
 }
 
 public enum EnemyState
