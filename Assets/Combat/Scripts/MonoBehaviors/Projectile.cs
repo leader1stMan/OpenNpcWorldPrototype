@@ -74,7 +74,6 @@ public class Projectile : MonoBehaviour
 
         // Rotate the arrow to face the direction of motion
         //transform.rotation = new Quaternion(Vector3.Angle(transform.forward, transform.position - PrevPosition), 0, 0, 1);
-        transform.eulerAngles = (transform.position-PrevPosition).normalized;
 
         // Check if arrow is out of range
         distanceTraveled += dx;
