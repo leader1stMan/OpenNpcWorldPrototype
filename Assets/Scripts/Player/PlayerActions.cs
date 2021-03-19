@@ -5,38 +5,38 @@ using System.Threading.Tasks;
 public class PlayerActions : MonoBehaviour
 {
     public KeyCode InteractButton = KeyCode.E;
+    public KeyCode EscapeButton = KeyCode.Escape;
 
     public LayerMask Mask;
     public float InteractionRange;
     public PlayerInventory PlayerInventroy;
-
+    public MerchantInventory Shop;
     public Camera PlayerCamera;
 
     public GameObject QuestUiWindow;
     private bool questWindowActive = false;
-
+    public bool isInteracting;
     private void Awake()
     {
         PlayerInventroy = GetComponent<PlayerInventory>();
     }
     private void Update()
     {
-        if (Input.GetKeyDown(InteractButton))
+        if (Input.GetKeyDown(InteractButton) && !isInteracting)
         {
             RaycastHit hit;
             if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out hit,InteractionRange, Mask))
             {
                 Transform Target = hit.transform;
 
-                MerchantShop Shop = Target.GetComponent<MerchantShop>();
+                Shop = Target.GetComponent<MerchantInventory>();
 
-                if (Shop != null) 
-                {                       
-                    StartCoroutine(Shop.Interact());
+                if (Shop != null)
+                {
+                    isInteracting = true;
                     PlayerInventroy.InventoryPanel.SetActive(true);
                     PlayerInventroy.ShopAccessed = true;
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.Confined;
+                    Shop.OpenInventory();
 
                     Vector3 rot = Target.eulerAngles;
                     Target.LookAt(transform);
@@ -57,6 +57,13 @@ public class PlayerActions : MonoBehaviour
             }
         }
         QuestWindowToggle();
+        if (isInteracting && Input.GetKeyDown(EscapeButton))
+        {
+            isInteracting = false;
+            PlayerInventroy.InventoryPanel.SetActive(false);
+            PlayerInventroy.ShopAccessed = false;
+            Shop.CloseInventory();
+        }
     }
 
     private void QuestWindowToggle()

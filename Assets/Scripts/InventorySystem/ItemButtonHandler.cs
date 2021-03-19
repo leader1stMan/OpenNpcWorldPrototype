@@ -5,9 +5,10 @@ using UnityEngine.UI;
 
 public class ItemButtonHandler : MonoBehaviour
 {
+    public InventoryType Type;
     ItemData ItemData;
     PlayerInventory Inventory;
-    MerchantInventory MerchantInventory;
+    MerchantInventory merchantInventory;
     public bool bIsItemButton = true;
     public bool bIsEquipField = false;
 
@@ -53,7 +54,7 @@ public class ItemButtonHandler : MonoBehaviour
     }
     public void Init(ItemData Itemdata, MerchantInventory Inventory)
     {
-        MerchantInventory = Inventory;
+        merchantInventory = Inventory;
 
         if ((!Itemdata.Item) && bIsItemButton)
         {
@@ -85,7 +86,15 @@ public class ItemButtonHandler : MonoBehaviour
 
     public void OnButtonClicked()
     {
-        if(!bIsDragged && ItemData.Item) Inventory.UseOrSell(ItemData);
+        switch (Type)
+        {
+            case InventoryType.Merchant:
+                if (!bIsDragged && ItemData.Item) merchantInventory.BuyItem(ItemData);
+                break;
+            case InventoryType.Player:
+                if (!bIsDragged && ItemData.Item) Inventory.UseOrSell(ItemData);
+                break;
+        }    
     }
 
     public void OnDrag()
@@ -167,5 +176,51 @@ public class ItemButtonHandler : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         LastCollidedObject = null;
+        switch (Type)
+        {
+            case InventoryType.Merchant:
+                MerchantInventory.InfoText.text = $"Credits: {PlayerProgress.Currency}";
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void MouseEnter()
+    {
+        if (ItemData.Item == null)
+            return;
+        switch (Type)
+        {
+            case InventoryType.Merchant:
+                MerchantInventory.InfoText.text = $"Credits: {PlayerProgress.Currency} Cost: {ItemData.Item.ItemValue * (100 + merchantInventory.CostIncreasment) / 100}";
+                break;
+            case InventoryType.Player:
+                if (Inventory.ShopAccessed)
+                    MerchantInventory.InfoText.text = $"Credits: {PlayerProgress.Currency} Cost: {ItemData.Item.ItemValue}";
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void MouseExit()
+    {
+        if (ItemData.Item == null)
+            return;
+        switch (Type)
+        {
+            case InventoryType.Merchant:
+                MerchantInventory.InfoText.text = $"Credits: {PlayerProgress.Currency}";
+                break;
+            case InventoryType.Player:
+                if (Inventory.ShopAccessed)
+                    MerchantInventory.InfoText.text = $"Credits: {PlayerProgress.Currency}";
+                break;
+            default:
+                break;
+        }
     }
 }
+
+public enum InventoryType { Player, Merchant}

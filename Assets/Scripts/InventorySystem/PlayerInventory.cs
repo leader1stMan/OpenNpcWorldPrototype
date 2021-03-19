@@ -18,7 +18,7 @@ public class PlayerInventory : Inventory
 
     private Transform InventoryEquipPanel;
     public bool ShopAccessed;
-    public MerchantShop shop;
+    public MerchantInventory shop;
 
     public override void Start()
     {
@@ -53,9 +53,7 @@ public class PlayerInventory : Inventory
         if (ShopAccessed)
         {
             RemoveItem(new ItemData(Itemdata.Item, 1));
-            shop.Sell(Itemdata);
-
-            RefreshInventoryUI();
+            shop.Sell(new ItemData(Itemdata.Item, 1));
         }
         else
         {
@@ -144,13 +142,11 @@ public class PlayerInventory : Inventory
         ClearItemButtons();
         foreach (ItemData i in InventoryList)
         {
-            if (i.Count != 0)
-            {
-                GameObject tempSlot = Instantiate<GameObject>(ItemSlotPrefab);
-                GameObject tempItem = tempSlot.transform.GetChild(0).gameObject;
-                tempItem.GetComponent<ItemButtonHandler>().Init(i, this);
-                tempSlot.transform.SetParent(InventoryItemPanel);
-            }
+            GameObject tempSlot = Instantiate<GameObject>(ItemSlotPrefab);
+            GameObject tempItem = tempSlot.transform.GetChild(0).gameObject;
+            tempItem.GetComponent<ItemButtonHandler>().Init(i, this);
+            tempSlot.transform.SetParent(InventoryItemPanel);
+
         }
         //Debug.Log(InventoryEquipPanel.transform.childCount);
         // Refresh the equip panel

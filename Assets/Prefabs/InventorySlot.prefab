@@ -440,7 +440,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
-    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -494,7 +493,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9a878e3b5c28984aaec2f809dea7316, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Type: 0
   bIsItemButton: 1
+  bIsEquipField: 0
 --- !u!114 &7497185248189942102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,6 +548,38 @@ MonoBehaviour:
         - m_Target: {fileID: 5163512042415298266}
           m_TargetAssemblyTypeName: ItemButtonHandler, Assembly-CSharp
           m_MethodName: OnEndDrag
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5163512042415298266}
+          m_TargetAssemblyTypeName: ItemButtonHandler, Assembly-CSharp
+          m_MethodName: MouseEnter
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5163512042415298266}
+          m_TargetAssemblyTypeName: ItemButtonHandler, Assembly-CSharp
+          m_MethodName: MouseExit
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

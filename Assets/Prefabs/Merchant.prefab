@@ -3072,7 +3072,7 @@ GameObject:
   - component: {fileID: 7488777172368816399}
   - component: {fileID: 5956885888957940876}
   - component: {fileID: 4169451687347231173}
-  - component: {fileID: 7352073796113815572}
+  - component: {fileID: 8820861122249464101}
   m_Layer: 8
   m_Name: Merchant
   m_TagString: Npc
@@ -3246,7 +3246,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Text: {fileID: -5152427970590384675, guid: c906b44c49a8ab54c8fdbd4dcb517075, type: 3}
   color: {r: 1, g: 0.7837778, b: 0, a: 1}
---- !u!114 &7352073796113815572
+--- !u!114 &8820861122249464101
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3255,16 +3255,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7523313584288638859}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c7e666f06026574a936495fa01fdeec, type: 3}
+  m_Script: {fileID: 11500000, guid: f6d8afd7248a9ca45bdf06567a91155c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Items: []
-  Player: {fileID: 0}
-  ShopPanel: {fileID: 0}
-  ItemSlotPrefab: {fileID: 1201470083506443664, guid: 58c07ce2eedfaba46adbaecd88e4eda2,
+  InventoryPanel: {fileID: 0}
+  ItemSlotPrefab: {fileID: 2739049692665913970, guid: a1829140362afcf4db1b77d3c60234a7,
     type: 3}
-  SlotPanel: {fileID: 0}
-  a: {fileID: 0}
+  MaxNumSlots: 20
+  Player: {fileID: 0}
+  IsInteracted: 0
+  CostIncreasment: 100
 --- !u!1001 &7523313585022400928
 PrefabInstance:
   m_ObjectHideFlags: 0

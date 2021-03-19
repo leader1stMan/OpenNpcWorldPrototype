@@ -104,7 +104,14 @@ public abstract class Inventory : MonoBehaviour
             {
                 ItemData temp = InventoryList[i];
                 temp.Count -= Itemdata.Count;
-                InventoryList[i] = temp;
+                if (temp.Count > 0)
+                {
+                    InventoryList[i] = temp;
+                }
+                else
+                {
+                    InventoryList[i] = EmptyItemData;
+                }
 
                 RefreshInventoryUI();
                 return;                                     // Item type exists in inventory. Add count to it and return.
