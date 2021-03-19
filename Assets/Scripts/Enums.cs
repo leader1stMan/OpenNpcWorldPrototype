@@ -19,5 +19,6 @@ public enum Job
 {
     Farmer,
     FisherMan,
-    Lumberjack    
+    Lumberjack,
+    Merchant
 }

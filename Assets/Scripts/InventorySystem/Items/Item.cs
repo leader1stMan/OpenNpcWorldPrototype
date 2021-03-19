@@ -8,6 +8,7 @@ public class Item : ScriptableObject
     // Data
     public int ItemId = -1;
     public string ItemName = "InValid";
+    public float ItemValue;
     [TextArea]
     public string Description = "This is an invalid item";
     public bool bCanTake = false;
@@ -34,6 +35,7 @@ public class Item : ScriptableObject
         this.ItemMesh = i.ItemMesh;
         this.ItemMaterial = i.ItemMaterial;
         this.ItemImage = i.ItemImage;
+        this.ItemValue = i.ItemValue;
     }
 
     // Implement custom behaviour when the item is used to reap its benefits

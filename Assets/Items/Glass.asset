@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemId: 1
   ItemName: Glass
+  ItemValue: 250
   Description: This is a glass
   bCanTake: 1
   bCanDrop: 1

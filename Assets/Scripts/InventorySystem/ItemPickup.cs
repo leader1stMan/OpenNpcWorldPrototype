@@ -9,6 +9,7 @@ public class ItemPickup : MonoBehaviour
 
     public Item Item;
     public int Count;
+    public float Value;
 
     // PickUp components
     Canvas PickUpCanvas;
