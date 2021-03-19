@@ -14,31 +14,60 @@ public class PlayerActions : MonoBehaviour
     //Dialogue    
     public GameObject dialogue_gameobject;
     public KeyCode InteractButton = KeyCode.E;
+    public KeyCode EscapeButton = KeyCode.Escape;
     public float InteractionRange;
+
+    public PlayerInventory PlayerInventroy;
+    public MerchantInventory Shop;
 
     public bool _indialogue = false;
     private RaycastHit _currenthit;
+
+    public bool isInteracting;
+
+    private void Awake()
+    {
+        PlayerInventroy = GetComponent<PlayerInventory>();
+    }
     private void Update()
     {
-        if (Input.GetKeyDown(InteractButton) && !_indialogue)
+        if (Input.GetKeyDown(InteractButton) && !isInteracting)
         {
             RaycastHit hit;
+            
             if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out hit, InteractionRange, Mask))
             {
                 _currenthit = hit;
-                DialogueManager dialogue = hit.transform.GetComponentInParent<DialogueManager>();
-                if (dialogue == null)
-                    dialogue = hit.transform.GetComponentInChildren<DialogueManager>();
-                if (dialogue == null)
-                    return;
-                if (dialogue._isdialogue == false)
+                Transform Target = hit.transform;
+                Shop = Target.GetComponent<MerchantInventory>();
+
+                if (Shop != null)
                 {
-                    dialogue_gameobject.SetActive(true);
-                    _indialogue = true;
-                    Vector3 rot = dialogue.transform.eulerAngles;
-                    dialogue.transform.LookAt(transform);
-                    dialogue.transform.eulerAngles = new Vector3(rot.x, dialogue.transform.eulerAngles.y, rot.z);
-                    dialogue.say(_currenthit.transform.gameObject);
+                    isInteracting = true;
+                    PlayerInventroy.InventoryPanel.SetActive(true);
+                    PlayerInventroy.ShopAccessed = true;
+                    Shop.OpenInventory();
+
+                    Vector3 rot = Target.eulerAngles;
+                    Target.LookAt(transform);
+                    Target.eulerAngles = new Vector3(rot.x, Target.eulerAngles.y, rot.z);
+                }
+                else
+                {
+                    DialogueManager dialogue = hit.transform.GetComponentInParent<DialogueManager>();
+                    if (dialogue == null)
+                        dialogue = hit.transform.GetComponentInChildren<DialogueManager>();
+                    if (dialogue == null)
+                        return;
+                    if (dialogue._isdialogue == false)
+                    {
+                        dialogue_gameobject.SetActive(true);
+                        _indialogue = true;
+                        Vector3 rot = dialogue.transform.eulerAngles;
+                        dialogue.transform.LookAt(transform);
+                        dialogue.transform.eulerAngles = new Vector3(rot.x, dialogue.transform.eulerAngles.y, rot.z);
+                        dialogue.say(_currenthit.transform.gameObject);
+                    }
                 }
             }
         }
@@ -47,6 +76,13 @@ public class PlayerActions : MonoBehaviour
             PressSpeakButton(_currenthit.transform.GetComponentInParent<DialogueManager>());
         }
         QuestWindowToggle();
+        if (isInteracting && Input.GetKeyDown(EscapeButton))
+        {
+            isInteracting = false;
+            PlayerInventroy.InventoryPanel.SetActive(false);
+            PlayerInventroy.ShopAccessed = false;
+            Shop.CloseInventory();
+        }
     }
 
     private void QuestWindowToggle()
