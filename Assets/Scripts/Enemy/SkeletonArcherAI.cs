@@ -38,6 +38,6 @@ public class SkeletonArcherAI : SkeletonAi
 
     void TakeAim()
     {
-        transform.rotation = Quaternion.LookRotation(currentTarget.position - transform.position);
+        //gameObject.transform.LookAt(currentTarget);
     }
 }
