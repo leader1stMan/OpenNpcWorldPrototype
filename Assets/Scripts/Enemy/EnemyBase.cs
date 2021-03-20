@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
-
+using UnityEditor;
+using System.Collections.Generic;
 public abstract class EnemyBase : MonoBehaviour
 {
     [SerializeField]
@@ -19,6 +20,8 @@ public abstract class EnemyBase : MonoBehaviour
             "This is an optional field")]
     public Collider PrefferedPatrolAreaCollider;
 
+
+
     #region Debugging
     public bool ShowDebugMessages;
     public bool VisualiseAgentActions;
@@ -26,11 +29,13 @@ public abstract class EnemyBase : MonoBehaviour
 
     public float VisionRange;
     public LayerMask WhatCanThisEnemyAttack;
+    [TagSelector] public string[] Tags;
     public EnemyState CurrentState { get; private set; }
 
     protected Transform currentTarget;
     float attackCooldown;
-
+    float blockCooldown;
+    bool hasshield = false;
     #region Editor Only
 
 #if UNITY_EDITOR
@@ -65,14 +70,19 @@ public abstract class EnemyBase : MonoBehaviour
     {
         SubscribeToEvents();
         PatrolToAnotherSpot();
+        if (stats.shield != null)
+        {
+            hasshield = true;
+
+        }
     }
 
     protected virtual void Update()
     {
         ManageState();
         CheckForTargets();
-        if (attackCooldown > 0)
-            attackCooldown -= Time.deltaTime;
+        if (attackCooldown > 0) { attackCooldown -= Time.deltaTime; }
+        if (hasshield == true && blockCooldown > 0) { blockCooldown -= Time.deltaTime / Random.Range(1f, 15f); }
 
         #region Editor Only
 #if UNITY_EDITOR
@@ -92,60 +102,86 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void ManageState()
     {
-        if(CurrentState == EnemyState.Patroling)
+        if (CurrentState == EnemyState.Patroling)
         {
-            if(Vector3.Distance(transform.position,agent.destination)<agent.stoppingDistance)
+            if (Vector3.Distance(transform.position, agent.destination) < agent.stoppingDistance)
             {
-                
+
                 PatrolToAnotherSpot();
             }
         }
-        else if(CurrentState == EnemyState.Chasing)
-        {
-            if (!currentTarget)
-            {
-                ChangeState(EnemyState.Idle);
-                return;            
-            }
-            RaycastHit hit;
-            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range && Physics.Raycast(transform.position, (currentTarget.position - transform.position).normalized, out hit, VisionRange) && hit.transform == currentTarget)
-            {
-                if (attackCooldown <= 0)
-                {
-                    Attack(currentTarget.gameObject);
-                    ChangeState(EnemyState.Attacking);
-                    attackCooldown = stats.GetWeapon().Cooldown; 
-                } 
-            }
-            else
-            {
-                Chase(currentTarget);
-            }
-        }
-        else if (CurrentState == EnemyState.Attacking)
+        else if (CurrentState == EnemyState.Chasing)
         {
             if (!currentTarget)
             {
                 ChangeState(EnemyState.Idle);
                 return;
             }
-            RaycastHit hit;
-            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range && Physics.Raycast(transform.position, (currentTarget.position - transform.position).normalized, out hit, VisionRange) && hit.transform == currentTarget)
+            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range + (stats.GetWeapon().Range / 1.1f))
             {
                 if (attackCooldown <= 0)
                 {
                     Attack(currentTarget.gameObject);
+                    ChangeState(EnemyState.Attacking);
                     attackCooldown = stats.GetWeapon().Cooldown;
                 }
+
             }
-            else  ChangeState(EnemyState.Chasing);
+            else
+            {
+                Chase(currentTarget);
+            }
+        }
+        else if (CurrentState == EnemyState.Attacking || CurrentState == EnemyState.Blocking)
+        {
+            if (!currentTarget)
+            {
+                ChangeState(EnemyState.Idle);
+                return;
+            }
+            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range + (stats.GetWeapon().Range / 1.1f))
+            {
+                if (attackCooldown <= 0 && hasshield == false || hasshield == true && stats.isBlocking == false && attackCooldown <= 0 && blockCooldown <= 0)
+                {
+                    Attack(currentTarget.gameObject);
+                    ChangeState(EnemyState.Attacking);
+                    attackCooldown = stats.GetWeapon().Cooldown * Random.Range(.01f, .5f);
+                    blockCooldown = stats.GetWeapon().Cooldown * Random.Range(.005f, .5f);
+                    print("attacking");
+
+                }
+                else if (stats.shield != null && blockCooldown <= 0 && stats.isBlocking == false)
+                {
+
+
+                    stats.isBlocking = true;
+                    attackCooldown = stats.GetWeapon().Cooldown * Random.Range(.02f, .5f);
+                    blockCooldown = stats.GetWeapon().Cooldown * Random.Range(.5f, 2f);
+                    print("blocking true b");
+                    ChangeState(EnemyState.Blocking);
+
+                }
+                else if (attackCooldown <= 0 && hasshield == true && stats.isBlocking == true && blockCooldown <= 0)
+                {
+                    stats.isBlocking = false;
+                    ChangeState(EnemyState.Attacking);
+                    Attack(currentTarget.gameObject);
+                    attackCooldown = stats.GetWeapon().Cooldown * Random.Range(.02f, .5f);
+                    blockCooldown = stats.GetWeapon().Cooldown * Random.Range(.1f, 1f);
+                    print("attacking1");
+                }
+
+            }
+            else { ChangeState(EnemyState.Chasing); }
+
+
         }
         else if (CurrentState == EnemyState.Idle)
         {
             PatrolToAnotherSpot();
             ChangeState(EnemyState.Patroling);
         }
-        
+
     }
 
 
@@ -158,18 +194,31 @@ public abstract class EnemyBase : MonoBehaviour
                 Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, WhatCanThisEnemyAttack);
                 foreach (Collider col in cols)
                 {
-                   
+
                     RaycastHit hit;
                     if (VisualiseAgentActions)
                         Debug.DrawRay(transform.position, (col.transform.position - transform.position).normalized * VisionRange, Color.red);
-                    if (Physics.Raycast(transform.position, (col.transform.position - transform.position).normalized,out hit, VisionRange))
+                    if (Physics.Raycast(transform.position, (col.transform.position - transform.position).normalized, out hit, VisionRange))
                     {
                         if (hit.transform == this.transform)
                             continue;
                         if (hit.transform == col.transform)
                         {
-                            currentTarget = col.transform;
-                            break;
+                            bool DontAttack = false;
+
+                            for (int i = 0; i < Tags.Length; i++)
+                            {
+                                if (col.gameObject.tag == Tags[i])
+                                {
+                                    DontAttack = true;
+                                }
+                            }
+                            if (DontAttack == false)
+                            {
+                                currentTarget = col.transform;
+                                break;
+                            }
+
                         }
                     }
                     else
@@ -177,7 +226,7 @@ public abstract class EnemyBase : MonoBehaviour
                         currentTarget = null;
                     }
                 }
-                
+
             }
             if (currentTarget != null)
             {
@@ -193,24 +242,20 @@ public abstract class EnemyBase : MonoBehaviour
         }
         else
         {
-            /*RaycastHit hit;
-            if(VisualiseAgentActions)
-            Debug.DrawRay(transform.position, (currentTarget.position - transform.position).normalized * VisionRange, Color.red);
-            if (Physics.Raycast(transform.position, (currentTarget.position - transform.position).normalized, out hit,VisionRange))
+            RaycastHit hit;
+            if (VisualiseAgentActions)
+                Debug.DrawRay(transform.position, (currentTarget.position - transform.position).normalized * VisionRange, Color.red);
+            if (Physics.Raycast(transform.position + new Vector3(0, .5f, 0), (currentTarget.position - transform.position).normalized, out hit, VisionRange))
             {
-                
-                
-                if (hit.transform != currentTarget.transform || Vector3.Distance(transform.position,hit.transform.position)>VisionRange)
+
+
+                if (hit.transform != currentTarget.transform || Vector3.Distance(transform.position, hit.transform.position) > VisionRange)
                 {
+                    print("lost target");
 
                     currentTarget = null;
                     ChangeState(EnemyState.Idle);
                 }
-            }*/
-            if(Vector3.Distance(transform.position, currentTarget.transform.position) > VisionRange)
-            {
-                currentTarget = null;
-                ChangeState(EnemyState.Idle);
             }
         }
     }
@@ -226,7 +271,7 @@ public abstract class EnemyBase : MonoBehaviour
         if (CurrentState == state)
             return;
         OnStateChanged.Invoke(CurrentState, state);
-        
+
         CurrentState = state;
     }
 
@@ -235,28 +280,29 @@ public abstract class EnemyBase : MonoBehaviour
         OnStateChanged.AddListener(ManageStateChange);
     }
 
-    protected virtual void ManageStateChange(EnemyState oldState,EnemyState newState)
+    protected virtual void ManageStateChange(EnemyState oldState, EnemyState newState)
     {
         switch (newState)
         {
             case EnemyState.Attacking:
-                agent.isStopped = true;
                 if (ShowDebugMessages)
                     Debug.Log(transform.name + " is attacking " + currentTarget.name);
                 break;
             case EnemyState.Chasing:
-                agent.isStopped = false;
                 if (ShowDebugMessages)
-                    Debug.Log(transform.name+" is chasing " + currentTarget.name);
+                    Debug.Log(transform.name + " is chasing " + currentTarget.name);
                 break;
             case EnemyState.Idle:
                 if (ShowDebugMessages)
                     Debug.Log(name + " is idle");
                 break;
             case EnemyState.Patroling:
-                agent.isStopped = false;
                 if (ShowDebugMessages)
-                        Debug.Log(name + " is patrolling");
+                    Debug.Log(name + " is patrolling");
+                break;
+            case EnemyState.Blocking:
+                if (ShowDebugMessages)
+                    Debug.Log(name + " is blocking");
                 break;
         }
     }
@@ -267,9 +313,9 @@ public abstract class EnemyBase : MonoBehaviour
         if (PrefferedPatrolAreaCollider == null)
         {
             dest = new Vector3(
-                Random.Range(transform.position.x - VisionRange*2,transform.position.x+VisionRange*2),
-                (transform.position.y),     
-                Random.Range(transform.position.z - VisionRange*2 , transform.position.z + VisionRange*2)
+                Random.Range(transform.position.x - VisionRange * 2, transform.position.x + VisionRange * 2),
+                (transform.position.y),
+                Random.Range(transform.position.z - VisionRange * 2, transform.position.z + VisionRange * 2)
                 );
         }
         else
@@ -281,7 +327,7 @@ public abstract class EnemyBase : MonoBehaviour
                 );
         }
         NavMeshHit hit;
-        if(NavMesh.SamplePosition(dest, out hit, VisionRange, 1))
+        if (NavMesh.SamplePosition(dest, out hit, VisionRange, 1))
         {
             dest = hit.position;
             ChangeState(EnemyState.Patroling);
@@ -293,6 +339,15 @@ public abstract class EnemyBase : MonoBehaviour
             PatrolToAnotherSpot();
         }
     }
+
+
+
+    protected virtual void StopAnimation(string AnimationName)
+    {
+        GetComponent<SkeletonAi>().anim.SetBool(AnimationName, false);
+    }
+
+
 
     protected virtual void OnDrawGizmosSelected()
     {
@@ -321,4 +376,4 @@ public abstract class EnemyBase : MonoBehaviour
 /// <summary>
 /// This event has two parameters. The first one is the old state and the other is the new state
 /// </summary>
-public class EnemyStateChangeEvent : UnityEvent<EnemyState,EnemyState> { }
+public class EnemyStateChangeEvent : UnityEvent<EnemyState, EnemyState> { }
