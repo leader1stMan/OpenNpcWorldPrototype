@@ -28,7 +28,7 @@ public abstract class EnemyBase : MonoBehaviour
     public LayerMask WhatCanThisEnemyAttack;
     public EnemyState CurrentState { get; private set; }
 
-    Transform currentTarget;
+    protected Transform currentTarget;
     float attackCooldown;
 
     #region Editor Only
