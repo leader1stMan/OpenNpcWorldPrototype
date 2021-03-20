@@ -107,8 +107,7 @@ public abstract class EnemyBase : MonoBehaviour
                 ChangeState(EnemyState.Idle);
                 return;            
             }
-            RaycastHit hit;
-            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range && Physics.Raycast(transform.position, (currentTarget.position - transform.position).normalized, out hit, VisionRange) && hit.transform == currentTarget)
+            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range)
             {
                 if (attackCooldown <= 0)
                 {
@@ -129,8 +128,7 @@ public abstract class EnemyBase : MonoBehaviour
                 ChangeState(EnemyState.Idle);
                 return;
             }
-            RaycastHit hit;
-            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range && Physics.Raycast(transform.position, (currentTarget.position - transform.position).normalized, out hit, VisionRange) && hit.transform == currentTarget)
+            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range)
             {
                 if (attackCooldown <= 0)
                 {

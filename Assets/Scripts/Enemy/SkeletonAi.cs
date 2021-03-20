@@ -13,7 +13,7 @@ public class SkeletonAi : EnemyBase
             if(CurrentState == EnemyState.Attacking)
             {
                 transform.LookAt(currentTarget);
-                transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
+                transform.rotation = new Quaternion(0, transform.rotation.y, 0, 1);
             }
             else{
                 Vector3 rot = transform.eulerAngles;
