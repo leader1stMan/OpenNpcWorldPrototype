@@ -238,10 +238,12 @@ public abstract class EnemyBase : MonoBehaviour
         switch (newState)
         {
             case EnemyState.Attacking:
+                agent.isStopped = true;
                 if (ShowDebugMessages)
                     Debug.Log(transform.name + " is attacking " + currentTarget.name);
                 break;
             case EnemyState.Chasing:
+                agent.isStopped = false;
                 if (ShowDebugMessages)
                     Debug.Log(transform.name+" is chasing " + currentTarget.name);
                 break;
@@ -250,7 +252,8 @@ public abstract class EnemyBase : MonoBehaviour
                     Debug.Log(name + " is idle");
                 break;
             case EnemyState.Patroling:
-                if(ShowDebugMessages)
+                agent.isStopped = false;
+                if (ShowDebugMessages)
                         Debug.Log(name + " is patrolling");
                 break;
         }
