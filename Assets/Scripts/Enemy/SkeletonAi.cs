@@ -10,15 +10,9 @@ public class SkeletonAi : EnemyBase
         
         if (CurrentState != EnemyState.Idle)
         {           
-            if(CurrentState == EnemyState.Attacking)
-            {
-                gameObject.transform.LookAt(currentTarget);
-            }
-            else{
-                Vector3 rot = transform.eulerAngles;
-                transform.LookAt(agent.steeringTarget);
-                transform.eulerAngles = new Vector3(rot.x, transform.eulerAngles.y, rot.z);
-            }
+            Vector3 rot = transform.eulerAngles;
+            transform.LookAt(agent.steeringTarget);
+            transform.eulerAngles = new Vector3(rot.x, transform.eulerAngles.y, rot.z);            
         }
 
     }
