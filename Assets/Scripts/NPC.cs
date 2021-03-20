@@ -50,8 +50,6 @@ public class NPC : NpcData
     {
         Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, VisionLayers);
 
-        bool bAdversityFound = false;
-
         foreach (Collider col in cols)
         {
             // If the NPC is looking at another NPC attacking or defending, run
@@ -60,7 +58,6 @@ public class NPC : NpcData
                 NpcStates state = col.gameObject.GetComponent<NPC>().currentState;
                 if (state == NpcStates.Attacking || state == NpcStates.Defending)
                 {
-                    bAdversityFound = true;
                     ChangeState(NpcStates.Scared);
                 }
             }
@@ -71,15 +68,9 @@ public class NPC : NpcData
                 Debug.Log(col.gameObject.name + " is " + state);
                 if (state == EnemyState.Attacking)
                 {
-                    bAdversityFound = true;
                     ChangeState(NpcStates.Scared);
                 }
             }
-        }
-
-        if (!bAdversityFound && currentState == NpcStates.Scared)
-        {
-            ChangeState(NpcStates.Idle);
         }
 
     }
