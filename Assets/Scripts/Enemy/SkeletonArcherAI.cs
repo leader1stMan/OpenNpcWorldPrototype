@@ -63,9 +63,7 @@ public class SkeletonArcherAI : SkeletonAi
         float AimOffset = Mathf.Abs(AimOffset1) > Mathf.Abs(AimOffset2) ? AimOffset2 : AimOffset1;
         //AimOffset = Mathf.Asin(g * x / (v * v)) / 2;
 
-        AimRotation.x = -AimOffset;
-
-        Debug.Log(y);
+        AimRotation.x = AimRotation.z>180? AimOffset : -AimOffset;
 
         return AimRotation;
     }
