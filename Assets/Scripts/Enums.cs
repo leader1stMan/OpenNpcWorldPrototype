@@ -16,8 +16,7 @@ public enum EnemyState
     Idle,
     Patroling,
     Chasing,
-    Attacking,
-    Blocking
+    Attacking
 }
 
 public enum Job
