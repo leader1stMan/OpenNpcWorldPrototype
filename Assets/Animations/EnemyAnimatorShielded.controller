@@ -515,7 +515,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: EnemyAnimator
+  m_Name: EnemyAnimatorShielded
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: isIdle

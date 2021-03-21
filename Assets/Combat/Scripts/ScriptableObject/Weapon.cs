@@ -33,7 +33,7 @@ public class Weapon : AttackDefinition
 
         if (defenderStats.isBlocking)
         {
-            Debug.Log("block");
+            Debug.Log("block defender stat");
             return;
         }
 
@@ -63,6 +63,11 @@ public class Weapon : AttackDefinition
         if (defenderStats.isBlocking)
         {
             Debug.Log("block");
+            SkeletonAi skai = defender.GetComponent<SkeletonAi>();
+            if (skai != null)
+            {
+                skai.anim.SetBool("ShieldBlock", true);
+            }
             return;
         }
 
