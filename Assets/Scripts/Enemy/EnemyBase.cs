@@ -117,7 +117,8 @@ public abstract class EnemyBase : MonoBehaviour
                 ChangeState(EnemyState.Idle);
                 return;            
             }
-            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range + (stats.GetWeapon().Range / 1.1f))
+            RaycastHit hit;
+            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range + (stats.GetWeapon().Range / 1.1f) && Physics.Raycast(transform.position, (currentTarget.position - transform.position).normalized, out hit, VisionRange) && hit.transform == currentTarget)
             {
                 if (attackCooldown <= 0)
                 {
@@ -139,7 +140,8 @@ public abstract class EnemyBase : MonoBehaviour
                 ChangeState(EnemyState.Idle);
                 return;
             }
-            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range + (stats.GetWeapon().Range / 1.1f))
+            RaycastHit hit;
+            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range + (stats.GetWeapon().Range / 1.1f) && Physics.Raycast(transform.position, (currentTarget.position - transform.position).normalized, out hit, VisionRange) && hit.transform == currentTarget)
             {
                 if (attackCooldown <= 0 && hasshield==false || hasshield == true && stats.isBlocking == false && attackCooldown <= 0 && blockCooldown <= 0)
                 {
@@ -194,11 +196,11 @@ public abstract class EnemyBase : MonoBehaviour
                 Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, WhatCanThisEnemyAttack);
                 foreach (Collider col in cols)
                 {
-                   
+
                     RaycastHit hit;
                     if (VisualiseAgentActions)
                         Debug.DrawRay(transform.position, (col.transform.position - transform.position).normalized * VisionRange, Color.red);
-                    if (Physics.Raycast(transform.position, (col.transform.position - transform.position).normalized,out hit, VisionRange))
+                    if (Physics.Raycast(transform.position, (col.transform.position - transform.position).normalized, out hit, VisionRange))
                     {
                         if (hit.transform == this.transform)
                             continue;
@@ -208,7 +210,7 @@ public abstract class EnemyBase : MonoBehaviour
 
                             for (int i = 0; i < Tags.Length; i++)
                             {
-                                if(col.gameObject.tag == Tags[i])
+                                if (col.gameObject.tag == Tags[i])
                                 {
                                     DontAttack = true;
                                 }
@@ -218,7 +220,7 @@ public abstract class EnemyBase : MonoBehaviour
                                 currentTarget = col.transform;
                                 break;
                             }
-                            
+
                         }
                     }
                     else
@@ -226,7 +228,7 @@ public abstract class EnemyBase : MonoBehaviour
                         currentTarget = null;
                     }
                 }
-                
+
             }
             if (currentTarget != null)
             {
@@ -242,7 +244,7 @@ public abstract class EnemyBase : MonoBehaviour
         }
         else
         {
-            RaycastHit hit;
+            /*RaycastHit hit;
             if(VisualiseAgentActions)
             Debug.DrawRay(transform.position, (currentTarget.position - transform.position).normalized * VisionRange, Color.red);
             if (Physics.Raycast(transform.position+new Vector3(0,.5f,0), (currentTarget.position - transform.position).normalized, out hit,VisionRange))
@@ -256,6 +258,11 @@ public abstract class EnemyBase : MonoBehaviour
                     currentTarget = null;
                     ChangeState(EnemyState.Idle);
                 }
+            }*/
+            if (Vector3.Distance(transform.position, currentTarget.transform.position) > VisionRange)
+            {
+                currentTarget = null;
+                ChangeState(EnemyState.Idle);
             }
         }
     }
@@ -285,10 +292,12 @@ public abstract class EnemyBase : MonoBehaviour
         switch (newState)
         {
             case EnemyState.Attacking:
+                agent.isStopped = true;
                 if (ShowDebugMessages)
                     Debug.Log(transform.name + " is attacking " + currentTarget.name);
                 break;
             case EnemyState.Chasing:
+                agent.isStopped = false;
                 if (ShowDebugMessages)
                     Debug.Log(transform.name+" is chasing " + currentTarget.name);
                 break;
@@ -297,7 +306,8 @@ public abstract class EnemyBase : MonoBehaviour
                     Debug.Log(name + " is idle");
                 break;
             case EnemyState.Patroling:
-                if(ShowDebugMessages)
+                agent.isStopped = false;
+                if (ShowDebugMessages)
                         Debug.Log(name + " is patrolling");
                 break;
             case EnemyState.Blocking:

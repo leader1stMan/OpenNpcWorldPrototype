@@ -9,10 +9,18 @@ public class SkeletonAi : EnemyBase
         base.Update();
         
         if (CurrentState != EnemyState.Idle)
-        {           
-            Vector3 rot = transform.eulerAngles;
-            transform.LookAt(agent.steeringTarget);
-            transform.eulerAngles = new Vector3(rot.x, transform.eulerAngles.y, rot.z);            
+        {
+            if (CurrentState == EnemyState.Attacking)
+            {
+                transform.LookAt(currentTarget);
+                transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
+            }
+            else
+            {
+                Vector3 rot = transform.eulerAngles;
+                transform.LookAt(agent.steeringTarget);
+                transform.eulerAngles = new Vector3(rot.x, transform.eulerAngles.y, rot.z);
+            }
         }
 
     }

@@ -53,19 +53,18 @@ public class SkeletonArcherAI : SkeletonAi
         float y = currentTarget.transform.position.y - (transform.position.y + LaunchHeight);
 
         // Getting weapon values
-        //float g = stats.GetWeapon().ProjectileToFire.GravityFactor; ERROR
+        float g = stats.GetWeapon().ProjectileToFire.GravityFactor;
         float v = stats.GetWeapon().ProjectileSpeed;
         float f1 = v * v;
-        //   float f2 = Mathf.Sqrt((f1 * f1) - g * (g*(x * x) + 2 * y * f1));
-        // float AimOffset1 = Mathf.Atan((f1 + f2) / (g * x));
-        // float AimOffset2 = Mathf.Atan((f1 - f2) / (g * x));
+        float f2 = Mathf.Sqrt((f1 * f1) - g * (g*(x * x) + 2 * y * f1));
+        float AimOffset1 = Mathf.Atan((f1 + f2) / (g * x));
+        float AimOffset2 = Mathf.Atan((f1 - f2) / (g * x));
 
-        // float AimOffset = Mathf.Abs(AimOffset1) > Mathf.Abs(AimOffset2) ? AimOffset2 : AimOffset1;
-        //AimOffset = Mathf.Asin(g * x / (v * v)) / 2;
+        float AimOffset = Mathf.Abs(AimOffset1) > Mathf.Abs(AimOffset2) ? AimOffset2 : AimOffset1;
+        AimOffset = Mathf.Asin(g * x / (v * v)) / 2;
 
-        // AimRotation *= Quaternion.AngleAxis(AimOffset, transform.forward);
+        AimRotation *= Quaternion.AngleAxis(AimOffset, transform.forward);
 
-        //  return AimRotation;
-        return Quaternion.identity;
+        return AimRotation;
     }
 }

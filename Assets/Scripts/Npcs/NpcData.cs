@@ -7,6 +7,9 @@ public class NpcData : MonoBehaviour
     protected string npcName;
     public string NpcName { get { return npcName; } }
 
+    public float VisionRange = 10;
+    public LayerMask VisionLayers;
+
     [SerializeField]
     protected int age;
     public int Age { get { return age; } }
