@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
 
-public class MerchantInventory : Inventory
+public class MerchantInventory : Inventory, IInteractWindow
 {
     public GameObject Player;
     NavMeshAgent agent;
@@ -13,8 +13,6 @@ public class MerchantInventory : Inventory
 
     float PlayerOriginalMouseSensitivity;
     float PlayerOriginalMouseSensitivityInternal;
-
-    public bool IsInteracted;
 
     public float CostIncreasment = 100;
 
@@ -49,12 +47,19 @@ public class MerchantInventory : Inventory
         }
     }
 
-    public void OpenInventory()
+    public void OnOpen()
     {
         if (!InventoryPanel.activeSelf)
         {
-            IsInteracted = true;
+            Vector3 rot = transform.eulerAngles;
+            transform.LookAt(Player.transform);
+            transform.eulerAngles = new Vector3(rot.x, transform.eulerAngles.y, rot.z);
+
+            inventory.InventoryPanel.SetActive(true);
+            inventory.ShopAccessed = true;
+
             FreezeCamera(true);
+
             inventory.shop = this;
             agent.isStopped = true;
             firstPerson.playerCanMove = false;
@@ -64,12 +69,15 @@ public class MerchantInventory : Inventory
             InfoText.text = $"Credits: {PlayerProgress.Currency}";
         }
     }
-    public void CloseInventory()
+    public void OnClose()
     {
         if (InventoryPanel.activeSelf)
         {
-            IsInteracted = false;
+            inventory.InventoryPanel.SetActive(false);
+            inventory.ShopAccessed = false;
+
             FreezeCamera(false);
+
             inventory.shop = null;
             agent.isStopped = false;
             InventoryPanel.SetActive(false);

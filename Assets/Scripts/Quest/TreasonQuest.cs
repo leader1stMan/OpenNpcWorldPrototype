@@ -83,7 +83,7 @@ public class TreasonQuest : Quest
     {
         StartCoroutine("Day");
         goal1.RemoveHandler(CompleteFirstGoal);
-        dialogue.sentence1 = goAwaySentence;
+        dialogue.currentSentence = goAwaySentence;
     }
 
     IEnumerator Day()
@@ -91,11 +91,11 @@ public class TreasonQuest : Quest
         yield return new WaitForSeconds(control.SecondsInAFullDay);
         if (goal1.selectedSentence.questParameter == "red")
         {
-            dialogue.sentence1 = redEnding;
+            dialogue.currentSentence = redEnding;
         }
         if (goal1.selectedSentence.questParameter == "orange")
         {
-            dialogue.sentence1 = orangeEnding;
+            dialogue.currentSentence = orangeEnding;
         }
     }
 
@@ -133,22 +133,22 @@ public class TreasonQuest : Quest
 
     void KingEnding()
     {
-        dialogue.sentence1.nextSentence = kingEnding;
+        dialogue.currentSentence.nextSentence = kingEnding;
         //complete king
     }
 
     void NeutralEnding()
     {
-        dialogue.sentence1.nextSentence = neutralEnding;
+        dialogue.currentSentence.nextSentence = neutralEnding;
         AlchemistDialogue = Alchemist.GetComponent<DialogueManager>();
-        AlchemistDialogue.sentence1 = AlchemistStartSentence;
+        AlchemistDialogue.currentSentence = AlchemistStartSentence;
     }
 
     void AgainstEnding()
     {
-        dialogue.sentence1.nextSentence = againstKingSentence;
+        dialogue.currentSentence.nextSentence = againstKingSentence;
         TheodoreDialogue = Theodore.GetComponent<DialogueManager>();
-        TheodoreDialogue.sentence1 = TheodoreStartSentence;
+        TheodoreDialogue.currentSentence = TheodoreStartSentence;
     }
 
     void EnableAgainstFromNeutral()
@@ -156,7 +156,7 @@ public class TreasonQuest : Quest
         if (withPotion)
         {
             TheodoreDialogue = Theodore.GetComponent<DialogueManager>();
-            TheodoreDialogue.sentence1 = TheodoreStartSentence;
+            TheodoreDialogue.currentSentence = TheodoreStartSentence;
         }
         else
         {
@@ -169,12 +169,12 @@ public class TreasonQuest : Quest
     {
         if (AlchemistGoal.selectedSentence.questParameter == "with potion")
         {
-            dialogue.sentence1 = GauvainWithPotion;
+            dialogue.currentSentence = GauvainWithPotion;
             withPotion = true;
         }
         if (AlchemistGoal.selectedSentence.questParameter == "without potion")
         {
-            dialogue.sentence1 = GauvainWithoutPotion;
+            dialogue.currentSentence = GauvainWithoutPotion;
             withPotion = false;
         }
     }

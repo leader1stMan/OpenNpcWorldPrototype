@@ -7,13 +7,11 @@ using UnityEngine.EventSystems;
 using TMPro;
 using System.IO;
 
-public class DialogueManager : MonoBehaviour
+public class DialogueManager : MonoBehaviour, IInteractWindow
 {
     public Camera dialogueCamera;
     public GameObject[] ToDisable;
     public UnityEvent OnStartDialogue;
-    public Queue<string> sentences;
-    public string[] FromFileDialogue;
     private int index;
     public float _textSpeed = 0f;
     private string sentence;
@@ -24,12 +22,12 @@ public class DialogueManager : MonoBehaviour
     public bool displayingdialogue = false;
     private GameObject _dialogue;
     private Dialogue dialogueScript;
-    public Sentence sentence1;
-
+    public Sentence currentSentence;
+    public Sentence defaultSentence;
+    private MerchantInventory shop;
     NPC npc;
     private void Start() 
     {
-        sentences = new Queue<string>();
         player = GameObject.FindWithTag("Player").GetComponent<FirstPersonAIO>();
         _playeractions = GameObject.FindWithTag("Player").GetComponent<PlayerActions>();
         _dialogue = _playeractions.dialogue_gameobject;
@@ -41,38 +39,27 @@ public class DialogueManager : MonoBehaviour
         if (OnStartDialogue == null)
             OnStartDialogue = new UnityEvent();
         npc = GetComponent<NPC>();
+        shop = GetComponent<MerchantInventory>();
     }
 
     public void say(GameObject caller) 
     {
-
-        if(caller == null)
-        {
-            Debug.Log("Dialogue is null");
-        }
         player.playerCanMove = false;
         _isdialogue = true;
-        //UpdateFile();
         dialogueScript._name.text = caller.name;
-        //Debug.Log(caller.name);
         player.lockAndHideCursor = false;
+        _playeractions.openedWindow = this;
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        //Debug.Log("Starting Convo");
         npc.agent.isStopped = true;
         npc.GetComponentInChildren<Animator>().enabled = false;
         
         npc.enabled = false;
-       
-        DialogueSystem.instance.Attach(this);
 
-        sentences.Clear();
-        /*
-        foreach(string sentence in FromFileDialogue)
-        {
-            sentences.Enqueue(sentence);
-        }
-        */
+        if (defaultSentence != null)
+            currentSentence = defaultSentence;
+        DialogueSystem.instance.Attach(this);
         DisplayNextSentence();
         
         OnStartDialogue.Invoke();
@@ -82,7 +69,6 @@ public class DialogueManager : MonoBehaviour
     public void EndDialogue()
     {
         playerCombat.attackCooldown = 3f;
-        //Debug.Log("Done");
         DialogueSystem.instance.Detach();
         npc.GetComponentInChildren<Animator>().enabled = true;
         npc.enabled = true;
@@ -91,8 +77,9 @@ public class DialogueManager : MonoBehaviour
         Cursor.visible = false;
         _isdialogue = false;
         player.playerCanMove = true;
-        _playeractions = GameObject.FindWithTag("Player").GetComponent<PlayerActions>();
+        _playeractions.openedWindow = null;
         _playeractions._indialogue = false;
+        _playeractions.isInteracting = false;
         _playeractions.dialogue_gameobject.SetActive(false);
     }
 
@@ -100,13 +87,6 @@ public class DialogueManager : MonoBehaviour
     private void OnDestroy()
     {
         OnStartDialogue.RemoveAllListeners();
-    }
-    private void UpdateFile()
-    {
-        string path;
-        path = "Assets/NPC dialogues/SentenceTesting.txt";
-        StreamReader reader = new StreamReader(path);
-        FromFileDialogue = File.ReadAllLines(path);
     }
     public void OptionsActive()
     {
@@ -118,36 +98,43 @@ public class DialogueManager : MonoBehaviour
         index = 0;
         foreach (Button a in options)
         {
-            if (index >= sentence1.GetPaths())
+            if (index >= currentSentence.GetPaths())
                 break;
             a.gameObject.SetActive(true);
             a.interactable = true;
             AddButtonListener(a, index);
-            a.GetComponentInChildren<Text>().text = sentence1.GetSentence(index).text;
+            a.GetComponentInChildren<Text>().text = currentSentence.GetSentence(index).text;
             index++;
         }
     }
     public void DisplayNextSentence()
     {
-        if (sentence1.answer != null && sentence1.answer.Length > 0)
+        if (currentSentence.answer != null && currentSentence.answer.Length > 0)
         {
-            sentence = sentence1.answer;
-            if (sentence1.goal != null)
+            sentence = currentSentence.answer;
+            if (currentSentence.goal != null)
             {
-                sentence1.goal.completeSentence(sentence1);
+                currentSentence.goal.completeSentence(currentSentence);
             }
-
+            if (currentSentence.CallShop)
+            {
+                OpenShop();
+            }
             Typee();
         }
         else
         {
-            if (sentence1.nextSentence != null)
+            if (currentSentence.nextSentence != null)
             {
-                if (sentence1.goal != null)
+                if (currentSentence.goal != null)
                 {
-                    sentence1.goal.completeSentence(sentence1); 
+                    currentSentence.goal.completeSentence(currentSentence); 
                 }
-                sentence1 = sentence1.nextSentence;
+                if (currentSentence.CallShop)
+                {
+                    OpenShop();
+                }
+                currentSentence = currentSentence.nextSentence;
 
                 DisplayNextSentence();
             }
@@ -176,11 +163,6 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSeconds(_textSpeed*Time.deltaTime);
         }
         displayingdialogue = false;
-        // if (!sentence1.HasPaths())
-        // {
-        //     Debug.Log("Has Ended");
-        //     EndDialogue();
-        // }
     }
     private void Choices(int index)
     {
@@ -192,7 +174,7 @@ public class DialogueManager : MonoBehaviour
             a.gameObject.SetActive(false);
             a.interactable = false;
         }
-        sentence1 = sentence1.choices[index];
+        currentSentence = currentSentence.choices[index];
         dialogueScript.DialogueText.gameObject.SetActive(true);
         dialogueScript._name.gameObject.SetActive(true);
         displayingdialogue = false;
@@ -205,5 +187,18 @@ public class DialogueManager : MonoBehaviour
             Choices(index);
         }
         );
+    }
+
+    public void OnClose()
+    {
+        EndDialogue();
+    }
+
+    void OpenShop()
+    {
+        EndDialogue();
+        shop.OnOpen();
+        _playeractions.openedWindow = shop;
+        _playeractions.isInteracting = true;
     }
 }

@@ -13,6 +13,7 @@ public class Sentence : ScriptableObject
     public List<Sentence> choices;
 
     public string questParameter;
+    public bool CallShop;
 
     public Sentence(string newText)
     {

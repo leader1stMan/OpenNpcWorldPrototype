@@ -295,11 +295,11 @@ MonoBehaviour:
   OnStartDialogue:
     m_PersistentCalls:
       m_Calls: []
-  FromFileDialogue: []
   _textSpeed: 0
   _isdialogue: 0
   displayingdialogue: 0
-  sentence1: {fileID: 0}
+  currentSentence: {fileID: 11400000, guid: 69eb25213af7bf04ca0956fb28441559, type: 2}
+  defaultSentence: {fileID: 0}
 --- !u!114 &-3937936013646344853
 MonoBehaviour:
   m_ObjectHideFlags: 0

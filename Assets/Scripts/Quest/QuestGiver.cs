@@ -61,7 +61,5 @@ public class QuestGiver : MonoBehaviour
         
         quest = q;
         questWindow.SetActive(false);
-        //quest.isActive = true;
-        player.quest = quest;
     }
 }
