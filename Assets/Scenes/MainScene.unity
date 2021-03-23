@@ -888,7 +888,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &252701122
 Transform:
   m_ObjectHideFlags: 0
@@ -6829,7 +6829,7 @@ PrefabInstance:
     - target: {fileID: 7523313584288638858, guid: 478b1810b02a9744db780642269305f4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.06229
+      value: 7.18
       objectReference: {fileID: 0}
     - target: {fileID: 7523313584288638858, guid: 478b1810b02a9744db780642269305f4,
         type: 3}
@@ -6839,7 +6839,7 @@ PrefabInstance:
     - target: {fileID: 7523313584288638858, guid: 478b1810b02a9744db780642269305f4,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.854081
+      value: -27.73
       objectReference: {fileID: 0}
     - target: {fileID: 7523313584288638858, guid: 478b1810b02a9744db780642269305f4,
         type: 3}
@@ -9265,6 +9265,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FarmerNPC
       objectReference: {fileID: 0}
+    - target: {fileID: 2820446562284331890, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2820446562284331891, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9339,6 +9344,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LumberjackNPC
+      objectReference: {fileID: 0}
+    - target: {fileID: 3650326406362613892, guid: 6cdfc5fdeea853549a62180b010a3f72,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3650326406362613893, guid: 6cdfc5fdeea853549a62180b010a3f72,
         type: 3}
@@ -10955,6 +10965,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FishermanNPC
+      objectReference: {fileID: 0}
+    - target: {fileID: 3227924253082711377, guid: d2f58f1ca95fd3b43917d67023dded37,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3227924253082711379, guid: d2f58f1ca95fd3b43917d67023dded37,
         type: 3}
@@ -13539,6 +13554,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FarmerNPC2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598780603943041308, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6598780603943041309, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}

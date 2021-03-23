@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using System.IO;
 
-public class DialogueManager : MonoBehaviour, IInteractWindow
+public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
 {
     public Camera dialogueCamera;
     public GameObject[] ToDisable;
@@ -200,5 +200,10 @@ public class DialogueManager : MonoBehaviour, IInteractWindow
         shop.OnOpen();
         _playeractions.openedWindow = shop;
         _playeractions.isInteracting = true;
+    }
+
+    public void OnDestruction(GameObject destroyer)
+    {
+        EndDialogue();
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
 
-public class MerchantInventory : Inventory, IInteractWindow
+public class MerchantInventory : Inventory, IInteractWindow, IDestructible
 {
     public GameObject Player;
     NavMeshAgent agent;
@@ -135,5 +135,10 @@ public class MerchantInventory : Inventory, IInteractWindow
         PlayerProgress.Currency += item.Item.ItemValue;
         InfoText.text = $"Credits: {PlayerProgress.Currency}";
         AddItem(item);
+    }
+
+    public void OnDestruction(GameObject destroyer)
+    {
+        OnClose();
     }
 }
