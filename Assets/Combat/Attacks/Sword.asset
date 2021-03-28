@@ -17,7 +17,7 @@ MonoBehaviour:
   maxDamage: 40
   criticalMultipliyer: 2
   criticalChance: 0.4
-  Range: 1.2
+  Range: 2
   weaponPref: {fileID: 0}
   type: 1
   ProjectileToFire: {fileID: 0}

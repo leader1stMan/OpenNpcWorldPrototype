@@ -20,7 +20,6 @@ public abstract class EnemyBase : MonoBehaviour
             "This is an optional field")]
     public Collider PrefferedPatrolAreaCollider;
 
-    
 
     #region Debugging
     public bool ShowDebugMessages;
@@ -100,6 +99,11 @@ public abstract class EnemyBase : MonoBehaviour
     //This function is to be called from animation
     public abstract void DealDamage();
 
+    protected virtual float TargetinRange(float weaponRange)
+    {
+        return weaponRange;
+    }
+
     protected virtual void ManageState()
     {
         if(CurrentState == EnemyState.Patroling)
@@ -118,7 +122,8 @@ public abstract class EnemyBase : MonoBehaviour
                 return;            
             }
             RaycastHit hit;
-            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range + (stats.GetWeapon().Range / 1.1f) && Physics.Raycast(transform.position, (currentTarget.position - transform.position).normalized, out hit, VisionRange) && hit.transform == currentTarget)
+            //if(position, direction)
+            if ((currentTarget.position - transform.position).magnitude < TargetinRange(stats.GetWeapon().Range) && Physics.Raycast(transform.position, (currentTarget.position - transform.position).normalized, out hit, VisionRange) && hit.transform == currentTarget)
             {
                 if (attackCooldown <= 0)
                 {
@@ -141,7 +146,8 @@ public abstract class EnemyBase : MonoBehaviour
                 return;
             }
             RaycastHit hit;
-            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range + (stats.GetWeapon().Range / 1.1f) && Physics.Raycast(transform.position, (currentTarget.position - transform.position).normalized, out hit, VisionRange) && hit.transform == currentTarget)
+            //if(position, direction)
+            if ((currentTarget.position - transform.position).magnitude < TargetinRange(stats.GetWeapon().Range) && Physics.Raycast(transform.position, (currentTarget.position - transform.position).normalized, out hit, VisionRange) && hit.transform == currentTarget)
             {
                 if (attackCooldown <= 0 && hasshield==false || hasshield == true && stats.isBlocking == false && attackCooldown <= 0 && blockCooldown <= 0)
                 {

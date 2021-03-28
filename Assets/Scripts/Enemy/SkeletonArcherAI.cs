@@ -18,6 +18,11 @@ public class SkeletonArcherAI : SkeletonAi
         base.Update();
     }
 
+    protected override float TargetinRange(float weaponRange)
+    {
+        return weaponRange + (weaponRange / 1.1f);
+    }
+
     public override void Attack(GameObject target)
     {
         anim.SetBool("isIdle", false);

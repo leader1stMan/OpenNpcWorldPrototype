@@ -52,7 +52,12 @@ public class Weapon : AttackDefinition
         if (defender == null)
             return;
         if (Vector3.Distance(attacker.transform.position, defender.transform.position) > Range)
+        {
+            Debug.Log("out of range");
+
             return;
+        }
+      
         /*
         if (!attacker.transform.IsFacingTarget(defender.transform))
             return;
