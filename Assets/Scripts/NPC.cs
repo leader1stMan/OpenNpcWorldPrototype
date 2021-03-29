@@ -4,13 +4,17 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public class NPC : NpcData
+public class NPC : NpcData, IAttackable
 {
     public bool ShowDebugMessages;
 
     public NavMeshAgent agent { get; private set; }
     private Animator anim;
 
+    public bool isAttacked;
+    public float movementSpeed;
+    public float scaredRunningSpeed;
+    public float runningDistance;
     [SerializeField] private float speedAnimDevider = 1;
     [SerializeField] private float stopDistance;
     [SerializeField] private float stopDistanceRandomAdjustment;
@@ -34,12 +38,11 @@ public class NPC : NpcData
     {
         anim.SetFloat("InputMagnitude", agent.velocity.magnitude / speedAnimDevider);
 
-        if((currentState == NpcStates.GoingToWork && Vector3.Distance(transform.position, work.position) < stopDistance )|| (agent.remainingDistance == 0 && !agent.pathPending))
+        if(currentState == NpcStates.GoingToWork && Vector3.Distance(transform.position, work.position) <= stopDistance)
         {
             if(ShowDebugMessages)
             Debug.Log("StartingToWork");
-            currentState = NpcStates.Working;
-            anim.SetBool("Working", true);
+            ChangeState(NpcStates.Working);
         }
         WatchEnvironment();
     }
@@ -48,17 +51,15 @@ public class NPC : NpcData
     {
         Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, VisionLayers);
 
-        bool bAdversityFound = false;
-
         foreach (Collider col in cols)
         {
             // If the NPC is looking at another NPC attacking or defending, run
             if (col.gameObject.GetComponent<NPC>())
             {
-                NpcStates state = col.gameObject.GetComponent<NPC>().currentState;
-                if (state == NpcStates.Attacking || state == NpcStates.Defending)
+                NPC npc = col.gameObject.GetComponent<NPC>();
+                NpcStates state = npc.currentState;
+                if (state == NpcStates.Attacking || state == NpcStates.Defending || npc.isAttacked)
                 {
-                    bAdversityFound = true;
                     ChangeState(NpcStates.Scared);
                 }
             }
@@ -66,20 +67,12 @@ public class NPC : NpcData
             else if (col.gameObject.GetComponent<EnemyBase>())
             {
                 EnemyState state = col.gameObject.GetComponent<EnemyBase>().CurrentState;
-                Debug.Log(col.gameObject.name + " is " + state);
                 if (state == EnemyState.Attacking)
                 {
-                    bAdversityFound = true;
                     ChangeState(NpcStates.Scared);
                 }
             }
         }
-
-        if (!bAdversityFound && currentState == NpcStates.Scared)
-        {
-            ChangeState(NpcStates.Idle);
-        }
-
     }
 
     private void ChangeState(NpcStates NewState)
@@ -95,22 +88,23 @@ public class NPC : NpcData
 
     private void OnStateChanged(NpcStates PrevState, NpcStates NewState)
     {
+        if (PrevState == NpcStates.Working)
+            anim.SetBool("Working", false);
         switch (NewState)
         {
             case NpcStates.Scared:
-                agent.speed *= 4;
-                SetMoveTarget(home);
+                StartCoroutine("Run");
                 break;
             case NpcStates.GoingHome:
-                if (PrevState == NpcStates.Scared) agent.speed *= .25f;
+                agent.speed = movementSpeed;
                 SetMoveTarget(home);
                 break;
             case NpcStates.GoingToWork:
-                if (PrevState == NpcStates.Scared) agent.speed *= .25f;
+                agent.speed = movementSpeed;
                 SetMoveTarget(work);
                 break;
             case NpcStates.Idle:
-                if (PrevState == NpcStates.Scared) agent.speed *= .25f;
+                agent.speed = movementSpeed;
                 float time = FindObjectOfType<DayAndNightControl>().currentTime;
                 if (time > .3f && time < .8f)
                 {
@@ -122,10 +116,11 @@ public class NPC : NpcData
                 }
                 break;
             case NpcStates.InteractingWithPlayer:
-                if (PrevState == NpcStates.Scared) agent.speed *= .25f;
+                agent.speed = movementSpeed;
                 break;
             case NpcStates.Working:
-                if (PrevState == NpcStates.Scared) agent.speed *= .25f;
+                agent.speed = movementSpeed;
+                anim.SetBool("Working", true);
                 SetMoveTarget(work);
                 break;
             default: break;
@@ -136,6 +131,17 @@ public class NPC : NpcData
     {
         agent.ResetPath();
         agent.SetDestination(target.position);
+    }
+
+    private void SetRandomMoveTarget()
+    {
+        agent.ResetPath();
+        Vector2 vector = Random.insideUnitCircle.normalized;
+        Vector3 randomDirection = new Vector3(vector.x, transform.position.y, vector.y) * runningDistance;
+        randomDirection += transform.position;
+        NavMeshHit hit;
+        NavMesh.SamplePosition(randomDirection, out hit, runningDistance, 1);
+        agent.SetDestination(hit.position);
     }
 
     private void GoToWork()
@@ -173,5 +179,25 @@ public class NPC : NpcData
             if (ShowDebugMessages)
                 Debug.LogWarning("DayAndNightControl object is not found. This is ok if the scene is unloaded.");
         }
+    }
+
+    public void OnAttack(GameObject attacker, Attack attack)
+    {
+        ChangeState(NpcStates.Scared);
+        StartCoroutine("Attacked");
+    }
+
+    IEnumerator Attacked()
+    {
+        isAttacked = true;
+        yield return new WaitForSeconds(1f);
+        isAttacked = false;
+    }
+    IEnumerator Run()
+    {
+        agent.speed = scaredRunningSpeed;
+        SetRandomMoveTarget();
+        yield return new WaitUntil(() => Vector3.Distance(agent.destination, transform.position) <= 0.5f);
+        ChangeState(NpcStates.Idle);
     }
 }
