@@ -1353,10 +1353,12 @@ MonoBehaviour:
   PrefferedPatrolAreaCollider: {fileID: 0}
   ShowDebugMessages: 0
   VisualiseAgentActions: 0
-  VisionRange: 0
+  VisionRange: 30
   WhatCanThisEnemyAttack:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 768
+  Tags: []
+  currentTarget: {fileID: 0}
   anim: {fileID: 4819432292679125860}
 --- !u!114 &3520071536676796669
 MonoBehaviour:
@@ -1414,7 +1416,7 @@ MonoBehaviour:
     BaseValue: 0
   Armor:
     BaseValue: 30
-  weapon: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9, type: 2}
+  weapon: {fileID: 11400000, guid: 2b9b62229886429419972221f33b1c3b, type: 2}
   shield: {fileID: 0}
   isBlocking: 0
 --- !u!114 &4107129538962306707

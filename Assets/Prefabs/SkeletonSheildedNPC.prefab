@@ -789,7 +789,7 @@ Animator:
   m_GameObject: {fileID: 6616903152129717052}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 5a35c5f0a89b9654d897ccd7c8f81bd0, type: 3}
-  m_Controller: {fileID: 9100000, guid: ea5b1bad16fecc540a9dd1a7b9ae97c7, type: 2}
+  m_Controller: {fileID: 9100000, guid: c8a2e8b8cb95909418ae027d6bef3c11, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -857,6 +857,7 @@ MonoBehaviour:
     m_Bits: 768
   Tags:
   - Enemy
+  currentTarget: {fileID: 0}
   anim: {fileID: 6616903152120348850}
 --- !u!114 &3019707602305102635
 MonoBehaviour:
