@@ -30,7 +30,12 @@ public class Weapon : AttackDefinition
 
         if (defenderStats == null)
             return;
-        
+
+        if (defenderStats.isBlocking)
+        {
+            Debug.Log("block defender stat");
+            return;
+        }
 
         var attack = CreateAttack(attackerStats, defenderStats);
 
@@ -47,13 +52,29 @@ public class Weapon : AttackDefinition
         if (defender == null)
             return;
         if (Vector3.Distance(attacker.transform.position, defender.transform.position) > Range)
+        {
+            Debug.Log("out of range");
+
             return;
+        }
+      
         /*
         if (!attacker.transform.IsFacingTarget(defender.transform))
             return;
         */
         var attackerStats = attacker.GetComponent<CharacterStats>();
         var defenderStats = defender.GetComponent<CharacterStats>();
+
+        if (defenderStats.isBlocking)
+        {
+            Debug.Log("block");
+            SkeletonAi skai = defender.GetComponent<SkeletonAi>();
+            if (skai != null)
+            {
+                skai.anim.SetBool("ShieldBlock", true);
+            }
+            return;
+        }
 
         var attack = CreateAttack(attackerStats, defenderStats);
 

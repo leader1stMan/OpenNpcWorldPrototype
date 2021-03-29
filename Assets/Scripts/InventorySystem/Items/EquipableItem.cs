@@ -12,6 +12,7 @@ public class EquipableItem : Item
     public float healthModifier;
 
     public Weapon weapon = null;
+    public Shield shield = null;
     override public void OnItemUsed(){
         
     }

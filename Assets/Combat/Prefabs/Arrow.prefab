@@ -111,6 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 0.6
+  GravityFactor: 0.5
   isFlying: 0
 --- !u!54 &8463300427574842633
 Rigidbody:

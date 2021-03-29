@@ -1,28 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-/*
+
 public class HealthBar : MonoBehaviour
 {
-    public CharacterStats Character;
-    public Slider Health;
+    [SerializeField] private CharacterStats character;
+    [SerializeField] private Image healthImage;
 
     void Start()
     {
-        Character.OnHealthValueChange += Character_OnHealthValueChange;
-        Health.maxValue = Character.maxHealth.GetValue();    
-        Health.value = Character.currentHealth.GetValue();
+        character.OnHealthValueChanged += HandleHealthValueChanged;
+
+        HandleHealthValueChanged();
     }
 
-    private void Character_OnHealthValueChange(object sender, System.EventArgs e)
+    private void HandleHealthValueChanged()
     {
-        hp_value = Character.currentHealth.GetValue();
-    }
+        Debug.Log($"Health: {character.GetCurrentHealth().GetValue()}/{character.GetMaxHealth().GetValue()}");
 
-    public float hp_value
-    {
-        get => Health.value;
-        set => Health.value = value > Health.maxValue ? Health.value = Health.maxValue : Health.value = value;
+        healthImage.fillAmount = character.GetCurrentHealth().GetValue() / character.GetMaxHealth().GetValue();
     }
-}*/
+}

@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 346eab38fcf993b4b87d5523a5270005, type: 3}
   m_Name: Sword
   m_EditorClassIdentifier: 
-  Cooldown: 5
+  Cooldown: 1
   minDamage: 20
   maxDamage: 40
   criticalMultipliyer: 2
   criticalChance: 0.4
-  Range: 3
+  Range: 2
   weaponPref: {fileID: 0}
   type: 1
   ProjectileToFire: {fileID: 0}

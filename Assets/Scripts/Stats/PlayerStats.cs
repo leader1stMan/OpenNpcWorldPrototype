@@ -9,14 +9,6 @@ public class PlayerStats : CharacterStats
         EquipmentController.instance.onEquipmentChanged += OnEquipmentChanged;
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            TakeDamage(null, 30f);
-        }
-    }
-
     void OnEquipmentChanged(EquipableItem newItem, EquipableItem oldItem)
     {
         if (newItem != null)
@@ -26,6 +18,8 @@ public class PlayerStats : CharacterStats
 
             if (newItem.weapon != null)
                 weapon = newItem.weapon;
+            if (newItem.shield != null)
+                shield = newItem.shield;
         }
 
         if (oldItem != null)
@@ -33,6 +27,7 @@ public class PlayerStats : CharacterStats
             Armor.RemoveModifier(oldItem.armorModifier);
             Damage.RemoveModifier(oldItem.damageModifier);
             weapon = null;
+            shield = null;
         }
     }
 }

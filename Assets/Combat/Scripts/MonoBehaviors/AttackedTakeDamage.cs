@@ -24,5 +24,6 @@ public class AttackedTakeDamage : MonoBehaviour, IAttackable
                 d.OnDestruction(attacker);
             }
         }
+        
     }
 }

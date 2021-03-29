@@ -4,7 +4,11 @@
     GoingToWork,
     Working,
     GoingHome,
-    InteractingWithPlayer
+    InteractingWithPlayer,
+    Scared,
+    Petrified,
+    Attacking,
+    Defending
 }
 
 public enum EnemyState
@@ -12,7 +16,8 @@ public enum EnemyState
     Idle,
     Patroling,
     Chasing,
-    Attacking
+    Attacking,
+    Blocking
 }
 
 public enum Job

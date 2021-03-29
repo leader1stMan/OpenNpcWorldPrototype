@@ -10,7 +10,7 @@ public class NPC : NpcData
 
     public NavMeshAgent agent { get; private set; }
     private Animator anim;
-    private DialogueManager dialogue;
+
     [SerializeField] private float speedAnimDevider = 1;
     [SerializeField] private float stopDistance;
     [SerializeField] private float stopDistanceRandomAdjustment;
@@ -19,8 +19,8 @@ public class NPC : NpcData
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponentInChildren<Animator>();
-        dialogue = GetComponent<DialogueManager>();  
 
+        /*____________________Might need to change this as this is called every frame, interfering with the code______________________*/
         FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork;
         FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome;
 
@@ -41,6 +41,95 @@ public class NPC : NpcData
             currentState = NpcStates.Working;
             anim.SetBool("Working", true);
         }
+        WatchEnvironment();
+    }
+
+    private void WatchEnvironment()
+    {
+        Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, VisionLayers);
+
+        bool bAdversityFound = false;
+
+        foreach (Collider col in cols)
+        {
+            // If the NPC is looking at another NPC attacking or defending, run
+            if (col.gameObject.GetComponent<NPC>())
+            {
+                NpcStates state = col.gameObject.GetComponent<NPC>().currentState;
+                if (state == NpcStates.Attacking || state == NpcStates.Defending)
+                {
+                    bAdversityFound = true;
+                    ChangeState(NpcStates.Scared);
+                }
+            }
+            // If the NPC is looking at an enemy Attacking or defending, run
+            else if (col.gameObject.GetComponent<EnemyBase>())
+            {
+                EnemyState state = col.gameObject.GetComponent<EnemyBase>().CurrentState;
+                Debug.Log(col.gameObject.name + " is " + state);
+                if (state == EnemyState.Attacking)
+                {
+                    bAdversityFound = true;
+                    ChangeState(NpcStates.Scared);
+                }
+            }
+        }
+
+        if (!bAdversityFound && currentState == NpcStates.Scared)
+        {
+            ChangeState(NpcStates.Idle);
+        }
+
+    }
+
+    private void ChangeState(NpcStates NewState)
+    {
+        if (currentState == NewState)
+            return;
+
+        NpcStates PrevState = currentState;
+
+        currentState = NewState;
+        OnStateChanged(PrevState, NewState);
+    }
+
+    private void OnStateChanged(NpcStates PrevState, NpcStates NewState)
+    {
+        switch (NewState)
+        {
+            case NpcStates.Scared:
+                agent.speed *= 4;
+                SetMoveTarget(home);
+                break;
+            case NpcStates.GoingHome:
+                if (PrevState == NpcStates.Scared) agent.speed *= .25f;
+                SetMoveTarget(home);
+                break;
+            case NpcStates.GoingToWork:
+                if (PrevState == NpcStates.Scared) agent.speed *= .25f;
+                SetMoveTarget(work);
+                break;
+            case NpcStates.Idle:
+                if (PrevState == NpcStates.Scared) agent.speed *= .25f;
+                float time = FindObjectOfType<DayAndNightControl>().currentTime;
+                if (time > .3f && time < .8f)
+                {
+                    GoToWork();
+                }
+                else
+                {
+                    GoHome();
+                }
+                break;
+            case NpcStates.InteractingWithPlayer:
+                if (PrevState == NpcStates.Scared) agent.speed *= .25f;
+                break;
+            case NpcStates.Working:
+                if (PrevState == NpcStates.Scared) agent.speed *= .25f;
+                SetMoveTarget(work);
+                break;
+            default: break;
+        }
     }
 
     private void SetMoveTarget(Transform target)
@@ -51,32 +140,26 @@ public class NPC : NpcData
 
     private void GoToWork()
     {
-        if(dialogue._isdialogue == false)
-        {
-            if (currentState == NpcStates.GoingToWork)
-                return;
+        if (currentState == NpcStates.GoingToWork || currentState == NpcStates.Scared)
+            return;
 
-            currentState = NpcStates.GoingToWork;
-            SetMoveTarget(work);
-            if(ShowDebugMessages)
-            Debug.Log(name + " is going to work");
-        }
+        currentState = NpcStates.GoingToWork;
+        SetMoveTarget(work);
+        if(ShowDebugMessages)
+        Debug.Log(name + " is going to work");
     }
 
     private void GoHome()
     {
-        if(dialogue._isdialogue == false)
-        {
-            if (currentState == NpcStates.GoingHome)
-                return;
+        if (currentState == NpcStates.GoingHome || currentState == NpcStates.Scared)
+            return;
 
-            currentState = NpcStates.GoingHome;
-            anim.SetBool("Working", false);
+        currentState = NpcStates.GoingHome;
+        anim.SetBool("Working", false);
 
-            SetMoveTarget(home);
-            if(ShowDebugMessages)
-            Debug.Log(name + " is going home");
-        }
+        SetMoveTarget(home);
+        if(ShowDebugMessages)
+        Debug.Log(name + " is going home");
     }
     private void OnDestroy()
     {

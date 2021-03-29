@@ -20,6 +20,6 @@ MonoBehaviour:
   Range: 200
   weaponPref: {fileID: 0}
   type: 0
-  ProjectileToFire: {fileID: 576152043499765526, guid: 684e8f4a473321144bda3e1950408fdc,
+  ProjectileToFire: {fileID: 859473610619418703, guid: 059c8656cefe8774ab8ea2da14fae9e4,
     type: 3}
   ProjectileSpeed: 8
