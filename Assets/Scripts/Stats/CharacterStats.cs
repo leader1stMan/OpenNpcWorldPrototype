@@ -12,7 +12,7 @@ public class CharacterStats : MonoBehaviour
     public Weapon weapon;
     public Shield shield;
     public bool isBlocking;
-
+    public bool isRagdolled;
     public event Action OnHealthValueChanged;
 
     void Awake()

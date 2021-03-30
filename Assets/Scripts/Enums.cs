@@ -8,7 +8,8 @@
     Scared,
     Petrified,
     Attacking,
-    Defending
+    Defending,
+    Ragdoll
 }
 
 public enum EnemyState
@@ -17,7 +18,9 @@ public enum EnemyState
     Patroling,
     Chasing,
     Attacking,
-    Blocking
+    Blocking,
+    Ragdoll,
+    GetUp
 }
 
 public enum Job

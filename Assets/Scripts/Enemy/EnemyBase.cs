@@ -34,6 +34,7 @@ public abstract class EnemyBase : MonoBehaviour
     public Transform currentTarget;
     float attackCooldown;
     float blockCooldown;
+    float ragdollCooldown = 15f;
     bool hasshield = false;
     #region Editor Only
 
@@ -68,7 +69,11 @@ public abstract class EnemyBase : MonoBehaviour
     protected virtual void Start()
     {
         SubscribeToEvents();
-        PatrolToAnotherSpot();
+        if (stats.isRagdolled == false)
+        {
+            PatrolToAnotherSpot();
+        }
+        
         if(stats.shield != null)
         {
             hasshield = true;
@@ -106,8 +111,27 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void ManageState()
     {
-        if(CurrentState == EnemyState.Patroling)
+
+            if (stats.isRagdolled == true)
+            { 
+            if (CurrentState != EnemyState.Ragdoll)
+            {
+                ChangeState(EnemyState.Ragdoll);
+            }
+            DoRagdoll();
+
+        }
+        else if (CurrentState == EnemyState.GetUp)
         {
+
+          
+
+            DoGetUp();
+
+
+         }
+         else if (CurrentState == EnemyState.Patroling)
+           {
             if(Vector3.Distance(transform.position,agent.destination)<agent.stoppingDistance)
             {
                 
@@ -125,12 +149,15 @@ public abstract class EnemyBase : MonoBehaviour
             //if(position, direction)
             if ((currentTarget.position - transform.position).magnitude < TargetinRange(stats.GetWeapon().Range) && Physics.Raycast(transform.position, (currentTarget.position - transform.position).normalized, out hit, VisionRange) && hit.transform == currentTarget)
             {
-                if (attackCooldown <= 0)
+                if (attackCooldown <= 0 )
                 {
+                    stats.isBlocking = false;
                     Attack(currentTarget.gameObject);
                     ChangeState(EnemyState.Attacking);
                     attackCooldown = stats.GetWeapon().Cooldown;
+                   
                 }
+                
                
             }
             else
@@ -151,6 +178,7 @@ public abstract class EnemyBase : MonoBehaviour
             {
                 if (attackCooldown <= 0 && hasshield==false || hasshield == true && stats.isBlocking == false && attackCooldown <= 0 && blockCooldown <= 0)
                 {
+                    stats.isBlocking = false;
                     Attack(currentTarget.gameObject);
                     ChangeState(EnemyState.Attacking);
                     attackCooldown = stats.GetWeapon().Cooldown * Random.Range(.01f, .5f);
@@ -190,8 +218,16 @@ public abstract class EnemyBase : MonoBehaviour
             ChangeState(EnemyState.Patroling);
         }
         
+
     }
 
+
+
+
+
+
+
+   
 
     protected virtual void CheckForTargets()
     {
@@ -275,6 +311,9 @@ public abstract class EnemyBase : MonoBehaviour
     private void Chase(Transform target)
     {
         currentTarget = target;
+        if (agent.enabled == false)
+            return;
+
         agent.SetDestination(target.position);
         ChangeState(EnemyState.Chasing);
     }
@@ -360,8 +399,207 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void StopAnimation(string AnimationName)
     {
-        GetComponent<SkeletonAi>().anim.SetBool(AnimationName, false);
+        GetComponent<Animator>().SetBool(AnimationName, false);
     }
+
+    protected virtual void PlayAnimation(string AnimationName, bool ovride)
+    {
+        if (ovride == false)
+        {
+            GetComponent<Animator>().SetBool(AnimationName, true);
+        }
+        else if (GetComponent<Animator>().GetBool(AnimationName) == false)
+        {
+
+            GetComponent<Animator>().SetBool(AnimationName, true);
+        }
+        
+    }
+
+
+
+
+    void DoRagdoll()
+    {
+        if (ragdollCooldown > 0)
+        {
+
+            PlayAnimation("isRagdolled", false);
+            RagEffect();
+            ragdollCooldown -= Time.deltaTime;
+        }
+        else
+        {
+            stats.isRagdolled = false;
+            ragdollCooldown = 15f;
+            ChangeState(EnemyState.GetUp);
+        }
+
+
+    }
+
+    void DoGetUp()
+    {
+        StopAnimation("isRagdolled");
+        PlayAnimation("GetUp", false);
+        currentTarget = null;
+        RagOff();
+        CheckForTargets();
+        if (currentTarget != null)
+        {
+            Chase(currentTarget);
+        }
+        else
+        {
+            ChangeState(EnemyState.Idle);
+        }
+    }
+
+
+    void RagEffect()
+    {
+        Rigidbody Rig = GetComponent<Rigidbody>();
+
+        if (Rig.isKinematic == true)
+        {
+            Rig.isKinematic = false;
+            Rig.useGravity = false;
+            CapsuleCollider BC = GetComponent<CapsuleCollider>();
+            //NavMeshAgent nma = GetComponent<NavMeshAgent>();
+            Animator a = GetComponent<Animator>();
+            a.enabled = false;
+            agent.enabled = false;
+            //nma.enabled = false;
+            BC.enabled = false;
+            Transform[] allChildren = GetComponentsInChildren<Transform>();
+            foreach (Transform t in allChildren)
+            {
+                GameObject g = t.gameObject;
+                if (g.name.Contains("Pelvis"))
+                {
+                    BoxCollider Cp = g.AddComponent<BoxCollider>();
+                    Rigidbody Rp = g.AddComponent<Rigidbody>();
+                    Rp.mass = 10f;
+                    Rp.drag = 5f;
+                    Rp.angularDrag = 1f;
+                    Cp.size = new Vector3(0.005f, 0.005f, 0.005f);
+                }
+                if (g.name.Contains("Head") || g.name.Contains("R Foot") || g.name.Contains("L Foot") ||
+                    g.name.Contains("Calf") || g.name.Contains("Arm") || g.name.Contains("Clav") ||
+                    g.name.Contains("Spine") || g.name.Contains("Thigh") || g.name.Contains("Neck"))
+                {
+                    if (g.name.Contains("Neck") == false)
+                    {
+                        CapsuleCollider C = g.AddComponent<CapsuleCollider>();
+                       // C.size = new Vector3(0.005f, 0.005f, 0.005f);
+                        C.height = 0.02f;
+                        C.radius = 0.01f;
+                    }
+
+                    CharacterJoint CJ = g.AddComponent<CharacterJoint>();
+                   // CJ.connectedBody = Rig;
+                    SoftJointLimit jointLimit = CJ.lowTwistLimit;
+                    jointLimit.limit = -5f;
+                    CJ.lowTwistLimit = jointLimit;
+
+                    SoftJointLimit jointLimitH = CJ.highTwistLimit;
+                    jointLimitH.limit = 25f;
+                    CJ.highTwistLimit = jointLimitH;
+
+                    SoftJointLimit jointLimit1 = CJ.swing1Limit;
+                    jointLimit1.limit = 5f;
+                    CJ.swing1Limit = jointLimit1;
+
+                    SoftJointLimit jointLimit2 = CJ.swing2Limit;
+                    jointLimit2.limit = 5f;
+                    CJ.swing2Limit = jointLimit2;
+
+
+                    
+                   
+                    
+                }
+
+            }
+
+            foreach (Transform t in allChildren)
+            {
+                GameObject g = t.gameObject;
+                if (g.name.Contains("Head")  || g.name.Contains("R Foot") || g.name.Contains("L Foot") ||
+                     g.name.Contains("Calf") || g.name.Contains("Arm") || g.name.Contains("Clav") ||
+                     g.name.Contains("Spine") || g.name.Contains("Thigh") || g.name.Contains("Neck"))
+                {
+                   
+                        CharacterJoint CJ = g.GetComponent<CharacterJoint>();
+                        CJ.connectedBody = t.parent.gameObject.GetComponent<Rigidbody>();
+                    
+                    
+
+                    g.GetComponent<Rigidbody>().mass = 10f;
+                    g.GetComponent<Rigidbody>().drag = 5f;
+                    g.GetComponent<Rigidbody>().angularDrag = 1f;
+                }
+               
+            }
+           
+            
+
+
+        }
+
+
+    }
+
+
+    void RagOff()
+    {
+        Rigidbody Rig = GetComponent<Rigidbody>();
+
+        if (Rig.isKinematic == false)
+        {
+            Rig.isKinematic = true;
+
+            Transform[] allChildren = GetComponentsInChildren<Transform>();
+            foreach (Transform t in allChildren)
+            {
+                GameObject g = t.gameObject;
+                if (g.name.Contains("Pelvis"))
+                {
+                    CapsuleCollider Cp = g.GetComponent<CapsuleCollider>();
+                    Rigidbody Rp = g.GetComponent<Rigidbody>();
+                    Destroy(Cp);
+                    Destroy(Rp);
+                    g.transform.localPosition = new Vector3(0, 0, 0);
+
+                }
+                if (g.name.Contains("Head") || g.name.Contains("R Foot") || g.name.Contains("L Foot") ||
+                     g.name.Contains("Calf") || g.name.Contains("Arm") || g.name.Contains("Clav") ||
+                     g.name.Contains("Spine") || g.name.Contains("Thigh") || g.name.Contains("Neck"))
+                {
+                    CapsuleCollider C = g.GetComponent<CapsuleCollider>();
+                    Destroy(C);
+                    CharacterJoint CJ = g.GetComponent<CharacterJoint>();
+                    Destroy(CJ);
+                    Rigidbody grig = g.GetComponent<Rigidbody>();
+                    Destroy(grig);
+                }
+
+            }
+
+
+            CapsuleCollider BC = GetComponent<CapsuleCollider>();
+          ///  NavMeshAgent nma = GetComponent<NavMeshAgent>();
+            Animator a = GetComponent<Animator>();
+            a.enabled = true;
+            agent.enabled = true;
+            BC.enabled = true;
+            Rig.useGravity = true;
+
+        }
+
+
+    }
+
 
 
 
