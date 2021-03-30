@@ -12,9 +12,9 @@ public class NPC : NpcData, IAttackable
     private Animator anim;
 
     public bool isAttacked;
-    public float movementSpeed;
-    public float scaredRunningSpeed;
-    public float runningDistance;
+    public float movementSpeed = 2;
+    public float scaredRunningSpeed = 4;
+    public float runningDistance = 40;
     [SerializeField] private float speedAnimDevider = 1;
     [SerializeField] private float stopDistance;
     [SerializeField] private float stopDistanceRandomAdjustment;
