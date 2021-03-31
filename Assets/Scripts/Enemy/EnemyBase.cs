@@ -9,6 +9,7 @@ public abstract class EnemyBase : MonoBehaviour
     protected NavMeshAgent agent = null;
 
     public CharacterStats stats;
+    public RagdollSystem RagSystem;
     /// <summary>
     /// This event has two parameters. 
     /// The first one is the old state and the other one is the new state
@@ -34,7 +35,7 @@ public abstract class EnemyBase : MonoBehaviour
     public Transform currentTarget;
     float attackCooldown;
     float blockCooldown;
-    float ragdollCooldown = 15f;
+    
     bool hasshield = false;
     #region Editor Only
 
@@ -44,12 +45,13 @@ public abstract class EnemyBase : MonoBehaviour
     #endregion
     public virtual void Awake()
     {
+        RagSystem = GetComponent<RagdollSystem>();
         if (OnStateChanged == null)
             OnStateChanged = new EnemyStateChangeEvent();
 
         if (stats == null)
             stats = GetComponent<CharacterStats>();
-
+       
         #region Editor Only
 #if UNITY_EDITOR
         if (VisualiseAgentActions)
@@ -118,16 +120,26 @@ public abstract class EnemyBase : MonoBehaviour
             {
                 ChangeState(EnemyState.Ragdoll);
             }
-            DoRagdoll();
+            if (RagSystem.ragdollCooldown > 0)
+            {
+                RagSystem.DoRagdoll();
+            }
+            else
+            {
+                stats.isRagdolled = false;
+                RagSystem.ragdollCooldown = 5f;
+                ChangeState(EnemyState.GetUp);
+            }
+           
 
         }
         else if (CurrentState == EnemyState.GetUp)
         {
 
-          
 
+
+            RagSystem.DoGetUp();
             DoGetUp();
-
 
          }
          else if (CurrentState == EnemyState.Patroling)
@@ -226,7 +238,22 @@ public abstract class EnemyBase : MonoBehaviour
 
 
 
+    public void DoGetUp()
+    {
+        StopAnimation("isRagdolled");
+        PlayAnimation("GetUp", false);
+        currentTarget = null;
 
+        CheckForTargets();
+        if (currentTarget != null)
+        {
+            Chase(currentTarget);
+        }
+        else
+        {
+            ChangeState(EnemyState.Idle);
+        }
+    }
    
 
     protected virtual void CheckForTargets()
@@ -308,6 +335,7 @@ public abstract class EnemyBase : MonoBehaviour
             }
         }
     }
+  
     private void Chase(Transform target)
     {
         currentTarget = target;
@@ -419,186 +447,8 @@ public abstract class EnemyBase : MonoBehaviour
 
 
 
-    void DoRagdoll()
-    {
-        if (ragdollCooldown > 0)
-        {
-
-            PlayAnimation("isRagdolled", false);
-            RagEffect();
-            ragdollCooldown -= Time.deltaTime;
-        }
-        else
-        {
-            stats.isRagdolled = false;
-            ragdollCooldown = 15f;
-            ChangeState(EnemyState.GetUp);
-        }
 
 
-    }
-
-    void DoGetUp()
-    {
-        StopAnimation("isRagdolled");
-        PlayAnimation("GetUp", false);
-        currentTarget = null;
-        RagOff();
-        CheckForTargets();
-        if (currentTarget != null)
-        {
-            Chase(currentTarget);
-        }
-        else
-        {
-            ChangeState(EnemyState.Idle);
-        }
-    }
-
-
-    void RagEffect()
-    {
-        Rigidbody Rig = GetComponent<Rigidbody>();
-
-        if (Rig.isKinematic == true)
-        {
-            Rig.isKinematic = false;
-            Rig.useGravity = false;
-            CapsuleCollider BC = GetComponent<CapsuleCollider>();
-            //NavMeshAgent nma = GetComponent<NavMeshAgent>();
-            Animator a = GetComponent<Animator>();
-            a.enabled = false;
-            agent.enabled = false;
-            //nma.enabled = false;
-            BC.enabled = false;
-            Transform[] allChildren = GetComponentsInChildren<Transform>();
-            foreach (Transform t in allChildren)
-            {
-                GameObject g = t.gameObject;
-                if (g.name.Contains("Pelvis"))
-                {
-                    BoxCollider Cp = g.AddComponent<BoxCollider>();
-                    Rigidbody Rp = g.AddComponent<Rigidbody>();
-                    Rp.mass = 10f;
-                    Rp.drag = 5f;
-                    Rp.angularDrag = 1f;
-                    Cp.size = new Vector3(0.005f, 0.005f, 0.005f);
-                }
-                if (g.name.Contains("Head") || g.name.Contains("R Foot") || g.name.Contains("L Foot") ||
-                    g.name.Contains("Calf") || g.name.Contains("Arm") || g.name.Contains("Clav") ||
-                    g.name.Contains("Spine") || g.name.Contains("Thigh") || g.name.Contains("Neck"))
-                {
-                    if (g.name.Contains("Neck") == false)
-                    {
-                        CapsuleCollider C = g.AddComponent<CapsuleCollider>();
-                       // C.size = new Vector3(0.005f, 0.005f, 0.005f);
-                        C.height = 0.02f;
-                        C.radius = 0.01f;
-                    }
-
-                    CharacterJoint CJ = g.AddComponent<CharacterJoint>();
-                   // CJ.connectedBody = Rig;
-                    SoftJointLimit jointLimit = CJ.lowTwistLimit;
-                    jointLimit.limit = -5f;
-                    CJ.lowTwistLimit = jointLimit;
-
-                    SoftJointLimit jointLimitH = CJ.highTwistLimit;
-                    jointLimitH.limit = 25f;
-                    CJ.highTwistLimit = jointLimitH;
-
-                    SoftJointLimit jointLimit1 = CJ.swing1Limit;
-                    jointLimit1.limit = 5f;
-                    CJ.swing1Limit = jointLimit1;
-
-                    SoftJointLimit jointLimit2 = CJ.swing2Limit;
-                    jointLimit2.limit = 5f;
-                    CJ.swing2Limit = jointLimit2;
-
-
-                    
-                   
-                    
-                }
-
-            }
-
-            foreach (Transform t in allChildren)
-            {
-                GameObject g = t.gameObject;
-                if (g.name.Contains("Head")  || g.name.Contains("R Foot") || g.name.Contains("L Foot") ||
-                     g.name.Contains("Calf") || g.name.Contains("Arm") || g.name.Contains("Clav") ||
-                     g.name.Contains("Spine") || g.name.Contains("Thigh") || g.name.Contains("Neck"))
-                {
-                   
-                        CharacterJoint CJ = g.GetComponent<CharacterJoint>();
-                        CJ.connectedBody = t.parent.gameObject.GetComponent<Rigidbody>();
-                    
-                    
-
-                    g.GetComponent<Rigidbody>().mass = 10f;
-                    g.GetComponent<Rigidbody>().drag = 5f;
-                    g.GetComponent<Rigidbody>().angularDrag = 1f;
-                }
-               
-            }
-           
-            
-
-
-        }
-
-
-    }
-
-
-    void RagOff()
-    {
-        Rigidbody Rig = GetComponent<Rigidbody>();
-
-        if (Rig.isKinematic == false)
-        {
-            Rig.isKinematic = true;
-
-            Transform[] allChildren = GetComponentsInChildren<Transform>();
-            foreach (Transform t in allChildren)
-            {
-                GameObject g = t.gameObject;
-                if (g.name.Contains("Pelvis"))
-                {
-                    CapsuleCollider Cp = g.GetComponent<CapsuleCollider>();
-                    Rigidbody Rp = g.GetComponent<Rigidbody>();
-                    Destroy(Cp);
-                    Destroy(Rp);
-                    g.transform.localPosition = new Vector3(0, 0, 0);
-
-                }
-                if (g.name.Contains("Head") || g.name.Contains("R Foot") || g.name.Contains("L Foot") ||
-                     g.name.Contains("Calf") || g.name.Contains("Arm") || g.name.Contains("Clav") ||
-                     g.name.Contains("Spine") || g.name.Contains("Thigh") || g.name.Contains("Neck"))
-                {
-                    CapsuleCollider C = g.GetComponent<CapsuleCollider>();
-                    Destroy(C);
-                    CharacterJoint CJ = g.GetComponent<CharacterJoint>();
-                    Destroy(CJ);
-                    Rigidbody grig = g.GetComponent<Rigidbody>();
-                    Destroy(grig);
-                }
-
-            }
-
-
-            CapsuleCollider BC = GetComponent<CapsuleCollider>();
-          ///  NavMeshAgent nma = GetComponent<NavMeshAgent>();
-            Animator a = GetComponent<Animator>();
-            a.enabled = true;
-            agent.enabled = true;
-            BC.enabled = true;
-            Rig.useGravity = true;
-
-        }
-
-
-    }
 
 
 
