@@ -145,6 +145,9 @@ public class NPC : NpcData, IAttackable
             case NpcStates.InteractingWithPlayer:
                 agent.speed = movementSpeed;
                 break;
+            case NpcStates.IsTalking:
+                agent.speed = 0;
+                break;
             case NpcStates.Working:
                 agent.speed = movementSpeed;
                 anim.SetBool("Working", true);
@@ -281,7 +284,7 @@ public class NPC : NpcData, IAttackable
                 {
                     if (priority > script.priority)
                     {
-                        if (Random.Range(0, 1000) <= 1000)
+                        if (Random.Range(0, 1000) == 1)
                         {
                             ChangeState(NpcStates.IsTalking);
                             isFirst = true;
