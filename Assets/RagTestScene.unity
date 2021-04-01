@@ -3044,11 +3044,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ragdollCooldown: 5
+  ragdollCooldownMax: 5
   Rig: {fileID: 691601433}
   RigType: 0
   stats: {fileID: 691601435}
   agent: {fileID: 691601432}
+  anim: {fileID: 0}
   SRadius: 0.0008
+  Debug: 0
 --- !u!195 &691601432
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3161,11 +3164,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ragdollCooldown: 5
+  ragdollCooldownMax: 5
   Rig: {fileID: 0}
   RigType: 0
   stats: {fileID: 0}
   agent: {fileID: 0}
+  anim: {fileID: 0}
   SRadius: 0.0008
+  Debug: 0
 --- !u!1001 &710939472
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7531,6 +7537,33 @@ PrefabInstance:
         type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fcb1c05815bce44e874a5f9df534ea5, type: 3}
+--- !u!1 &1217685915 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2820446562284331890, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+    type: 3}
+  m_PrefabInstance: {fileID: 910410754143012180}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1217685927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1217685915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3de1620f47bc57e4b8ba313b16b470fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ragdollCooldown: 1000
+  ragdollCooldownMax: 1000
+  Rig: {fileID: 0}
+  RigType: 0
+  stats: {fileID: 0}
+  agent: {fileID: 0}
+  anim: {fileID: 0}
+  SRadius: 0.1
+  Debug: 0
 --- !u!1001 &1225692741
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10918,11 +10951,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ragdollCooldown: 5
+  ragdollCooldownMax: 5
   Rig: {fileID: 0}
   RigType: 0
   stats: {fileID: 0}
   agent: {fileID: 0}
+  anim: {fileID: 0}
   SRadius: 0.0008
+  Debug: 0
 --- !u!1001 &1920329763
 PrefabInstance:
   m_ObjectHideFlags: 0

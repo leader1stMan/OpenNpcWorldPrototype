@@ -127,7 +127,7 @@ public abstract class EnemyBase : MonoBehaviour
             else
             {
                 stats.isRagdolled = false;
-                RagSystem.ragdollCooldown = 5f;
+                RagSystem.ragdollCooldown = RagSystem.ragdollCooldownMax;
                 ChangeState(EnemyState.GetUp);
             }
            

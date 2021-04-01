@@ -7,23 +7,32 @@ using System.Collections.Generic;
 public class RagdollSystem : MonoBehaviour
 {
 
-    public float ragdollCooldown = 5;
+    public float ragdollCooldown = 5f;
+    public float ragdollCooldownMax = 5f;
     public Rigidbody Rig;
     public int RigType = 0;
     public CharacterStats stats;
     public NavMeshAgent agent;
+    public Animator anim;
     public float SRadius = 0.0008f;
     bool OverRode = false;
+    public bool Debug = false;
+
     void Start()
     {
         Rig = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();
         stats = GetComponent<CharacterStats>();
+        anim = GetComponentInChildren<Animator>();
         if (gameObject.name.Contains("Player"))
         {
             RigType = 1;
         }
-        if (GetComponent<SkeletonAi>() != null || GetComponent<SkeletonArcherAI>() != null || GetComponent<NPC>() != null)
+        else if(GetComponent<NPC>() != null)
+        {
+            RigType = 2;
+        }
+        if (GetComponent<SkeletonAi>() != null || GetComponent<SkeletonArcherAI>() != null )
         {
             OverRode = true;
         }
@@ -64,7 +73,7 @@ public class RagdollSystem : MonoBehaviour
         else
         {
             stats.isRagdolled = false;
-            ragdollCooldown = 5;
+            ragdollCooldown = ragdollCooldownMax;
             
           //  ChangeState(EnemyState.GetUp);
         }
@@ -91,8 +100,7 @@ public class RagdollSystem : MonoBehaviour
             Rig.useGravity = false;
             CapsuleCollider BC = GetComponent<CapsuleCollider>();
             //NavMeshAgent nma = GetComponent<NavMeshAgent>();
-            Animator a = GetComponent<Animator>();
-            a.enabled = false;
+            anim.enabled = false;
             agent.enabled = false;
             //nma.enabled = false;
             BC.enabled = false;
@@ -112,6 +120,11 @@ public class RagdollSystem : MonoBehaviour
             {
 
                 Rig1();
+            }
+            else if (RigType == 2)
+            {
+
+                Rig2();
             }
         }
     }
@@ -185,7 +198,7 @@ public class RagdollSystem : MonoBehaviour
 
 
 
-                g.GetComponent<Rigidbody>().mass = 10f;
+                g.GetComponent<Rigidbody>().mass = 20f;
                 g.GetComponent<Rigidbody>().drag = 5f;
                 g.GetComponent<Rigidbody>().angularDrag = 1f;
             }
@@ -238,7 +251,7 @@ public class RagdollSystem : MonoBehaviour
                 else
                 {
                     g.AddComponent<Rigidbody>();
-                    g.GetComponent<Rigidbody>().mass = 10f;
+                    g.GetComponent<Rigidbody>().mass = 20f;
                     g.GetComponent<Rigidbody>().drag = 5f;
                     g.GetComponent<Rigidbody>().angularDrag = 1f;
                 }
@@ -278,7 +291,7 @@ public class RagdollSystem : MonoBehaviour
 
                
                 //g.GetComponent<Rigidbody>().isKinematic = true;
-                g.GetComponent<Rigidbody>().mass = 10f;
+                g.GetComponent<Rigidbody>().mass = 20f;
                 g.GetComponent<Rigidbody>().drag = 5f;
                 g.GetComponent<Rigidbody>().angularDrag = 1f;
             }
@@ -290,7 +303,112 @@ public class RagdollSystem : MonoBehaviour
 
     }
 
+    void Rig2()
+    {
+        Transform[] allChildren = GetComponentsInChildren<Transform>();
+        foreach (Transform t in allChildren)
+        {
+            GameObject g = t.gameObject;
 
+            if (g.name.Contains("Hips") || g.name.Contains("Head") && g.name.Contains("HeadTop") == false || g.name.Contains("Foot") ||
+                g.name.Contains("RightHand") && g.name.Contains("1") == false && g.name.Contains("2") == false && g.name.Contains("3") == false 
+                || g.name.Contains("LeftHand") && g.name.Contains("1") == false && g.name.Contains("2") == false && g.name.Contains("3") == false 
+                || g.name.Contains("Arm") || g.name.Contains("Shoulder") ||
+                g.name.Contains("Spine2") || g.name.Contains("Leg") || g.name.Contains("Neck"))
+            {
+                if (g.name.Contains("Neck") == false)
+                {
+                    SphereCollider C = g.AddComponent<SphereCollider>();
+                    // C.size = new Vector3(0.005f, 0.005f, 0.005f);
+                    //  C.height = 0.001f;
+                    C.radius = SRadius;
+                }
+                if (g.name.Contains("Hips") == false)
+                {
+                    CharacterJoint CJ = g.AddComponent<CharacterJoint>();
+                    // CJ.connectedBody = Rig;
+                    SoftJointLimit jointLimit = CJ.lowTwistLimit;
+                    jointLimit.limit = -5f;
+                    CJ.lowTwistLimit = jointLimit;
+
+                    SoftJointLimit jointLimitH = CJ.highTwistLimit;
+                    jointLimitH.limit = 25f;
+                    CJ.highTwistLimit = jointLimitH;
+
+                    SoftJointLimit jointLimit1 = CJ.swing1Limit;
+                    jointLimit1.limit = 5f;
+                    CJ.swing1Limit = jointLimit1;
+
+                    SoftJointLimit jointLimit2 = CJ.swing2Limit;
+                    jointLimit2.limit = 5f;
+                    CJ.swing2Limit = jointLimit2;
+                }
+                else
+                {
+                    g.AddComponent<Rigidbody>();
+                    g.GetComponent<Rigidbody>().mass = 20f;
+                    g.GetComponent<Rigidbody>().drag = 5f;
+                    g.GetComponent<Rigidbody>().angularDrag = 1f;
+                }
+
+                g.layer = LayerMask.NameToLayer("RagBox");
+
+
+
+
+
+
+
+            }
+
+        }
+
+        foreach (Transform t in allChildren)
+        {
+            GameObject g = t.gameObject;
+            string name = g.name;
+            if (g.name.Contains("Hips") || g.name.Contains("Head") && g.name.Contains("HeadTop") == false || g.name.Contains("Foot") ||
+               g.name.Contains("RightHand") && g.name.Contains("1") == false && g.name.Contains("2") == false && g.name.Contains("3") == false
+               || g.name.Contains("LeftHand") && g.name.Contains("1") == false && g.name.Contains("2") == false && g.name.Contains("3") == false
+               || g.name.Contains("Arm") || g.name.Contains("Shoulder") ||
+               g.name.Contains("Spine2") || g.name.Contains("Leg") || g.name.Contains("Neck"))
+            {
+
+
+                CharacterJoint CJ = g.GetComponent<CharacterJoint>();
+                if (CJ != null)
+                {
+                    if (t.parent.gameObject.GetComponent<Rigidbody>()!=null)
+                    {
+                        CJ.connectedBody = t.parent.gameObject.GetComponent<Rigidbody>();
+                    }
+                    else if (t.parent.parent.gameObject.GetComponent<Rigidbody>() != null)
+                    {
+                        CJ.connectedBody = t.parent.parent.gameObject.GetComponent<Rigidbody>();
+                    }
+                    
+
+                }
+                
+                
+
+
+                if(Debug == true)
+                {
+                    g.GetComponent<Rigidbody>().isKinematic = true;
+                }
+
+                g.GetComponent<Rigidbody>().mass = 20f;
+                g.GetComponent<Rigidbody>().drag = 5f;
+                g.GetComponent<Rigidbody>().angularDrag = 1f;
+            }
+
+        }
+
+
+
+
+    }
 
     public void RagOff()
     {
@@ -340,14 +458,30 @@ public class RagdollSystem : MonoBehaviour
                         Destroy(grig);
                     }
                 }
-
+                else if (RigType == 2)
+                {
+                    if (g.name.Contains("Hips") || g.name.Contains("Head") && g.name.Contains("HeadTop") == false || g.name.Contains("Foot") ||
+                 g.name.Contains("RightHand") && g.name.Contains("1") == false && g.name.Contains("2") == false && g.name.Contains("3") == false
+                 || g.name.Contains("LeftHand") && g.name.Contains("1") == false && g.name.Contains("2") == false && g.name.Contains("3") == false
+                 || g.name.Contains("Arm") || g.name.Contains("Shoulder") ||
+                 g.name.Contains("Spine2") || g.name.Contains("Leg") || g.name.Contains("Neck"))
+                    {
+                        SphereCollider C = g.GetComponent<SphereCollider>();
+                        Destroy(C);
+                        CharacterJoint CJ = g.GetComponent<CharacterJoint>();
+                        Destroy(CJ);
+                        Rigidbody grig = g.GetComponent<Rigidbody>();
+                        Destroy(grig);
+                    }
+                }
+                g.layer = LayerMask.NameToLayer("Default");
             }
 
 
             CapsuleCollider BC = GetComponent<CapsuleCollider>();
             ///  NavMeshAgent nma = GetComponent<NavMeshAgent>();
-            Animator a = GetComponent<Animator>();
-            a.enabled = true;
+            //Animator a = GetComponent<Animator>();
+            anim.enabled = true;
             agent.enabled = true;
             BC.enabled = true;
             Rig.useGravity = true;
@@ -361,19 +495,19 @@ public class RagdollSystem : MonoBehaviour
 
     protected virtual void StopAnimation(string AnimationName)
     {
-        GetComponent<Animator>().SetBool(AnimationName, false);
+        anim.SetBool(AnimationName, false);
     }
 
     protected virtual void PlayAnimation(string AnimationName, bool ovride)
     {
         if (ovride == false)
         {
-            GetComponent<Animator>().SetBool(AnimationName, true);
+            anim.SetBool(AnimationName, true);
         }
-        else if (GetComponent<Animator>().GetBool(AnimationName) == false)
+        else if (anim.GetBool(AnimationName) == false)
         {
 
-            GetComponent<Animator>().SetBool(AnimationName, true);
+            anim.SetBool(AnimationName, true);
         }
 
     }
