@@ -27,6 +27,9 @@ public class NPC : NpcData, IAttackable
     private int Dialogue;
     private bool isStarted;
     private int called;
+    protected GameObject conversatingWith;
+
+    public bool debug;
 
     private TMP_Text text;
 
@@ -116,7 +119,11 @@ public class NPC : NpcData, IAttackable
     private void OnStateChanged(NpcStates PrevState, NpcStates NewState)
     {
         if (PrevState == NpcStates.Working)
+        {
             anim.SetBool("Working", false);
+            debug = false;
+        }
+    
         switch (NewState)
         {
             case NpcStates.Scared:
@@ -146,11 +153,13 @@ public class NPC : NpcData, IAttackable
                 agent.speed = movementSpeed;
                 break;
             case NpcStates.IsTalking:
-                agent.speed = 0;
+                agent.speed = movementSpeed;
+                SetMoveTarget(conversatingWith.transform);
                 break;
             case NpcStates.Working:
                 agent.speed = movementSpeed;
                 anim.SetBool("Working", true);
+                debug = true;
                 SetMoveTarget(work);
                 break;
             default: break;
@@ -176,7 +185,7 @@ public class NPC : NpcData, IAttackable
 
     private void GoToWork()
     {
-        if (currentState == NpcStates.GoingToWork || currentState == NpcStates.IsTalking || currentState == NpcStates.Scared)
+        if (currentState == NpcStates.GoingToWork || currentState == NpcStates.Working || currentState == NpcStates.IsTalking || currentState == NpcStates.Scared)
             return;
 
         currentState = NpcStates.GoingToWork;
@@ -192,6 +201,7 @@ public class NPC : NpcData, IAttackable
 
         currentState = NpcStates.GoingHome;
         anim.SetBool("Working", false);
+        debug = false;
 
         SetMoveTarget(home);
         if(ShowDebugMessages)
@@ -267,6 +277,7 @@ public class NPC : NpcData, IAttackable
         //Debug.Log("Conversation ended by" + gameObject.name);
         isFirst = false;
         ChangeState(NpcStates.Idle);
+        conversatingWith = null;
 
         text.text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
         yield return null;
@@ -278,13 +289,13 @@ public class NPC : NpcData, IAttackable
         {
             if (other.CompareTag("Npc"))
             {
-                GameObject obj = other.gameObject;
-                NPC script = obj.GetComponentInParent<NPC>();
+                conversatingWith = other.gameObject;
+                NPC script = conversatingWith.GetComponentInParent<NPC>();
                 if (script.currentState != NpcStates.IsTalking)
                 {
                     if (priority > script.priority)
                     {
-                        if (Random.Range(0, 1000) == 1)
+                        if (Random.Range(0, 1000) <= 100)
                         {
                             ChangeState(NpcStates.IsTalking);
                             isFirst = true;
