@@ -4799,6 +4799,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SkeletonSheildedNPC
       objectReference: {fileID: 0}
+    - target: {fileID: 6616903152129717052, guid: 891e497a11d64444a88e206290c9a9e4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6616903152129750495, guid: 891e497a11d64444a88e206290c9a9e4,
         type: 3}
       propertyPath: Tags.Array.size
@@ -11221,6 +11226,11 @@ PrefabInstance:
         type: 3}
       propertyPath: priority
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3998307100013478935, guid: d2f58f1ca95fd3b43917d67023dded37,
+        type: 3}
+      propertyPath: maxHealth.BaseValue
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1935212651, guid: d2f58f1ca95fd3b43917d67023dded37, type: 3}
