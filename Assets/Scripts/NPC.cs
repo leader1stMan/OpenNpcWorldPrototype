@@ -28,8 +28,7 @@ public class NPC : NpcData, IAttackable
     private bool isStarted;
     private int called;
     protected GameObject conversatingWith;
-
-    public bool debug;
+    protected NPC NPCscript;
 
     private TMP_Text text;
 
@@ -73,8 +72,9 @@ public class NPC : NpcData, IAttackable
                     Debug.Log("StartingToWork");
                 ChangeState(NpcStates.Working);
             }
-            WatchEnvironment();
         }
+
+        WatchEnvironment();
     }
 
     private void WatchEnvironment()
@@ -119,11 +119,8 @@ public class NPC : NpcData, IAttackable
     private void OnStateChanged(NpcStates PrevState, NpcStates NewState)
     {
         if (PrevState == NpcStates.Working)
-        {
             anim.SetBool("Working", false);
-            debug = false;
-        }
-    
+
         switch (NewState)
         {
             case NpcStates.Scared:
@@ -159,7 +156,6 @@ public class NPC : NpcData, IAttackable
             case NpcStates.Working:
                 agent.speed = movementSpeed;
                 anim.SetBool("Working", true);
-                debug = true;
                 SetMoveTarget(work);
                 break;
             default: break;
@@ -201,7 +197,6 @@ public class NPC : NpcData, IAttackable
 
         currentState = NpcStates.GoingHome;
         anim.SetBool("Working", false);
-        debug = false;
 
         SetMoveTarget(home);
         if(ShowDebugMessages)
@@ -290,17 +285,18 @@ public class NPC : NpcData, IAttackable
             if (other.CompareTag("Npc"))
             {
                 conversatingWith = other.gameObject;
-                NPC script = conversatingWith.GetComponentInParent<NPC>();
-                if (script.currentState != NpcStates.IsTalking)
+                NPCscript = conversatingWith.GetComponentInParent<NPC>();
+                if (NPCscript.currentState != NpcStates.Scared || NPCscript.currentState != NpcStates.IsTalking)
                 {
-                    if (priority > script.priority)
+                    if (priority > NPCscript.priority)
                     {
-                        if (Random.Range(0, 1000) <= 100)
+                        if (Random.Range(0, 1000) == 1)
                         {
                             ChangeState(NpcStates.IsTalking);
                             isFirst = true;
-                            script.ChangeState(NpcStates.IsTalking);
-                            script.isFirst = false;
+                            NPCscript.ChangeState(NpcStates.IsTalking);
+                            NPCscript.isFirst = false;
+                            NPCscript.conversatingWith = this.gameObject;
                             //Debug.Log("Conversation started by " + gameObject.name);
                         }
                     }
