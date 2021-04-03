@@ -218,19 +218,21 @@ public class NPC : NpcData, IAttackable
         agent.speed = scaredRunningSpeed;
         timeToRun = runningTime;
         int interaction = 0;
+        agent.ResetPath();
         while (timeToRun > 0)
         {
             interaction++;
             Vector3 distanceIn3D = attacker.transform.position - transform.position;
             float magnitude = new Vector2(distanceIn3D.x, distanceIn3D.z).magnitude;
             Vector2 distance = new Vector2(distanceIn3D.x / magnitude, distanceIn3D.z / magnitude);
-            Debug.DrawLine(transform.position, new Vector3(transform.position.x + distance.x * runningDistance, transform.position.y, transform.position.z + distance.y * runningDistance), Color.blue, 20f);
+            //Debug.DrawLine(transform.position, new Vector3(transform.position.x + distance.x * runningDistance, transform.position.y, transform.position.z + distance.y * runningDistance), Color.blue, 20f);
             Vector3 goal;
-            NavMeshHit hit, temp;
+            NavMeshHit hit;
             int index = 0;
             double angleX = Math.Acos(distance.x);
             double angleY = Math.Asin(distance.y);
             bool isPathValid;
+            NavMeshPath path = new NavMeshPath();
             do
             {
                 angleX += index * Math.Pow(-1.0f, index) * Math.PI / 6.0f;
@@ -238,17 +240,25 @@ public class NPC : NpcData, IAttackable
                 distance = new Vector2((float)Math.Cos(angleX), (float)Math.Sin(angleY));
                 index++;
                 goal = new Vector3(transform.position.x - distance.x * runningDistance, transform.position.y, transform.position.z - distance.y * runningDistance);
-             
-                Debug.DrawLine(transform.position, goal, Color.red, 20f);
+                bool samplePosition;
+                Debug.DrawLine(transform.position, goal, Color.yellow, 20f);
                 Debug.DrawLine(goal, goal + new Vector3(0.05f, 0, 0.05f), Color.blue , 20f);
-                NavMesh.SamplePosition(goal, out hit, runningDistance/5, agent.areaMask);
-                yield return new WaitUntil(() => !agent.pathPending);
-                agent.SetDestination(hit.position);
-                float length = GetPathLength(agent.path);
-                isPathValid = (length >= runningDistance) && index <= 13;
-
-                Debug.Log(length + " " + runningDistance);
-            } while (isPathValid);
+                samplePosition = NavMesh.SamplePosition(goal, out hit, runningDistance / 5, agent.areaMask);
+                if (samplePosition)
+                {
+                    agent.CalculatePath(hit.position, path);
+                    yield return new WaitUntil(() => path.status != NavMeshPathStatus.PathInvalid);
+                    agent.path = path;
+                }
+                isPathValid = (samplePosition && path.status != NavMeshPathStatus.PathPartial && agent.remainingDistance <= runningDistance);
+                if (index > 13)
+                { 
+                    ChangeState(NpcStates.Idle);
+                    break;
+                }
+                //Debug.DrawRay(hit.position, new Vector3(0, 0.1f, 0), Color.blue, 5f);
+                Debug.Log(index + " " + agent.remainingDistance + " " + agent.hasPath);
+            } while (!isPathValid);
             if (timeToRun < 2f)
                 agent.acceleration = currentAcceleration;
             yield return new WaitUntil(() => Vector3.Distance(agent.destination, transform.position) <= runningDistance / 1.2);
@@ -256,18 +266,5 @@ public class NPC : NpcData, IAttackable
                 agent.acceleration = scaredAcceleration;
         }
         ChangeState(NpcStates.Idle);
-    }
-    public float GetPathLength(NavMeshPath path)
-    {
-        float lng = 0.0f;
-
-        if ((path.status != NavMeshPathStatus.PathInvalid) && (path.corners.Length > 1))
-        {
-            for (int i = 1; i < path.corners.Length; ++i)
-            {
-                lng += Vector3.Distance(path.corners[i - 1], path.corners[i]);
-            }
-        }
-        return lng;
     }
 }

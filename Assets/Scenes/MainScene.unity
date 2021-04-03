@@ -693,7 +693,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849520, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849521, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -798,7 +798,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: runningDistance
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -808,7 +808,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: scaredRunningSpeed
-      value: 4
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -818,12 +818,17 @@ PrefabInstance:
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: runningTime
-      value: 15
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: NavMeshAccurancy
       value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: scaredAcceleration
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2722809551112734972, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -10539,7 +10544,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849520, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849521, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -10604,12 +10609,12 @@ PrefabInstance:
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: scaredRunningSpeed
-      value: 4
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: runningDistance
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -10619,12 +10624,17 @@ PrefabInstance:
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: runningTime
-      value: 15
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: NavMeshAccurancy
       value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: scaredAcceleration
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6317785528158108508, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -15980,7 +15990,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: scaredRunningSpeed
-      value: 2
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -15990,7 +16000,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: runningTime
-      value: 60
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -16000,7 +16010,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: scaredAcceleration
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849523, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -18838,7 +18848,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849520, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849521, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -18938,7 +18948,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: runningDistance
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -18948,7 +18958,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: scaredRunningSpeed
-      value: 4
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -18958,12 +18968,17 @@ PrefabInstance:
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: runningTime
-      value: 15
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: NavMeshAccurancy
       value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: scaredAcceleration
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2722809551112734972, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
