@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -7,14 +8,19 @@ using UnityEngine.AI;
 public class NPC : NpcData, IAttackable
 {
     public bool ShowDebugMessages;
-
+    
     public NavMeshAgent agent { get; private set; }
     private Animator anim;
 
+    public GameObject Attacker;
     public bool isAttacked;
     public float movementSpeed;
     public float scaredRunningSpeed;
+    public float scaredAcceleration;
     public float runningDistance;
+    public float runningTime;
+    private float timeToRun;
+    public float NavMeshAccurancy;
     [SerializeField] private float speedAnimDevider = 1;
     [SerializeField] private float stopDistance;
     [SerializeField] private float stopDistanceRandomAdjustment;
@@ -28,21 +34,18 @@ public class NPC : NpcData, IAttackable
         FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork;
         FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome;
 
-        stopDistance = Random.Range(stopDistanceRandomAdjustment + stopDistance, stopDistance);
+        stopDistance = UnityEngine.Random.Range(stopDistanceRandomAdjustment + stopDistance, stopDistance);
         agent.stoppingDistance = stopDistance;
 
         GoHome();
     }
-
     void Update()
     {
         anim.SetFloat("InputMagnitude", agent.velocity.magnitude / speedAnimDevider);
 
-        if(currentState == NpcStates.GoingToWork && Vector3.Distance(transform.position, work.position) <= stopDistance)
+        if (timeToRun > 0)
         {
-            if(ShowDebugMessages)
-            Debug.Log("StartingToWork");
-            ChangeState(NpcStates.Working);
+            timeToRun -= Time.deltaTime;
         }
         WatchEnvironment();
     }
@@ -58,17 +61,20 @@ public class NPC : NpcData, IAttackable
             {
                 NPC npc = col.gameObject.GetComponent<NPC>();
                 NpcStates state = npc.currentState;
-                if (state == NpcStates.Attacking || state == NpcStates.Defending || npc.isAttacked)
+                if (npc.isAttacked)
                 {
+                    Attacker = npc.Attacker;
                     ChangeState(NpcStates.Scared);
                 }
             }
             // If the NPC is looking at an enemy Attacking or defending, run
             else if (col.gameObject.GetComponent<EnemyBase>())
             {
-                EnemyState state = col.gameObject.GetComponent<EnemyBase>().CurrentState;
+                EnemyBase enemy= col.gameObject.GetComponent<EnemyBase>();
+                EnemyState state = enemy.CurrentState;
                 if (state == EnemyState.Attacking)
                 {
+                    Attacker = col.gameObject;
                     ChangeState(NpcStates.Scared);
                 }
             }
@@ -89,24 +95,23 @@ public class NPC : NpcData, IAttackable
     private void OnStateChanged(NpcStates PrevState, NpcStates NewState)
     {
         if (PrevState == NpcStates.Working)
+        {
             anim.SetBool("Working", false);
+        }
         switch (NewState)
         {
             case NpcStates.Scared:
-                StartCoroutine("Run");
+                StartCoroutine("Run", Attacker);
                 break;
             case NpcStates.GoingHome:
-                agent.speed = movementSpeed;
-                SetMoveTarget(home);
+                GoHome();
                 break;
             case NpcStates.GoingToWork:
-                agent.speed = movementSpeed;
-                SetMoveTarget(work);
+                GoToWork();
                 break;
             case NpcStates.Idle:
-                agent.speed = movementSpeed;
                 float time = FindObjectOfType<DayAndNightControl>().currentTime;
-                if (time > .3f && time < .8f)
+                if (time > .2f && time < .8f)
                 {
                     GoToWork();
                 }
@@ -136,7 +141,7 @@ public class NPC : NpcData, IAttackable
     private void SetRandomMoveTarget()
     {
         agent.ResetPath();
-        Vector2 vector = Random.insideUnitCircle.normalized;
+        Vector2 vector = UnityEngine.Random.insideUnitCircle.normalized;
         Vector3 randomDirection = new Vector3(vector.x, transform.position.y, vector.y) * runningDistance;
         randomDirection += transform.position;
         NavMeshHit hit;
@@ -144,28 +149,41 @@ public class NPC : NpcData, IAttackable
         agent.SetDestination(hit.position);
     }
 
-    private void GoToWork()
+    void GoToWork()
     {
         if (currentState == NpcStates.GoingToWork || currentState == NpcStates.Scared)
             return;
-
+        StartCoroutine("GoToWorkCoroutine");
+    }
+    IEnumerator GoToWorkCoroutine()
+    {
+        agent.speed = movementSpeed;
         currentState = NpcStates.GoingToWork;
         SetMoveTarget(work);
-        if(ShowDebugMessages)
-        Debug.Log(name + " is going to work");
+
+        yield return new WaitUntil(() => Vector3.Distance(agent.destination, transform.position) <= 0.05f);
+
+        if (currentState == NpcStates.Working)
+        ChangeState(NpcStates.Working);
     }
 
-    private void GoHome()
+    void GoHome()
     {
         if (currentState == NpcStates.GoingHome || currentState == NpcStates.Scared)
             return;
+        StartCoroutine("GoHomeCoroutine");
+    }
 
+    IEnumerator GoHomeCoroutine()
+    {
+        agent.speed = movementSpeed;
         currentState = NpcStates.GoingHome;
-        anim.SetBool("Working", false);
 
         SetMoveTarget(home);
-        if(ShowDebugMessages)
-        Debug.Log(name + " is going home");
+
+        yield return new WaitUntil(() => Vector3.Distance(agent.destination, transform.position) <= 0.05f);
+        if (currentState == NpcStates.GoingHome)
+            ChangeState(NpcStates.Idle);
     }
     private void OnDestroy()
     {
@@ -176,13 +194,14 @@ public class NPC : NpcData, IAttackable
         }
         catch
         {
-            if (ShowDebugMessages)
+            if (ShowDebugMessages) 
                 Debug.LogWarning("DayAndNightControl object is not found. This is ok if the scene is unloaded.");
         }
     }
 
     public void OnAttack(GameObject attacker, Attack attack)
     {
+        Attacker = attacker;
         ChangeState(NpcStates.Scared);
         StartCoroutine("Attacked");
     }
@@ -193,11 +212,62 @@ public class NPC : NpcData, IAttackable
         yield return new WaitForSeconds(1f);
         isAttacked = false;
     }
-    IEnumerator Run()
+    IEnumerator Run(GameObject attacker)
     {
+        float currentAcceleration = agent.acceleration;
         agent.speed = scaredRunningSpeed;
-        SetRandomMoveTarget();
-        yield return new WaitUntil(() => Vector3.Distance(agent.destination, transform.position) <= 0.5f);
+        timeToRun = runningTime;
+        int interaction = 0;
+        while (timeToRun > 0)
+        {
+            interaction++;
+            Vector3 distanceIn3D = attacker.transform.position - transform.position;
+            float magnitude = new Vector2(distanceIn3D.x, distanceIn3D.z).magnitude;
+            Vector2 distance = new Vector2(distanceIn3D.x / magnitude, distanceIn3D.z / magnitude);
+            Debug.DrawLine(transform.position, new Vector3(transform.position.x + distance.x * runningDistance, transform.position.y, transform.position.z + distance.y * runningDistance), Color.blue, 20f);
+            Vector3 goal;
+            NavMeshHit hit, temp;
+            int index = 0;
+            double angleX = Math.Acos(distance.x);
+            double angleY = Math.Asin(distance.y);
+            bool isPathValid;
+            do
+            {
+                angleX += index * Math.Pow(-1.0f, index) * Math.PI / 6.0f;
+                angleY -= index * Math.Pow(-1.0f, index) * Math.PI / 6.0f;
+                distance = new Vector2((float)Math.Cos(angleX), (float)Math.Sin(angleY));
+                index++;
+                goal = new Vector3(transform.position.x - distance.x * runningDistance, transform.position.y, transform.position.z - distance.y * runningDistance);
+             
+                Debug.DrawLine(transform.position, goal, Color.red, 20f);
+                Debug.DrawLine(goal, goal + new Vector3(0.05f, 0, 0.05f), Color.blue , 20f);
+                NavMesh.SamplePosition(goal, out hit, runningDistance/5, agent.areaMask);
+                yield return new WaitUntil(() => !agent.pathPending);
+                agent.SetDestination(hit.position);
+                float length = GetPathLength(agent.path);
+                isPathValid = (length >= runningDistance) && index <= 13;
+
+                Debug.Log(length + " " + runningDistance);
+            } while (isPathValid);
+            if (timeToRun < 2f)
+                agent.acceleration = currentAcceleration;
+            yield return new WaitUntil(() => Vector3.Distance(agent.destination, transform.position) <= runningDistance / 1.2);
+            if (interaction == 1)
+                agent.acceleration = scaredAcceleration;
+        }
         ChangeState(NpcStates.Idle);
+    }
+    public float GetPathLength(NavMeshPath path)
+    {
+        float lng = 0.0f;
+
+        if ((path.status != NavMeshPathStatus.PathInvalid) && (path.corners.Length > 1))
+        {
+            for (int i = 1; i < path.corners.Length; ++i)
+            {
+                lng += Vector3.Distance(path.corners[i - 1], path.corners[i]);
+            }
+        }
+        return lng;
     }
 }
