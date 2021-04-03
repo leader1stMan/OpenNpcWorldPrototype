@@ -9,6 +9,8 @@ public class RagdollSystem : MonoBehaviour
 
     public float ragdollCooldown = 5f;
     public float ragdollCooldownMax = 5f;
+    public bool ForceRagdoll = false;
+    public bool DisabledKinematic = false;
     public Rigidbody Rig;
     public int RigType = 0;
     public CharacterStats stats;
@@ -17,16 +19,21 @@ public class RagdollSystem : MonoBehaviour
     public float SRadius = 0.0008f;
     bool OverRode = false;
     public bool Debug = false;
-
+    public int DollID = 15;
+    int ORC = 0;
+    bool RagSwitch = false;
+    bool RagStarted = false;
     void Start()
     {
-        Rig = GetComponent<Rigidbody>();
+       
+            Rig = GetComponent<Rigidbody>();
+      
         agent = GetComponent<NavMeshAgent>();
         stats = GetComponent<CharacterStats>();
         anim = GetComponentInChildren<Animator>();
         if (gameObject.name.Contains("Player"))
         {
-            RigType = 1;
+           // RigType = 1;
         }
         else if(GetComponent<NPC>() != null)
         {
@@ -47,13 +54,23 @@ public class RagdollSystem : MonoBehaviour
 
     void Update()
     {
-        if (OverRode == false)
+        if (OverRode == false || ForceRagdoll == true)
         {
-            if (stats.isRagdolled == true)
+            if (stats.isRagdolled == true || ForceRagdoll == true)
             {
+                if (ForceRagdoll == true)
+                {
+                    if(OverRode == true)
+                    {
+                        OverRode = false;
+                        ORC = 1;
+                    }
+                    stats.isRagdolled = true;
+                    ForceRagdoll = false;
+                }
                 DoRagdoll();
             }
-            else
+            else 
             {
                 DoGetUp();
             }
@@ -66,16 +83,24 @@ public class RagdollSystem : MonoBehaviour
         if (ragdollCooldown > 0)
         {
 
-            PlayAnimation("isRagdolled", false);
+            //PlayAnimation("isRagdolled", false);
             RagEffect();
             ragdollCooldown -= Time.deltaTime;
         }
         else
         {
+            if(ORC == 1)
+            {
+                OverRode = true;
+                ORC = 0;
+                
+            }
+            RagSwitch = true;
             stats.isRagdolled = false;
             ragdollCooldown = ragdollCooldownMax;
             
-          //  ChangeState(EnemyState.GetUp);
+            // PlayAnimation("GetUp", false);
+            //  ChangeState(EnemyState.GetUp);
         }
 
 
@@ -86,7 +111,12 @@ public class RagdollSystem : MonoBehaviour
 
     public void DoGetUp()
     {
-        RagOff();
+        if (RagSwitch == true)
+        {
+            RagSwitch = false;
+            RagOff();
+        }
+           
         
     }
 
@@ -94,18 +124,27 @@ public class RagdollSystem : MonoBehaviour
     public void RagEffect()
     {
        
-        if (Rig.isKinematic == true)
+        if (RagStarted == false)
         {
-            Rig.isKinematic = false;
+            RagStarted = true;
+            if (DisabledKinematic == true)
+            {
+                Rig.isKinematic = false;
+                
+            }
             Rig.useGravity = false;
             CapsuleCollider BC = GetComponent<CapsuleCollider>();
-            //NavMeshAgent nma = GetComponent<NavMeshAgent>();
-            anim.enabled = false;
-            agent.enabled = false;
-            //nma.enabled = false;
-            BC.enabled = false;
-          
 
+            if (anim != null) { anim.enabled = false; }
+
+
+            if (agent != null) { agent.enabled = false; }
+
+
+            if (BC != null) { BC.enabled = false; }
+
+
+            if (Rig != null) { Rig.useGravity = false; }
 
 
 
@@ -146,6 +185,7 @@ public class RagdollSystem : MonoBehaviour
                 Rp.drag = 5f;
                 Rp.angularDrag = 1f;
                 Cp.size = new Vector3(0.005f, 0.005f, 0.005f);
+                g.layer = DollID;
             }
             if (g.name.Contains("Head") || g.name.Contains("R Foot") || g.name.Contains("L Foot") ||
                 g.name.Contains("Calf") || g.name.Contains("Arm") || g.name.Contains("Clav") ||
@@ -170,15 +210,15 @@ public class RagdollSystem : MonoBehaviour
                 CJ.highTwistLimit = jointLimitH;
 
                 SoftJointLimit jointLimit1 = CJ.swing1Limit;
-                jointLimit1.limit = 5f;
+                jointLimit1.limit = 25f;
                 CJ.swing1Limit = jointLimit1;
 
                 SoftJointLimit jointLimit2 = CJ.swing2Limit;
-                jointLimit2.limit = 5f;
+                jointLimit2.limit = 25f;
                 CJ.swing2Limit = jointLimit2;
 
 
-
+                g.layer = DollID; //LayerMask.NameToLayer(DollID);
 
 
             }
@@ -241,11 +281,11 @@ public class RagdollSystem : MonoBehaviour
                     CJ.highTwistLimit = jointLimitH;
 
                     SoftJointLimit jointLimit1 = CJ.swing1Limit;
-                    jointLimit1.limit = 5f;
+                    jointLimit1.limit = 25f;
                     CJ.swing1Limit = jointLimit1;
 
                     SoftJointLimit jointLimit2 = CJ.swing2Limit;
-                    jointLimit2.limit = 5f;
+                    jointLimit2.limit = 25f;
                     CJ.swing2Limit = jointLimit2;
                 }
                 else
@@ -255,13 +295,13 @@ public class RagdollSystem : MonoBehaviour
                     g.GetComponent<Rigidbody>().drag = 5f;
                     g.GetComponent<Rigidbody>().angularDrag = 1f;
                 }
-              
-                
-                   
-                
 
 
 
+
+
+
+                g.layer = DollID; //g.layer = LayerMask.NameToLayer("RagBox");
 
 
             }
@@ -310,7 +350,7 @@ public class RagdollSystem : MonoBehaviour
         {
             GameObject g = t.gameObject;
 
-            if (g.name.Contains("Hips") || g.name.Contains("Head") && g.name.Contains("HeadTop") == false || g.name.Contains("Foot") ||
+            if (g.name.Contains("Hips") || g.name.Contains("Head") && g.name.Contains("HeadTop") == false && g.name.Contains("HeadJoint") == false || g.name.Contains("Foot") ||
                 g.name.Contains("RightHand") && g.name.Contains("1") == false && g.name.Contains("2") == false && g.name.Contains("3") == false 
                 || g.name.Contains("LeftHand") && g.name.Contains("1") == false && g.name.Contains("2") == false && g.name.Contains("3") == false 
                 || g.name.Contains("Arm") || g.name.Contains("Shoulder") ||
@@ -336,11 +376,11 @@ public class RagdollSystem : MonoBehaviour
                     CJ.highTwistLimit = jointLimitH;
 
                     SoftJointLimit jointLimit1 = CJ.swing1Limit;
-                    jointLimit1.limit = 5f;
+                    jointLimit1.limit = 25f;
                     CJ.swing1Limit = jointLimit1;
 
                     SoftJointLimit jointLimit2 = CJ.swing2Limit;
-                    jointLimit2.limit = 5f;
+                    jointLimit2.limit = 25f;
                     CJ.swing2Limit = jointLimit2;
                 }
                 else
@@ -351,7 +391,7 @@ public class RagdollSystem : MonoBehaviour
                     g.GetComponent<Rigidbody>().angularDrag = 1f;
                 }
 
-                g.layer = LayerMask.NameToLayer("RagBox");
+                g.layer = DollID; //g.layer = LayerMask.NameToLayer("RagBox");
 
 
 
@@ -367,7 +407,7 @@ public class RagdollSystem : MonoBehaviour
         {
             GameObject g = t.gameObject;
             string name = g.name;
-            if (g.name.Contains("Hips") || g.name.Contains("Head") && g.name.Contains("HeadTop") == false || g.name.Contains("Foot") ||
+            if (g.name.Contains("Hips") || g.name.Contains("Head") && g.name.Contains("HeadTop") == false && g.name.Contains("HeadJoint") == false || g.name.Contains("Foot") ||
                g.name.Contains("RightHand") && g.name.Contains("1") == false && g.name.Contains("2") == false && g.name.Contains("3") == false
                || g.name.Contains("LeftHand") && g.name.Contains("1") == false && g.name.Contains("2") == false && g.name.Contains("3") == false
                || g.name.Contains("Arm") || g.name.Contains("Shoulder") ||
@@ -386,7 +426,11 @@ public class RagdollSystem : MonoBehaviour
                     {
                         CJ.connectedBody = t.parent.parent.gameObject.GetComponent<Rigidbody>();
                     }
-                    
+                    else if (t.parent.parent.parent.gameObject.GetComponent<Rigidbody>() != null)
+                    {
+                        CJ.connectedBody = t.parent.parent.parent.gameObject.GetComponent<Rigidbody>();
+                    }
+
 
                 }
                 
@@ -413,15 +457,20 @@ public class RagdollSystem : MonoBehaviour
     public void RagOff()
     {
      
-        if (Rig.isKinematic == false)
+        if (RagStarted == true)
         {
-            Rig.isKinematic = true;
+            RagStarted = false;
+            if (DisabledKinematic == true)
+            {
+                Rig.isKinematic = true;
+            }
+           
 
             Transform[] allChildren = GetComponentsInChildren<Transform>();
             foreach (Transform t in allChildren)
             {
                 GameObject g = t.gameObject;
-                if (g.name.Contains("Pelvis"))
+                if (g.name.Contains("Pelvis")|| g.name.Contains("Hip"))
                 {
                     CapsuleCollider Cp = g.GetComponent<CapsuleCollider>();
                     Rigidbody Rp = g.GetComponent<Rigidbody>();
@@ -442,6 +491,7 @@ public class RagdollSystem : MonoBehaviour
                         Destroy(CJ);
                         Rigidbody grig = g.GetComponent<Rigidbody>();
                         Destroy(grig);
+                        g.layer = LayerMask.NameToLayer("Default");
                     }
                 }
                 else if (RigType == 1)
@@ -456,11 +506,12 @@ public class RagdollSystem : MonoBehaviour
                         Destroy(CJ);
                         Rigidbody grig = g.GetComponent<Rigidbody>();
                         Destroy(grig);
+                        g.layer = LayerMask.NameToLayer("Default");
                     }
                 }
                 else if (RigType == 2)
                 {
-                    if (g.name.Contains("Hips") || g.name.Contains("Head") && g.name.Contains("HeadTop") == false || g.name.Contains("Foot") ||
+                    if (g.name.Contains("Hips") || g.name.Contains("Head") && g.name.Contains("HeadTop") == false && g.name.Contains("HeadJoint") == false || g.name.Contains("Foot") ||
                  g.name.Contains("RightHand") && g.name.Contains("1") == false && g.name.Contains("2") == false && g.name.Contains("3") == false
                  || g.name.Contains("LeftHand") && g.name.Contains("1") == false && g.name.Contains("2") == false && g.name.Contains("3") == false
                  || g.name.Contains("Arm") || g.name.Contains("Shoulder") ||
@@ -472,19 +523,25 @@ public class RagdollSystem : MonoBehaviour
                         Destroy(CJ);
                         Rigidbody grig = g.GetComponent<Rigidbody>();
                         Destroy(grig);
+                        g.layer = LayerMask.NameToLayer("Default");
                     }
                 }
-                g.layer = LayerMask.NameToLayer("Default");
+               
             }
-
-
             CapsuleCollider BC = GetComponent<CapsuleCollider>();
-            ///  NavMeshAgent nma = GetComponent<NavMeshAgent>();
-            //Animator a = GetComponent<Animator>();
-            anim.enabled = true;
-            agent.enabled = true;
-            BC.enabled = true;
-            Rig.useGravity = true;
+           
+           
+            if (anim != null) { anim.enabled = true; }
+            
+
+            if (agent != null) { agent.enabled = true; }
+                
+
+            if (BC != null) { BC.enabled = true; }
+                
+
+            if (Rig != null) { Rig.useGravity = true; }
+               
 
         }
 
