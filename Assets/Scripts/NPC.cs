@@ -20,7 +20,6 @@ public class NPC : NpcData, IAttackable
     public float runningDistance;
     public float runningTime;
     private float timeToRun;
-    public float NavMeshAccurancy;
     [SerializeField] private float speedAnimDevider = 1;
     [SerializeField] private float stopDistance;
     [SerializeField] private float stopDistanceRandomAdjustment;
@@ -241,8 +240,6 @@ public class NPC : NpcData, IAttackable
                 index++;
                 goal = new Vector3(transform.position.x - distance.x * runningDistance, transform.position.y, transform.position.z - distance.y * runningDistance);
                 bool samplePosition;
-                Debug.DrawLine(transform.position, goal, Color.yellow, 20f);
-                Debug.DrawLine(goal, goal + new Vector3(0.05f, 0, 0.05f), Color.blue , 20f);
                 samplePosition = NavMesh.SamplePosition(goal, out hit, runningDistance / 5, agent.areaMask);
                 if (samplePosition)
                 {
@@ -256,8 +253,6 @@ public class NPC : NpcData, IAttackable
                     ChangeState(NpcStates.Idle);
                     break;
                 }
-                //Debug.DrawRay(hit.position, new Vector3(0, 0.1f, 0), Color.blue, 5f);
-                Debug.Log(index + " " + agent.remainingDistance + " " + agent.hasPath);
             } while (!isPathValid);
             if (timeToRun < 2f)
                 agent.acceleration = currentAcceleration;
