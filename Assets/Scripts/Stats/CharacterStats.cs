@@ -28,8 +28,6 @@ public class CharacterStats : MonoBehaviour
         currentHealth.SetValue(currentHealth.GetValue() - damage);
 
         OnHealthValueChanged?.Invoke();
-
-        Debug.Log(transform.name + " takes " + damage + " damage");
     }
 
     public Stat GetArmor()
