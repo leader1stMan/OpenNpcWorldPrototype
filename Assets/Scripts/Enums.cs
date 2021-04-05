@@ -5,6 +5,7 @@
     Working,
     GoingHome,
     InteractingWithPlayer,
+    Talking,
     Scared,
     Petrified,
     Attacking,

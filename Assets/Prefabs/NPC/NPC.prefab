@@ -188,7 +188,6 @@ GameObject:
   - component: {fileID: 1928269307111726560}
   - component: {fileID: -3937936013646344853}
   - component: {fileID: 4575109230519276086}
-  - component: {fileID: 3138425072226794443}
   - component: {fileID: 3119983497678077428}
   - component: {fileID: 2164559594005086327}
   - component: {fileID: -757223329705075394}
@@ -251,6 +250,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcName: 
+  VisionRange: 10
+  VisionLayers:
+    serializedVersion: 2
+    m_Bits: 0
   age: 25
   job: 0
   home: {fileID: 0}
@@ -260,9 +263,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   ShowDebugMessages: 0
+  isAttacked: 0
+  movementSpeed: 2
+  scaredRunningSpeed: 4
+  runningDistance: 40
   speedAnimDevider: 5
   stopDistance: 0.5
   stopDistanceRandomAdjustment: 2
+  priority: 0
 --- !u!136 &7176504838547576364
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -331,22 +339,8 @@ MonoBehaviour:
   Armor:
     BaseValue: 0
   weapon: {fileID: 0}
---- !u!114 &3138425072226794443
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2650718596372849520}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c52d954a6969a46459f4bb6026875226, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  priority: 0
-  isTalking: 0
-  isFirst: 0
-  Dialogue: 0
+  shield: {fileID: 0}
+  isBlocking: 0
 --- !u!114 &3119983497678077428
 MonoBehaviour:
   m_ObjectHideFlags: 0
