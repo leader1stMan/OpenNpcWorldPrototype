@@ -13,6 +13,7 @@ public class CharacterStats : MonoBehaviour
     public Shield shield;
     public bool isBlocking;
     public bool isRagdolled;
+    public bool isDead = false;
     public event Action OnHealthValueChanged;
 
     void Awake()
@@ -23,12 +24,20 @@ public class CharacterStats : MonoBehaviour
 
     public void TakeDamage(GameObject attacker, float damage)
     {
-        if (damage <= 0f) return;
+        if (damage <= 0f)
+        {
+            return;
+        }
+        
 
         currentHealth.SetValue(currentHealth.GetValue() - damage);
 
         OnHealthValueChanged?.Invoke();
-
+        if (isDead == false && currentHealth.GetValue() <= 0f)
+        {
+            isDead = true;
+           
+        }
         Debug.Log(transform.name + " takes " + damage + " damage");
     }
 

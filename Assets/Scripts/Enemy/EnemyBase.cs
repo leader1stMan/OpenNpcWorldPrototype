@@ -155,7 +155,17 @@ public abstract class EnemyBase : MonoBehaviour
             if (!currentTarget)
             {
                 ChangeState(EnemyState.Idle);
-                return;            
+                return;
+            }
+            else
+            {
+                CharacterStats ctStats = currentTarget.GetComponent<CharacterStats>();
+                if (ctStats != null && ctStats.isDead == true)
+                {
+                    currentTarget = null;
+                    return;
+
+                }
             }
             RaycastHit hit;
             //if(position, direction)
@@ -247,7 +257,11 @@ public abstract class EnemyBase : MonoBehaviour
         CheckForTargets();
         if (currentTarget != null)
         {
-            Chase(currentTarget);
+            CharacterStats ctStats = currentTarget.GetComponent<CharacterStats>();
+            if (ctStats != null && ctStats.isDead == true)
+            {
+                currentTarget = null;
+            }
         }
         else
         {
@@ -284,10 +298,16 @@ public abstract class EnemyBase : MonoBehaviour
                                     DontAttack = true;
                                 }
                             }
+                            CharacterStats colStats = col.gameObject.GetComponent<CharacterStats>();
+
                             if (DontAttack == false)
                             {
-                                currentTarget = col.transform;
-                                break;
+                                if(colStats==true && colStats.isDead == false)
+                                {
+                                    currentTarget = col.transform;
+                                    break;
+                                }
+                                
                             }
 
                         }
@@ -301,7 +321,16 @@ public abstract class EnemyBase : MonoBehaviour
             }
             if (currentTarget != null)
             {
-                Chase(currentTarget);
+                CharacterStats ctStats = currentTarget.GetComponent<CharacterStats>();
+                if (ctStats != null && ctStats.isDead == true)
+                {
+                    currentTarget = null;
+                }
+                else
+                {
+                    Chase(currentTarget);
+                }
+                
             }
             else
             {

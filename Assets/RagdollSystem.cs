@@ -52,13 +52,13 @@ public class RagdollSystem : MonoBehaviour
 
 
 
-    void Update()
+    void FixedUpdate()
     {
-        if (OverRode == false || ForceRagdoll == true)
+        if (OverRode == false || ForceRagdoll == true || stats.isDead == true && stats.isRagdolled == false)
         {
-            if (stats.isRagdolled == true || ForceRagdoll == true)
+            if (stats.isRagdolled == true || stats.isDead == true && stats.isRagdolled == false || ForceRagdoll == true)
             {
-                if (ForceRagdoll == true)
+                if (ForceRagdoll == true || stats.isDead == true)
                 {
                     if(OverRode == true)
                     {
@@ -111,7 +111,7 @@ public class RagdollSystem : MonoBehaviour
 
     public void DoGetUp()
     {
-        if (RagSwitch == true)
+        if (RagSwitch == true && stats.isDead == false)
         {
             RagSwitch = false;
             RagOff();
