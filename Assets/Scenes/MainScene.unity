@@ -7134,6 +7134,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Merchant
       objectReference: {fileID: 0}
+    - target: {fileID: 7523313584288638859, guid: 478b1810b02a9744db780642269305f4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8820861122249464101, guid: 478b1810b02a9744db780642269305f4,
         type: 3}
       propertyPath: InventoryPanel

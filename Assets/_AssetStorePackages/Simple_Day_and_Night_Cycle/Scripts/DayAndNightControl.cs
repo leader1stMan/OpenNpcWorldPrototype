@@ -64,6 +64,8 @@ public class DayAndNightControl : MonoBehaviour {
 		}
 		if (currentDay == 0.3f)
 			OnMorningHandler?.Invoke();
+		if (currentDay == 0.7f)
+			OnEveningHandler?.Invoke();
 	}
 
 	void UpdateLight()
@@ -139,7 +141,6 @@ public class DayAndNightControl : MonoBehaviour {
 		else if (currentTime > 0.7f && currentTime < 0.8f)
 		{
 			dayState = "Evening";
-			OnEveningHandler?.Invoke();
 		}
 		else if (currentTime > 0.8f && currentTime < 1f)
 		{

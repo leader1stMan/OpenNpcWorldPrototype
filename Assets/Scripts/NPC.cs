@@ -26,8 +26,6 @@ public class NPC : NpcData, IAttackable
     [SerializeField] private float stopDistanceRandomAdjustment;
 
     private bool isFirst;
-    private bool isStarted;
-    protected GameObject conversatingWith;
 
     private TMP_Text text;
 
@@ -98,13 +96,23 @@ public class NPC : NpcData, IAttackable
 
         currentState = NewState;
         OnStateChanged(PrevState, NewState);
+        Debug.Log(gameObject.name + " " + PrevState + " " + NewState + " " + (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name);
     }
 
     private void OnStateChanged(NpcStates PrevState, NpcStates NewState)
     {
-        if (PrevState == NpcStates.Working)
+        switch(PrevState)
         {
-            anim.SetBool("Working", false);
+            case NpcStates.Working:
+                anim.SetBool("Working", false);
+                break;
+            case NpcStates.Talking:
+                agent.isStopped = false;
+                StopCoroutine("Conversation");
+                EndConversation();
+                break;
+            default:
+                break;
         }
         switch (NewState)
         {
@@ -129,13 +137,11 @@ public class NPC : NpcData, IAttackable
                 }
                 break;
             case NpcStates.InteractingWithPlayer:
-                agent.speed = movementSpeed;
                 break;
             case NpcStates.Talking:
                 agent.isStopped = true;
                 break;
             case NpcStates.Working:
-                agent.speed = movementSpeed;
                 anim.SetBool("Working", true);
                 SetMoveTarget(work);
                 break;
@@ -147,17 +153,6 @@ public class NPC : NpcData, IAttackable
     {
         agent.ResetPath();
         agent.SetDestination(target.position);
-    }
-
-    private void SetRandomMoveTarget()
-    {
-        agent.ResetPath();
-        Vector2 vector = UnityEngine.Random.insideUnitCircle.normalized;
-        Vector3 randomDirection = new Vector3(vector.x, transform.position.y, vector.y) * runningDistance;
-        randomDirection += transform.position;
-        NavMeshHit hit;
-        NavMesh.SamplePosition(randomDirection, out hit, runningDistance, 1);
-        agent.SetDestination(hit.position);
     }
 
     void GoToWork()
@@ -174,7 +169,7 @@ public class NPC : NpcData, IAttackable
 
         yield return new WaitUntil(() => Vector3.Distance(agent.destination, transform.position) <= 0.05f);
 
-        if (currentState == NpcStates.Working)
+        if (currentState != NpcStates.Working)
         ChangeState(NpcStates.Working);
     }
 
@@ -211,8 +206,10 @@ public class NPC : NpcData, IAttackable
         }
     }
 
-    IEnumerator Conversation()
+    IEnumerator Conversation(GameObject talker)
     {
+        ChangeState(NpcStates.Talking);
+        StartCoroutine("RotateTo", talker);
         string path;
 
         switch (UnityEngine.Random.Range(1, 2))
@@ -262,42 +259,36 @@ public class NPC : NpcData, IAttackable
         {
             yield return new WaitForSeconds(4);
         }
-
-        //Debug.Log("Conversation ended by" + gameObject.name);
-        isFirst = false;
-        ChangeState(NpcStates.Idle);
-        conversatingWith = null;
-
-        text.text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
+        EndConversation();
     }
 
+    public void EndConversation()
+    {
+        StopCoroutine("RotateTo");
+        isFirst = false;
+        text.text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
+        ChangeState(NpcStates.Idle);
+    }
     void OnTriggerStay(Collider other)
     {
-        if (currentState != NpcStates.Scared || currentState != NpcStates.Talking)
+        if (currentState == NpcStates.Scared || currentState == NpcStates.Talking)
+            return;
+        if (!other.CompareTag("Npc"))
+            return;
+        NPC NPCscript = other.GetComponentInParent<NPC>();
+        if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking)
+            return;
+        if (UnityEngine.Random.Range(0, 10) == 1)
         {
-            if (other.CompareTag("Npc"))
+            Debug.Log(gameObject.name + " " + other.gameObject.name);
+            if (GetInstanceID() > NPCscript.GetInstanceID())
             {
-                NPC NPCscript = other.GetComponentInParent<NPC>();
-                if (NPCscript.currentState != NpcStates.Scared || NPCscript.currentState != NpcStates.Talking)
-                {
-                    if (UnityEngine.Random.Range(0, 1000) == 1)
-                    {
-                        conversatingWith = other.gameObject;
-                        ChangeState(NpcStates.Talking);
-                        if (GetInstanceID() > NPCscript.GetInstanceID())
-                        {
-                            isFirst = true;
-                        }
-                        else
-                        {
-                            isFirst = false;
-                        }
-                        StartCoroutine("Conversation");
-                    }
-                }
+                isFirst = true;
             }
+            NPCscript.OnTriggerStay(gameObject.GetComponentInChildren<CapsuleCollider>());
+            StartCoroutine("Conversation", other.gameObject);
         }
-    }
+    }    
 
     public void OnAttack(GameObject attacker, Attack attack)
     {
@@ -361,6 +352,19 @@ public class NPC : NpcData, IAttackable
             if (interaction == 1)
                 agent.acceleration = scaredAcceleration;
         }
+        agent.acceleration = currentAcceleration;
         ChangeState(NpcStates.Idle);
+    }
+
+    IEnumerator RotateTo(GameObject target)
+    {
+        Quaternion lookRotation;
+        do
+        {
+            Vector3 direction = (target.transform.position - transform.position).normalized;
+            lookRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime / (Quaternion.Angle(transform.rotation, lookRotation) / agent.angularSpeed));
+            yield return new WaitForEndOfFrame();
+        } while (currentState == NpcStates.Talking);
     }
 }
