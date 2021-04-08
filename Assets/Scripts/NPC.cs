@@ -26,6 +26,11 @@ public class NPC : NpcData, IAttackable
     [SerializeField] private float stopDistanceRandomAdjustment;
 
     private bool isFirst;
+    private int Dialogue;
+    private bool isStarted;
+    private int called;
+    protected GameObject conversatingWith;
+    protected NPC NPCscript;
 
     private TMP_Text text;
 
@@ -45,6 +50,7 @@ public class NPC : NpcData, IAttackable
 
         text = GetComponentInChildren<TMP_Text>();
     }
+
     void Update()
     {
         anim.SetFloat("InputMagnitude", agent.velocity.magnitude / speedAnimDevider);
@@ -53,6 +59,7 @@ public class NPC : NpcData, IAttackable
         {
             timeToRun -= Time.deltaTime;
         }
+
         WatchEnvironment();
     }
 
@@ -66,7 +73,6 @@ public class NPC : NpcData, IAttackable
             if (col.gameObject.GetComponent<NPC>())
             {
                 NPC npc = col.gameObject.GetComponent<NPC>();
-                NpcStates state = npc.currentState;
                 if (npc.isAttacked)
                 {
                     Attacker = npc.Attacker;
@@ -76,7 +82,7 @@ public class NPC : NpcData, IAttackable
             // If the NPC is looking at an enemy Attacking or defending, run
             else if (col.gameObject.GetComponent<EnemyBase>())
             {
-                EnemyBase enemy= col.gameObject.GetComponent<EnemyBase>();
+                EnemyBase enemy = col.gameObject.GetComponent<EnemyBase>();
                 EnemyState state = enemy.CurrentState;
                 if (state == EnemyState.Attacking)
                 {
@@ -167,10 +173,17 @@ public class NPC : NpcData, IAttackable
         currentState = NpcStates.GoingToWork;
         SetMoveTarget(work);
 
-        yield return new WaitUntil(() => Vector3.Distance(agent.destination, transform.position) <= 0.05f);
+        yield return new WaitUntil(() => Vector3.Distance(agent.destination, transform.position) <= 5f);
 
-        if (currentState != NpcStates.Working)
-        ChangeState(NpcStates.Working);
+        if (currentState == NpcStates.Talking || currentState == NpcStates.Scared)
+        {
+            Debug.Log("true");
+        }
+        else
+        {
+            if (currentState != NpcStates.Working)
+                ChangeState(NpcStates.Working);
+        }
     }
 
     void GoHome()
@@ -259,6 +272,8 @@ public class NPC : NpcData, IAttackable
         {
             yield return new WaitForSeconds(4);
         }
+
+        ChangeState(NpcStates.Idle);
         EndConversation();
     }
 
@@ -267,8 +282,8 @@ public class NPC : NpcData, IAttackable
         StopCoroutine("RotateTo");
         isFirst = false;
         text.text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
-        ChangeState(NpcStates.Idle);
     }
+
     void OnTriggerStay(Collider other)
     {
         if (currentState == NpcStates.Scared || currentState == NpcStates.Talking)
@@ -278,15 +293,40 @@ public class NPC : NpcData, IAttackable
         NPC NPCscript = other.GetComponentInParent<NPC>();
         if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking)
             return;
+
         if (UnityEngine.Random.Range(0, 10) == 1)
         {
             Debug.Log(gameObject.name + " " + other.gameObject.name);
-            if (GetInstanceID() > NPCscript.GetInstanceID())
+            if (NPCscript.currentState == NpcStates.Talking)
             {
-                isFirst = true;
+                if (GetInstanceID() > NPCscript.GetInstanceID())
+                {
+                    isFirst = true;
+
+                    NPCscript.OnTriggerStay(gameObject.GetComponentInChildren<CapsuleCollider>());
+                    StartCoroutine("Conversation", other.gameObject);
+
+                    NPCscript.isFirst = false;
+                    NPCscript.StartCoroutine("Conversation", this.gameObject);
+                }
+                else
+                {
+                    return;
+                }
             }
-            NPCscript.OnTriggerStay(gameObject.GetComponentInChildren<CapsuleCollider>());
-            StartCoroutine("Conversation", other.gameObject);
+            else
+            {
+                if (GetInstanceID() > NPCscript.GetInstanceID())
+                {
+                    isFirst = true;
+
+                    NPCscript.OnTriggerStay(gameObject.GetComponentInChildren<CapsuleCollider>());
+                    StartCoroutine("Conversation", other.gameObject);
+
+                    NPCscript.isFirst = false;
+                    NPCscript.StartCoroutine("Conversation", this.gameObject);
+                }
+            }
         }
     }    
 
@@ -303,6 +343,7 @@ public class NPC : NpcData, IAttackable
         yield return new WaitForSeconds(1f);
         isAttacked = false;
     }
+
     IEnumerator Run(GameObject attacker)
     {
         float currentAcceleration = agent.acceleration;

@@ -62,10 +62,6 @@ public class DayAndNightControl : MonoBehaviour {
 			currentTime = 0;//once we hit "midnight"; any time after that sunrise will begin.
 			currentDay++; //make the day counter go up
 		}
-		if (currentDay == 0.3f)
-			OnMorningHandler?.Invoke();
-		if (currentDay == 0.7f)
-			OnEveningHandler?.Invoke();
 	}
 
 	void UpdateLight()
@@ -133,6 +129,7 @@ public class DayAndNightControl : MonoBehaviour {
 		else if (currentTime < 0.5f && currentTime > 0.3f)
 		{
 			dayState = "Morning";
+			OnMorningHandler?.Invoke();
 		}
 		else if (currentTime > 0.5f && currentTime < 0.6f)
 		{
@@ -141,6 +138,7 @@ public class DayAndNightControl : MonoBehaviour {
 		else if (currentTime > 0.7f && currentTime < 0.8f)
 		{
 			dayState = "Evening";
+			OnEveningHandler?.Invoke();
 		}
 		else if (currentTime > 0.8f && currentTime < 1f)
 		{
