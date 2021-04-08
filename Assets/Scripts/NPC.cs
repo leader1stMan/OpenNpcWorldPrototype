@@ -26,9 +26,10 @@ public class NPC : NpcData, IAttackable
     [SerializeField] private float stopDistanceRandomAdjustment;
 
     private bool isFirst;
+    string path = null;
 
     private TMP_Text text;
-
+    public List<string> DialoguePaths;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -96,18 +97,22 @@ public class NPC : NpcData, IAttackable
 
         currentState = NewState;
         OnStateChanged(PrevState, NewState);
-        Debug.Log(gameObject.name + " " + PrevState + " " + NewState + " " + (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name);
     }
 
     private void OnStateChanged(NpcStates PrevState, NpcStates NewState)
     {
         switch(PrevState)
         {
+            case NpcStates.GoingHome:
+                StopGoingHome();
+                break;
+            case NpcStates.GoingToWork:
+                StopGoingToWork();
+                break;
             case NpcStates.Working:
                 anim.SetBool("Working", false);
                 break;
             case NpcStates.Talking:
-                agent.isStopped = false;
                 StopCoroutine("Conversation");
                 EndConversation();
                 break;
@@ -173,11 +178,23 @@ public class NPC : NpcData, IAttackable
         ChangeState(NpcStates.Working);
     }
 
+    void StopGoingToWork()
+    {
+        agent.ResetPath();
+        StopCoroutine("GoToWorkCoroutine");
+    }
+
     void GoHome()
     {
         if (currentState == NpcStates.GoingHome || currentState == NpcStates.Talking || currentState == NpcStates.Scared)
             return;
         StartCoroutine("GoHomeCoroutine");
+    }
+
+    void StopGoingHome()
+    {
+        agent.ResetPath();
+        StopCoroutine("GoHomeCoroutine");
     }
 
     IEnumerator GoHomeCoroutine()
@@ -210,33 +227,11 @@ public class NPC : NpcData, IAttackable
     {
         ChangeState(NpcStates.Talking);
         StartCoroutine("RotateTo", talker);
-        string path;
 
-        switch (UnityEngine.Random.Range(1, 2))
+        if (isFirst)
         {
-            case 1:
-                if (isFirst)
-                {
-                    path = "Assets/NPC dialogues/Dialogue 1a.txt";
-                }
-                else
-                {
-                    path = "Assets/NPC dialogues/Dialogue 1b.txt";
-                }
-                break;
-            case 2:
-                if (isFirst)
-                {
-                    path = "Assets/NPC dialogues/Dialogue 2a.txt";
-                }
-                else
-                {
-                    path = "Assets/NPC dialogues/Dialogue 2b.txt";
-                }
-                break;
-            default:
-                path = null;
-                break;
+            path = AssignPath();
+            talker.GetComponent<NPC>().path = path;
         }
 
         if (!isFirst)
@@ -262,8 +257,16 @@ public class NPC : NpcData, IAttackable
         EndConversation();
     }
 
+    string AssignPath()
+    {
+        if (DialoguePaths.Count > 0)
+            return DialoguePaths[UnityEngine.Random.Range(0, DialoguePaths.Count - 1)];
+        else
+            return null;
+    }
     public void EndConversation()
     {
+        agent.isStopped = false;
         StopCoroutine("RotateTo");
         isFirst = false;
         text.text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
@@ -278,14 +281,15 @@ public class NPC : NpcData, IAttackable
         NPC NPCscript = other.GetComponentInParent<NPC>();
         if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking)
             return;
-        if (UnityEngine.Random.Range(0, 10) == 1)
+        if (UnityEngine.Random.Range(0, 1000) == 1)
         {
             Debug.Log(gameObject.name + " " + other.gameObject.name);
             if (GetInstanceID() > NPCscript.GetInstanceID())
             {
                 isFirst = true;
+                NPCscript.isFirst = false;
+                NPCscript.StartCoroutine("Conversation", gameObject);
             }
-            NPCscript.OnTriggerStay(gameObject.GetComponentInChildren<CapsuleCollider>());
             StartCoroutine("Conversation", other.gameObject);
         }
     }    
