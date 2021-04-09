@@ -9513,6 +9513,11 @@ PrefabInstance:
       propertyPath: work
       value: 
       objectReference: {fileID: 2033566939}
+    - target: {fileID: 2820446562284331888, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: stopDistance
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 2820446562284331890, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
       propertyPath: m_Name
@@ -13885,6 +13890,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ShowDebugMessages
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598780603943041310, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+        type: 3}
+      propertyPath: stopDistance
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1893211631, guid: db78526ad1b84a84383ecf5bf5bb69a5, type: 3}

@@ -43,7 +43,6 @@ public class NPC : NpcData, IAttackable
         FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork;
         FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome;
 
-        stopDistance = UnityEngine.Random.Range(stopDistanceRandomAdjustment + stopDistance, stopDistance);
         agent.stoppingDistance = stopDistance;
 
         GoHome();
