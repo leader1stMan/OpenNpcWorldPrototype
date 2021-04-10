@@ -184,6 +184,12 @@ LightingSettings:
   m_PVRFilteringAtrousPositionSigmaDirect: 0.5
   m_PVRFilteringAtrousPositionSigmaIndirect: 2
   m_PVRFilteringAtrousPositionSigmaAO: 1
+--- !u!1 &33486726 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 27391321730920731, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+    type: 3}
+  m_PrefabInstance: {fileID: 9131209755506925617}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &51548599 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,
@@ -373,6 +379,47 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &107018973 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3650326406362613892, guid: 6cdfc5fdeea853549a62180b010a3f72,
+    type: 3}
+  m_PrefabInstance: {fileID: 3285705730082761132}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &107018974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107018973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9297a64c9fb819a48a780c7a1827cc8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueCamera: {fileID: 995356969}
+  ToDisable:
+  - {fileID: 930136567}
+  OnStartDialogue:
+    m_PersistentCalls:
+      m_Calls: []
+  _textSpeed: 0
+  _isdialogue: 0
+  displayingdialogue: 0
+  currentSentence: {fileID: 11400000, guid: f92015d1eba4ee84abb6ccd746ecbe46, type: 2}
+  defaultSentence: {fileID: 0}
+--- !u!114 &107018982 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3650326406362613894, guid: 6cdfc5fdeea853549a62180b010a3f72,
+    type: 3}
+  m_PrefabInstance: {fileID: 3285705730082761132}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107018973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 096c17a238bc7e946806a109840208bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &107776851 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 690046979554682701, guid: a1829140362afcf4db1b77d3c60234a7,
@@ -2097,6 +2144,47 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 533716847}
   m_Mesh: {fileID: 4300028, guid: c70032afc7e2f214c8b20d1e445fb365, type: 3}
+--- !u!1 &537865617 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6598780603943041308, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+    type: 3}
+  m_PrefabInstance: {fileID: 9131209755506925617}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &537865618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537865617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9297a64c9fb819a48a780c7a1827cc8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueCamera: {fileID: 1997143247}
+  ToDisable:
+  - {fileID: 33486726}
+  OnStartDialogue:
+    m_PersistentCalls:
+      m_Calls: []
+  _textSpeed: 0
+  _isdialogue: 0
+  displayingdialogue: 0
+  currentSentence: {fileID: 11400000, guid: 69eb25213af7bf04ca0956fb28441559, type: 2}
+  defaultSentence: {fileID: 0}
+--- !u!114 &537865626 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6598780603943041310, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+    type: 3}
+  m_PrefabInstance: {fileID: 9131209755506925617}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537865617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 096c17a238bc7e946806a109840208bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &581234227
 GameObject:
   m_ObjectHideFlags: 0
@@ -4720,6 +4808,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 370730227}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &930136567 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7591471634553815171, guid: 6cdfc5fdeea853549a62180b010a3f72,
+    type: 3}
+  m_PrefabInstance: {fileID: 3285705730082761132}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &965480300
 GameObject:
   m_ObjectHideFlags: 0
@@ -4886,6 +4980,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1859001787}
   m_PrefabAsset: {fileID: 0}
+--- !u!20 &995356969 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 6188728124097322791, guid: 6cdfc5fdeea853549a62180b010a3f72,
+    type: 3}
+  m_PrefabInstance: {fileID: 3285705730082761132}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &997332832
 GameObject:
   m_ObjectHideFlags: 0
@@ -5029,6 +5129,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4042669713053730, guid: 6c482e625e2add940a53e04912d07ae7,
     type: 3}
   m_PrefabInstance: {fileID: 1018620680}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1032248013 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8995657166687693685, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+    type: 3}
+  m_PrefabInstance: {fileID: 910410754143012180}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1053341827
 GameObject:
@@ -6041,6 +6147,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!20 &1325280272 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 4642765648561140945, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+    type: 3}
+  m_PrefabInstance: {fileID: 910410754143012180}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1336964414 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1992123933282040033, guid: d7918e1353055ed46b34521f92fe1024,
@@ -6078,6 +6190,77 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 737805706}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1474046185 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2820446562284331890, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+    type: 3}
+  m_PrefabInstance: {fileID: 910410754143012180}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1474046186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474046185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fa58638d949dc94db73bddb2b783f86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: 
+  description: 
+  itemRewards: []
+  coinsReward: 0
+  state: 0
+  trackedSentences1: []
+  redSentences: []
+  pinkSentences: []
+  greenSentences: []
+  AlchemistsSentences: []
+  TheodoreQuestComplete: []
+  goAwaySentence: {fileID: 11400000, guid: b19f52f0f220d7441a1080e213661ee4, type: 2}
+  againstKingSentence: {fileID: 11400000, guid: 785cfd268c6aaec4eadfd44afb77dfb1,
+    type: 2}
+  neutralEnding: {fileID: 11400000, guid: 4f02b2d93ede6d14397cc897e194c644, type: 2}
+  questionCompleteQuestion: {fileID: 11400000, guid: fdda6088259098346adbd1738c9118e9,
+    type: 2}
+  GauvainWithPotion: {fileID: 11400000, guid: aea1b034a0126714c8346c4d1e38d34a, type: 2}
+  GauvainWithoutPotion: {fileID: 11400000, guid: d0f323b1e5fea0b4984ac0af2da2b7d7,
+    type: 2}
+  redEnding: {fileID: 11400000, guid: 617cbfb4e4e72e644bd5fa39c8b27418, type: 2}
+  orangeEnding: {fileID: 11400000, guid: 01cc0d4060c2be148bf8cbb8aabcfeda, type: 2}
+  kingEnding: {fileID: 11400000, guid: 3fcd09328dd573f42bff94a1f8614926, type: 2}
+  TheodoreStartSentence: {fileID: 11400000, guid: 42d389bab4d12ac4380b0ebe6d670f78,
+    type: 2}
+  AlchemistStartSentence: {fileID: 11400000, guid: be98d084a5d623a4a93384b6bebef720,
+    type: 2}
+  control: {fileID: 0}
+  Theodore: {fileID: 537865626}
+  Alchemist: {fileID: 107018982}
+--- !u!114 &1474046187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474046185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9297a64c9fb819a48a780c7a1827cc8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueCamera: {fileID: 1325280272}
+  ToDisable:
+  - {fileID: 1032248013}
+  OnStartDialogue:
+    m_PersistentCalls:
+      m_Calls: []
+  _textSpeed: 0
+  _isdialogue: 0
+  displayingdialogue: 0
+  currentSentence: {fileID: 11400000, guid: 0c690bd68ec9d8f4ca5c50ecef85d755, type: 2}
+  defaultSentence: {fileID: 0}
 --- !u!1001 &1491741696
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8841,6 +9024,12 @@ MonoBehaviour:
   m_Spacing: {x: 10, y: 10}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!20 &1997143247 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 4384751257000193727, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+    type: 3}
+  m_PrefabInstance: {fileID: 9131209755506925617}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2033095809
 GameObject:
   m_ObjectHideFlags: 0
