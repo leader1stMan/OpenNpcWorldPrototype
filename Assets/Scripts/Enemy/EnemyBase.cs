@@ -122,7 +122,7 @@ public abstract class EnemyBase : MonoBehaviour
                 ChangeState(EnemyState.Idle);
                 return;
             }
-            if (Vector3.Distance(currentTarget.position, transform.position) <= stats.GetWeapon().Range)
+            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range)
             {
                 if (attackCooldown <= 0)
                 {
