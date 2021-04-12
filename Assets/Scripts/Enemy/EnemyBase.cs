@@ -164,7 +164,6 @@ public abstract class EnemyBase : MonoBehaviour
                 else if (stats.shield != null && blockCooldown <= 0 && stats.isBlocking == false)
                 {
 
-
                     stats.isBlocking = true;
                     attackCooldown = stats.GetWeapon().Cooldown * Random.Range(.02f, .5f);
                     blockCooldown = stats.GetWeapon().Cooldown * Random.Range(.5f, 2f);
