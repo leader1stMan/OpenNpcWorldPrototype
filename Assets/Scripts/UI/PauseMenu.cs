@@ -42,10 +42,14 @@ public class PauseMenu : MonoBehaviour
                 PlayerData data= SaveSystem.LoadPlayer(file.Name);
                 var newBtn = Instantiate(button, transform);
                 newBtn.transform.SetParent(btnParent.transform, false);
-                Button b = newBtn.GetComponent<Button>();
+                Button[] arr = newBtn.GetComponentsInChildren<Button>();
+                Button b = arr[0];
+                Button c = arr[1];
                 b.GetComponentInChildren<Text>().text ="Level "+ data.level.ToString();
+                //c.GetComponentInChildren<Text>().text = "Delete Level " + data.level.ToString();
                 var a = data;
                 AddListener(b, a);
+                AddListener1(c, file.Name);
                 i++;
             }
         }
@@ -58,6 +62,11 @@ public class PauseMenu : MonoBehaviour
     void AddListener(Button b, PlayerData name)
     {
         b.onClick.AddListener(() => LoadSaveGame(name));
+        //index = value;
+    }
+    void AddListener1(Button c, string name)
+    {
+        c.onClick.AddListener(() => SaveSystem.DeleteSaveFile(name));
         //index = value;
     }
     public void LoadSaveGame(PlayerData data)

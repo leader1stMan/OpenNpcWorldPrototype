@@ -157,7 +157,7 @@ RectTransform:
   - {fileID: 1987679202}
   - {fileID: 1419888196}
   m_Father: {fileID: 104326226}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -362,8 +362,8 @@ RectTransform:
   m_Children:
   - {fileID: 965480301}
   - {fileID: 868791539}
-  - {fileID: 2044893690}
   - {fileID: 4319700}
+  - {fileID: 2044893690}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1979,7 +1979,7 @@ PrefabInstance:
     - target: {fileID: 5605595255286850272, guid: 114db96316e581d45ad8e03741c22ef1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5605595255286850272, guid: 114db96316e581d45ad8e03741c22ef1,
         type: 3}
@@ -2820,7 +2820,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btnParent: {fileID: 313487184}
-  button: {fileID: 3018599173431676364, guid: c1347b9c2dfbe38439092bc89fcece12, type: 3}
+  button: {fileID: 9107945497034742101, guid: c5b64ffdc268e8f459d95b3df7588f43, type: 3}
   PlayerStat: {fileID: 1375716848}
   PausePanel: {fileID: 4319699}
   LoadGameList: {fileID: 1121391946}

@@ -44,4 +44,10 @@ public static class SaveSystem
             return null;
         }
     }
+    public static void DeleteSaveFile(string saveName)
+    {
+        string path = Application.persistentDataPath + "/" + saveName;
+        File.Delete(path);
+        GameObject.FindObjectOfType<PauseMenu>().PopulateSavedGames();
+    }
 }
