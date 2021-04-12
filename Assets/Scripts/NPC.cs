@@ -22,8 +22,6 @@ public class NPC : NpcData, IAttackable
     public float runningTime;
     private float timeToRun;
     [SerializeField] private float speedAnimDevider = 1;
-    [SerializeField] private float stopDistance;
-    [SerializeField] private float stopDistanceRandomAdjustment;
 
     private bool isFirst;
     string path = null;
@@ -38,11 +36,6 @@ public class NPC : NpcData, IAttackable
         /*____________________Might need to change this as this is called every frame, interfering with the code______________________*/
         FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork;
         FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome;
-
-        stopDistance = UnityEngine.Random.Range(stopDistanceRandomAdjustment + stopDistance, stopDistance);
-        agent.stoppingDistance = stopDistance;
-
-        GoHome();
 
         text = GetComponentInChildren<TMP_Text>();
     }
@@ -67,7 +60,6 @@ public class NPC : NpcData, IAttackable
             if (col.gameObject.GetComponent<NPC>())
             {
                 NPC npc = col.gameObject.GetComponent<NPC>();
-                NpcStates state = npc.currentState;
                 if (npc.isAttacked)
                 {
                     Attacker = npc.Attacker;
@@ -95,13 +87,13 @@ public class NPC : NpcData, IAttackable
 
         NpcStates PrevState = currentState;
 
-        currentState = NewState;
-        OnStateChanged(PrevState, NewState);
+        currentState = NewState; 
+        OnStateChanged(PrevState, NewState); 
     }
 
     private void OnStateChanged(NpcStates PrevState, NpcStates NewState)
     {
-        switch(PrevState)
+       switch (PrevState)
         {
             case NpcStates.GoingHome:
                 StopGoingHome();
@@ -113,7 +105,6 @@ public class NPC : NpcData, IAttackable
                 anim.SetBool("Working", false);
                 break;
             case NpcStates.Talking:
-                StopCoroutine("Conversation");
                 EndConversation();
                 break;
             default:
@@ -132,7 +123,7 @@ public class NPC : NpcData, IAttackable
                 break;
             case NpcStates.Idle:
                 float time = FindObjectOfType<DayAndNightControl>().currentTime;
-                if (time > .2f && time < .8f)
+                if (time > .3f && time < .7f)
                 {
                     GoToWork();
                 }
@@ -169,10 +160,9 @@ public class NPC : NpcData, IAttackable
     IEnumerator GoToWorkCoroutine()
     {
         agent.speed = movementSpeed;
-        currentState = NpcStates.GoingToWork;
+        ChangeState(NpcStates.GoingToWork);
         SetMoveTarget(work);
-
-        yield return new WaitUntil(() => Vector3.Distance(agent.destination, transform.position) <= 0.05f);
+        yield return new WaitUntil(() => agent.remainingDistance <= 0.1f && !agent.pathPending);
 
         if (currentState != NpcStates.Working)
         ChangeState(NpcStates.Working);
@@ -200,11 +190,11 @@ public class NPC : NpcData, IAttackable
     IEnumerator GoHomeCoroutine()
     {
         agent.speed = movementSpeed;
-        currentState = NpcStates.GoingHome;
+        ChangeState(NpcStates.GoingHome);
 
         SetMoveTarget(home);
 
-        yield return new WaitUntil(() => Vector3.Distance(agent.destination, transform.position) <= 0.05f);
+        yield return new WaitUntil(() => agent.remainingDistance <= 0.1f && !agent.pathPending);
         if (currentState == NpcStates.GoingHome)
             ChangeState(NpcStates.Idle);
     }
@@ -228,32 +218,46 @@ public class NPC : NpcData, IAttackable
         ChangeState(NpcStates.Talking);
         StartCoroutine("RotateTo", talker);
 
+        StreamReader reader;
+        NPC npc = talker.GetComponent<NPC>();
+        string line;
+        List<string> lines = new List<string>();
         if (isFirst)
         {
             path = AssignPath();
-            talker.GetComponent<NPC>().path = path;
+            npc.path = path;
+            reader = new StreamReader(path);
+            while ((line = reader.ReadLine()) != "{}")
+            {
+                lines.Add(line);
+            }
+        }
+        else
+        {
+            yield return new WaitUntil(() => path != null);
+             reader = new StreamReader(path);
+            while (reader.ReadLine() != "{}") ;
+            while ((line = reader.ReadLine()) != null)
+            {
+                lines.Add(line);
+            }
         }
 
-        if (!isFirst)
+        text.text = null;
+        yield return new WaitUntil(() => isFirst);
+        for (int i = 0; i < lines.Count; i++)
         {
-            text.text = null;
-            yield return new WaitForSeconds(4);
+            if (!lines[i].StartsWith(" "))
+            {
+                text.text = lines[i];
+                yield return new WaitForSeconds(4);
+                text.text = null;
+            }
+            isFirst = false;
+            npc.isFirst = true;
+            yield return new WaitUntil(() => isFirst);
         }
-
-        string line;
-        StreamReader reader = new StreamReader(path);
-        while ((line = reader.ReadLine()) != null)
-        {
-            text.text = line;
-            yield return new WaitForSeconds(4);
-            text.text = null;
-            yield return new WaitForSeconds(4);
-        }
-
-        if (isFirst)
-        {
-            yield return new WaitForSeconds(4);
-        }
+        npc.isFirst = true;
         EndConversation();
     }
 
@@ -264,33 +268,39 @@ public class NPC : NpcData, IAttackable
         else
             return null;
     }
+    public void StartConversation(GameObject talker)
+    {
+        StartCoroutine("Conversation", talker);
+    }
     public void EndConversation()
     {
         agent.isStopped = false;
+        StopCoroutine("Conversation");
         StopCoroutine("RotateTo");
+        path = null;
         isFirst = false;
         text.text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
-        ChangeState(NpcStates.Idle);
+        if (currentState == NpcStates.Talking)
+            ChangeState(NpcStates.Idle);
     }
     void OnTriggerStay(Collider other)
     {
-        if (currentState == NpcStates.Scared || currentState == NpcStates.Talking)
+        if (currentState == NpcStates.Scared || currentState == NpcStates.Talking || currentState == NpcStates.Working)
             return;
         if (!other.CompareTag("Npc"))
             return;
         NPC NPCscript = other.GetComponentInParent<NPC>();
-        if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking)
+        if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking || NPCscript.currentState == NpcStates.Working)
             return;
         if (UnityEngine.Random.Range(0, 1000) == 1)
         {
-            Debug.Log(gameObject.name + " " + other.gameObject.name);
             if (GetInstanceID() > NPCscript.GetInstanceID())
             {
                 isFirst = true;
                 NPCscript.isFirst = false;
-                NPCscript.StartCoroutine("Conversation", gameObject);
+                StartConversation(other.gameObject);
+                NPCscript.StartConversation(gameObject);
             }
-            StartCoroutine("Conversation", other.gameObject);
         }
     }    
 

@@ -38,6 +38,9 @@ public class DayAndNightControl : MonoBehaviour {
 	public delegate void OnEveningListener();
 	public event OnEveningListener OnEveningHandler;
 
+
+	private bool dayCall = true;
+	private bool nightCall = true;
 	// Use this for initialization
 	void Start () {
 		foreach (Camera c in GameObject.FindObjectsOfType<Camera>())
@@ -61,11 +64,19 @@ public class DayAndNightControl : MonoBehaviour {
 		if (currentTime >= 1) {
 			currentTime = 0;//once we hit "midnight"; any time after that sunrise will begin.
 			currentDay++; //make the day counter go up
+			dayCall = true;
+			nightCall = true;
 		}
-		if (currentDay == 0.3f)
+		if (currentTime < 0.5f && currentTime > 0.3f && dayCall)
+		{
 			OnMorningHandler?.Invoke();
-		if (currentDay == 0.7f)
+			dayCall = false;
+		}
+		if (currentTime > 0.7f && nightCall)
+		{
 			OnEveningHandler?.Invoke();
+			nightCall = false;
+		}
 	}
 
 	void UpdateLight()

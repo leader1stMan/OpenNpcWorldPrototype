@@ -2405,7 +2405,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 661354747}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.632827, y: 8.214018, z: -21.477451}
+  m_LocalPosition: {x: 13.888, y: 9.147, z: -22.154}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2139815656}
@@ -3197,6 +3197,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &794433173
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 794433174}
+  m_Layer: 0
+  m_Name: Farmer1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &794433174
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794433173}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -14.453, y: 2.834, z: -11.575}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1740181810}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &801181591
 GameObject:
@@ -6957,6 +6987,37 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1077361356}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1740181809
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1740181810}
+  m_Layer: 0
+  m_Name: Work Positions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1740181810
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740181809}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.0001364, y: -2.4033725, z: -15.065826}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 794433174}
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1743253466
 GameObject:
   m_ObjectHideFlags: 0
@@ -9400,17 +9461,17 @@ PrefabInstance:
     - target: {fileID: 338504425366044328, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.94
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 338504425366044328, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.41
+      value: 0.919
       objectReference: {fileID: 0}
     - target: {fileID: 338504425366044328, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -21.81
+      value: -30.124
       objectReference: {fileID: 0}
     - target: {fileID: 338504425366044328, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
@@ -9512,7 +9573,22 @@ PrefabInstance:
         type: 3}
       propertyPath: work
       value: 
-      objectReference: {fileID: 2033566939}
+      objectReference: {fileID: 794433174}
+    - target: {fileID: 2820446562284331888, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: DialoguePaths.Array.data[0]
+      value: Assets/NPC dialogues/npc-npc dialogues/Dialogue1.txt
+      objectReference: {fileID: 0}
+    - target: {fileID: 2820446562284331888, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: DialoguePaths.Array.data[1]
+      value: Assets/NPC dialogues/npc-npc dialogues/Dialogue2.txt
+      objectReference: {fileID: 0}
+    - target: {fileID: 2820446562284331888, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: DialoguePaths.Array.data[2]
+      value: Assets/NPC dialogues/npc-npc dialogues/Dialogue3.txt
+      objectReference: {fileID: 0}
     - target: {fileID: 2820446562284331890, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
       propertyPath: m_Name
@@ -9521,17 +9597,17 @@ PrefabInstance:
     - target: {fileID: 2820446562284331891, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -17.55
+      value: -7.96
       objectReference: {fileID: 0}
     - target: {fileID: 2820446562284331891, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.17
       objectReference: {fileID: 0}
     - target: {fileID: 2820446562284331891, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -17.41
+      value: -28.94
       objectReference: {fileID: 0}
     - target: {fileID: 2820446562284331891, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
@@ -9573,8 +9649,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2909588456847932361, guid: 7b2ae5c70ce5cee40835f02d129fdba2, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b2ae5c70ce5cee40835f02d129fdba2, type: 3}
 --- !u!4 &910410754143012181 stripped
 Transform:
@@ -11230,6 +11305,11 @@ PrefabInstance:
         type: 3}
       propertyPath: priority
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3227924253082711379, guid: d2f58f1ca95fd3b43917d67023dded37,
+        type: 3}
+      propertyPath: job
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3998307100013478935, guid: d2f58f1ca95fd3b43917d67023dded37,
         type: 3}
@@ -13814,17 +13894,17 @@ PrefabInstance:
     - target: {fileID: 6598780603943041309, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.04
+      value: -7.072
       objectReference: {fileID: 0}
     - target: {fileID: 6598780603943041309, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6598780603943041309, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -27.45
+      value: -29.19
       objectReference: {fileID: 0}
     - target: {fileID: 6598780603943041309, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
