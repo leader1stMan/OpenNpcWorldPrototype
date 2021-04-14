@@ -13,6 +13,8 @@ public class CharacterStats : MonoBehaviour
     public Shield shield;
     public bool isBlocking;
 
+    public bool isDead;
+
     public event Action OnHealthValueChanged;
 
     void Awake()

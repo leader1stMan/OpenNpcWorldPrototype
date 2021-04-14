@@ -19,8 +19,7 @@ public abstract class EnemyBase : MonoBehaviour
             "It can still be lured out of the area by npcs and the player. " +
             "This is an optional field")]
     public Collider PrefferedPatrolAreaCollider;
-
-
+    Rigidbody[] rig;
 
     #region Debugging
     public bool ShowDebugMessages;
@@ -50,6 +49,17 @@ public abstract class EnemyBase : MonoBehaviour
         if (stats == null)
             stats = GetComponent<CharacterStats>();
 
+        rig = GetComponentsInChildren<Rigidbody>();
+        foreach (Rigidbody rigidbody in rig)
+        {
+            if (rigidbody != this.GetComponent<Rigidbody>())
+            {
+                rigidbody.GetComponent<Collider>().enabled = false;
+                rigidbody.isKinematic = true;
+            }
+        }
+
+        GetComponent<CapsuleCollider>().enabled = true;
         #region Editor Only
 #if UNITY_EDITOR
         if (VisualiseAgentActions)
@@ -107,7 +117,11 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void ManageState()
     {
-        if (CurrentState == EnemyState.Patroling)
+        if (stats.isDead == true)
+        {
+            ChangeState(EnemyState.Dead);
+        }
+        else if (CurrentState == EnemyState.Patroling)
         {
             if (Vector3.Distance(transform.position, agent.destination) < agent.stoppingDistance)
             {
@@ -163,7 +177,6 @@ public abstract class EnemyBase : MonoBehaviour
                 }
                 else if (stats.shield != null && blockCooldown <= 0 && stats.isBlocking == false)
                 {
-
 
                     stats.isBlocking = true;
                     attackCooldown = stats.GetWeapon().Cooldown * Random.Range(.02f, .5f);
@@ -322,6 +335,21 @@ public abstract class EnemyBase : MonoBehaviour
             case EnemyState.Blocking:
                 if (ShowDebugMessages)
                     Debug.Log(name + " is blocking");
+                break;
+                case EnemyState.Dead:
+                GetComponent<Animator>().enabled = false;
+                agent.enabled = false;
+                GetComponent<CapsuleCollider>().enabled = false;
+                GetComponent<Rigidbody>().isKinematic = false;
+
+                foreach(Rigidbody rigidbody in rig)
+                {
+                    if (rigidbody != this.GetComponent<Rigidbody>())
+                    {
+                        rigidbody.GetComponent<Collider>().enabled = true;
+                        rigidbody.isKinematic = false;
+                    }
+                }
                 break;
         }
     }

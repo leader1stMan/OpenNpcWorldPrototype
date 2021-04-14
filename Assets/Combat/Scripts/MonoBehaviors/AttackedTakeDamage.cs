@@ -6,7 +6,7 @@ using UnityEngine;
 public class AttackedTakeDamage : MonoBehaviour, IAttackable
 {
     private CharacterStats stats;
-
+    public bool RagdollOnDeath = true;
     void Awake()
     {
         stats = GetComponent<CharacterStats>();
@@ -18,11 +18,19 @@ public class AttackedTakeDamage : MonoBehaviour, IAttackable
 
         if (stats.GetCurrentHealth().GetValue() <= 0)
         {
-            var destructibles = GetComponents(typeof(IDestructible));
-            foreach (IDestructible d in destructibles)
+            if (stats.isDead == false && RagdollOnDeath == true)
             {
-                d.OnDestruction(attacker);
+                stats.isDead = true;
             }
+            else if(RagdollOnDeath == false)
+            {
+                var destructibles = GetComponents(typeof(IDestructible));
+                foreach (IDestructible d in destructibles)
+                {
+                    d.OnDestruction(attacker);
+                }
+            }
+           
         }
         
     }

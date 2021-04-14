@@ -52,7 +52,7 @@ public class DayAndNightControl : MonoBehaviour {
 		lightIntensity = directionalLight.intensity; //what's the current intensity of the light
 		starMat = StarDome.GetComponentInChildren<MeshRenderer> ().material;
 		if (StartDay) {
-			currentTime = 0.3f; //start at morning
+			currentTime = 0.2f; //start at morning
 			starMat.color = new Color(1f,1f,1f,0f);
 		}
 	}
@@ -77,6 +77,10 @@ public class DayAndNightControl : MonoBehaviour {
 			OnEveningHandler?.Invoke();
 			nightCall = false;
 		}
+		if (currentDay == 0.3f)
+			OnMorningHandler?.Invoke();
+		if (currentDay == 0.7f)
+			OnEveningHandler?.Invoke();
 	}
 
 	void UpdateLight()

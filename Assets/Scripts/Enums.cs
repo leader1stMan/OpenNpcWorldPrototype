@@ -9,7 +9,8 @@
     Scared,
     Petrified,
     Attacking,
-    Defending
+    Defending,
+    Dead
 }
 
 public enum EnemyState
@@ -18,7 +19,8 @@ public enum EnemyState
     Patroling,
     Chasing,
     Attacking,
-    Blocking
+    Blocking,
+    Dead
 }
 
 public enum Job

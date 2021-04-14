@@ -18,7 +18,6 @@ public class SkeletonAi : EnemyBase
             else
             {
                 Vector3 rot = transform.eulerAngles;
-                transform.LookAt(agent.steeringTarget);
                 transform.eulerAngles = new Vector3(rot.x, transform.eulerAngles.y, rot.z);
             }
         }
