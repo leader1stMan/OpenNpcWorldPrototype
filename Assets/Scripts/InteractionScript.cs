@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System.IO;
 using TMPro;
 
+[RequireComponent(typeof(NPC))]
 public class InteractionScript : MonoBehaviour
 {
     public int priority;
@@ -111,7 +112,7 @@ public class InteractionScript : MonoBehaviour
                 {
                     if (priority > script.priority)
                     {
-                        if (Random.Range(0, 1000) == 1)
+                        if (Random.Range(0, 1000) <= 1000)
                         {
                             isTalking = true;
                             isFirst = true;

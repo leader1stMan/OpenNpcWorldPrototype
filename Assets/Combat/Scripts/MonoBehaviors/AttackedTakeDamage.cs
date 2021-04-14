@@ -21,8 +21,6 @@ public class AttackedTakeDamage : MonoBehaviour, IAttackable
             if (stats.isDead == false && RagdollOnDeath == true)
             {
                 stats.isDead = true;
-               
-                stats.isRagdolled = true;
             }
             else if(RagdollOnDeath == false)
             {

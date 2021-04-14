@@ -37,7 +37,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849520, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: m_Name
-      value: FarmerNPC
+      value: FarmerNPC Variant
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849520, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -128,6 +128,31 @@ PrefabInstance:
         type: 3}
       propertyPath: npcName
       value: Gauvain
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: movementSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: scaredRunningSpeed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: scaredAcceleration
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: runningDistance
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: runningTime
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 2722809551112734972, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -2286,6 +2311,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7283242642400124092, guid: cd5633ded9ea10e42be05f617848635f, type: 3}
+    - {fileID: 1928269307111726560, guid: cd5633ded9ea10e42be05f617848635f, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cd5633ded9ea10e42be05f617848635f, type: 3}
 --- !u!1 &2820446562284331890 stripped
 GameObject:

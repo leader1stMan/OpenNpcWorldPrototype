@@ -5,11 +5,12 @@
     Working,
     GoingHome,
     InteractingWithPlayer,
+    Talking,
     Scared,
     Petrified,
     Attacking,
     Defending,
-    Ragdoll
+    Dead
 }
 
 public enum EnemyState
@@ -19,8 +20,7 @@ public enum EnemyState
     Chasing,
     Attacking,
     Blocking,
-    Ragdoll,
-    GetUp
+    Dead
 }
 
 public enum Job

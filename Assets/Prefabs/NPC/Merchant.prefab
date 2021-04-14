@@ -2950,7 +2950,6 @@ GameObject:
   - component: {fileID: 7523313584288638856}
   - component: {fileID: 7523313584288638857}
   - component: {fileID: 3402753726995649239}
-  - component: {fileID: 6224966354933946651}
   - component: {fileID: 430295333861460368}
   - component: {fileID: 8349426070465812173}
   - component: {fileID: 7488777172368816399}
@@ -3016,6 +3015,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcName: 
+  VisionRange: 10
+  VisionLayers:
+    serializedVersion: 2
+    m_Bits: 0
   age: 25
   job: 3
   home: {fileID: 0}
@@ -3025,6 +3028,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   ShowDebugMessages: 0
+  Attacker: {fileID: 0}
+  isAttacked: 0
+  movementSpeed: 2
+  scaredRunningSpeed: 8
+  scaredAcceleration: 10
+  runningDistance: 2
+  runningTime: 35
   speedAnimDevider: 5
   stopDistance: 0.5
   stopDistanceRandomAdjustment: 2
@@ -3042,29 +3052,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &6224966354933946651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7523313584288638859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9297a64c9fb819a48a780c7a1827cc8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueCamera: {fileID: 1090568397904130088}
-  ToDisable:
-  - {fileID: 3718546557559451532}
-  OnStartDialogue:
-    m_PersistentCalls:
-      m_Calls: []
-  _textSpeed: 0
-  _isdialogue: 0
-  displayingdialogue: 0
-  currentSentence: {fileID: 0}
-  defaultSentence: {fileID: 11400000, guid: 66015bde50ed65748a2dcfde173e6a62, type: 2}
 --- !u!114 &430295333861460368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3096,6 +3083,8 @@ MonoBehaviour:
   Armor:
     BaseValue: 0
   weapon: {fileID: 0}
+  shield: {fileID: 0}
+  isBlocking: 0
 --- !u!114 &7488777172368816399
 MonoBehaviour:
   m_ObjectHideFlags: 0

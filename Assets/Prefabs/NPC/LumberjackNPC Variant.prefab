@@ -16,22 +16,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2059886983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3650326406362613892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c52d954a6969a46459f4bb6026875226, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  priority: 2
-  isTalking: 0
-  isFirst: 0
-  Dialogue: 0
 --- !u!1001 &1612761466483223540
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -98,7 +82,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849520, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: m_Name
-      value: LumberjackNPC
+      value: LumberjackNPC Variant
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849520, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -204,6 +188,31 @@ PrefabInstance:
         type: 3}
       propertyPath: stopDistanceRandomAdjustment
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: movementSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: scaredRunningSpeed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: scaredAcceleration
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: runningDistance
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: runningTime
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849523, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -2441,7 +2450,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 3138425072226794443, guid: cd5633ded9ea10e42be05f617848635f, type: 3}
+    - {fileID: 0}
+    - {fileID: 1928269307111726560, guid: cd5633ded9ea10e42be05f617848635f, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cd5633ded9ea10e42be05f617848635f, type: 3}
 --- !u!1 &3650326406362613892 stripped
 GameObject:

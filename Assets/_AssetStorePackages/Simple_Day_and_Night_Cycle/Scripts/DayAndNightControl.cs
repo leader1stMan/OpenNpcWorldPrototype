@@ -49,7 +49,7 @@ public class DayAndNightControl : MonoBehaviour {
 		lightIntensity = directionalLight.intensity; //what's the current intensity of the light
 		starMat = StarDome.GetComponentInChildren<MeshRenderer> ().material;
 		if (StartDay) {
-			currentTime = 0.3f; //start at morning
+			currentTime = 0.2f; //start at morning
 			starMat.color = new Color(1f,1f,1f,0f);
 		}
 	}
@@ -62,6 +62,10 @@ public class DayAndNightControl : MonoBehaviour {
 			currentTime = 0;//once we hit "midnight"; any time after that sunrise will begin.
 			currentDay++; //make the day counter go up
 		}
+		if (currentDay == 0.3f)
+			OnMorningHandler?.Invoke();
+		if (currentDay == 0.7f)
+			OnEveningHandler?.Invoke();
 	}
 
 	void UpdateLight()
@@ -122,7 +126,6 @@ public class DayAndNightControl : MonoBehaviour {
 	public string TimeOfDay ()
 	{
 		string dayState = "";
-		
 		if (currentTime > 0f && currentTime < 0.3f) 
 		{
 			dayState = "Midnight";
@@ -130,7 +133,6 @@ public class DayAndNightControl : MonoBehaviour {
 		else if (currentTime < 0.5f && currentTime > 0.3f)
 		{
 			dayState = "Morning";
-			OnMorningHandler?.Invoke();
 		}
 		else if (currentTime > 0.5f && currentTime < 0.6f)
 		{
@@ -139,7 +141,6 @@ public class DayAndNightControl : MonoBehaviour {
 		else if (currentTime > 0.7f && currentTime < 0.8f)
 		{
 			dayState = "Evening";
-			OnEveningHandler?.Invoke();
 		}
 		else if (currentTime > 0.8f && currentTime < 1f)
 		{

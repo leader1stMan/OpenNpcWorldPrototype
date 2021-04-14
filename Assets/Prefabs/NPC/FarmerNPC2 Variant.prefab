@@ -16,22 +16,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1893211631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6598780603943041308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c52d954a6969a46459f4bb6026875226, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  priority: 1
-  isTalking: 0
-  isFirst: 0
-  Dialogue: 0
 --- !u!1001 &9176837937052310204
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -121,7 +105,7 @@ PrefabInstance:
     - target: {fileID: 2650718596372849520, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: m_Name
-      value: FarmerNPC2
+      value: FarmerNPC2 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 2650718596372849520, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -217,6 +201,31 @@ PrefabInstance:
         type: 3}
       propertyPath: moveTarget
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: movementSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: scaredRunningSpeed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: scaredAcceleration
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: runningDistance
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650718596372849522, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: runningTime
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 2722809551112734972, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
@@ -625,6 +634,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3138425072226794443, guid: cd5633ded9ea10e42be05f617848635f, type: 3}
+    - {fileID: 1928269307111726560, guid: cd5633ded9ea10e42be05f617848635f, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cd5633ded9ea10e42be05f617848635f, type: 3}
 --- !u!1 &6598780603943041308 stripped
 GameObject:

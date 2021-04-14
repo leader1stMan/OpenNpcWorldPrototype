@@ -185,10 +185,8 @@ GameObject:
   - component: {fileID: 2650718596372849523}
   - component: {fileID: 2650718596372849522}
   - component: {fileID: 7176504838547576364}
-  - component: {fileID: 1928269307111726560}
   - component: {fileID: -3937936013646344853}
   - component: {fileID: 4575109230519276086}
-  - component: {fileID: 3138425072226794443}
   - component: {fileID: 3119983497678077428}
   - component: {fileID: 2164559594005086327}
   - component: {fileID: -757223329705075394}
@@ -251,6 +249,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npcName: 
+  VisionRange: 10
+  VisionLayers:
+    serializedVersion: 2
+    m_Bits: 0
   age: 25
   job: 0
   home: {fileID: 0}
@@ -260,6 +262,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   ShowDebugMessages: 0
+  Attacker: {fileID: 0}
+  isAttacked: 0
+  movementSpeed: 2
+  scaredRunningSpeed: 4
+  scaredAcceleration: 0
+  runningDistance: 40
+  runningTime: 0
   speedAnimDevider: 5
   stopDistance: 0.5
   stopDistanceRandomAdjustment: 2
@@ -277,29 +286,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &1928269307111726560
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2650718596372849520}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9297a64c9fb819a48a780c7a1827cc8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueCamera: {fileID: 4864847964148987091}
-  ToDisable:
-  - {fileID: 9168199886508878711}
-  OnStartDialogue:
-    m_PersistentCalls:
-      m_Calls: []
-  _textSpeed: 0
-  _isdialogue: 0
-  displayingdialogue: 0
-  currentSentence: {fileID: 11400000, guid: 69eb25213af7bf04ca0956fb28441559, type: 2}
-  defaultSentence: {fileID: 0}
 --- !u!114 &-3937936013646344853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,22 +317,8 @@ MonoBehaviour:
   Armor:
     BaseValue: 0
   weapon: {fileID: 0}
---- !u!114 &3138425072226794443
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2650718596372849520}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c52d954a6969a46459f4bb6026875226, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  priority: 0
-  isTalking: 0
-  isFirst: 0
-  Dialogue: 0
+  shield: {fileID: 0}
+  isBlocking: 0
 --- !u!114 &3119983497678077428
 MonoBehaviour:
   m_ObjectHideFlags: 0
