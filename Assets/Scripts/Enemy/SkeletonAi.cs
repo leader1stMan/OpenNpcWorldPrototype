@@ -4,6 +4,8 @@ public class SkeletonAi : EnemyBase
 {
     public Animator anim;
     GameObject TheTarget;
+
+
     protected override void Update()
     {
         base.Update();
@@ -21,7 +23,6 @@ public class SkeletonAi : EnemyBase
                 transform.eulerAngles = new Vector3(rot.x, transform.eulerAngles.y, rot.z);
             }
         }
-
     }
 
     protected override void ManageStateChange(EnemyState oldState, EnemyState newState)

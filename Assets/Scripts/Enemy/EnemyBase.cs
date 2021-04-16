@@ -125,7 +125,6 @@ public abstract class EnemyBase : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, agent.destination) < agent.stoppingDistance)
             {
-
                 PatrolToAnotherSpot();
             }
         }
@@ -218,11 +217,10 @@ public abstract class EnemyBase : MonoBehaviour
                 Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, WhatCanThisEnemyAttack);
                 foreach (Collider col in cols)
                 {
-
                     RaycastHit hit;
                     if (VisualiseAgentActions)
                         Debug.DrawRay(transform.position, (col.transform.position - transform.position).normalized * VisionRange, Color.red);
-                    if (Physics.Raycast(transform.position, (col.transform.position - transform.position).normalized, out hit, VisionRange))
+                    if (Physics.Raycast(transform.position, (col.transform.position - transform.position).normalized, out hit, VisionRange) && col.GetComponentInParent<CharacterStats>().isDead == false)
                     {
                         if (hit.transform == this.transform)
                             continue;
@@ -386,7 +384,6 @@ public abstract class EnemyBase : MonoBehaviour
             PatrolToAnotherSpot();
         }
     }
-
 
 
     protected virtual void StopAnimation(string AnimationName)
