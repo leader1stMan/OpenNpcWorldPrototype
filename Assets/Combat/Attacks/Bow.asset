@@ -22,4 +22,4 @@ MonoBehaviour:
   type: 0
   ProjectileToFire: {fileID: 859473610619418703, guid: 059c8656cefe8774ab8ea2da14fae9e4,
     type: 3}
-  ProjectileSpeed: 8
+  ProjectileSpeed: 16
