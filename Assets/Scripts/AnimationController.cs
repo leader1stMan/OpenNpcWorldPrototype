@@ -55,17 +55,16 @@ public class AnimationController : MonoBehaviour
         {
             int chosenLayer = (int)layer;
 
-            newAnimation = LayerPrefixs[chosenLayer] + newAnimation;
+            string animation = LayerPrefixs[chosenLayer] + newAnimation;
 
-            if (Layers[chosenLayer] != newAnimation && !Block[chosenLayer])
+            if (Layers[chosenLayer] != animation && !Block[chosenLayer])
             {
-                animator.Play(newAnimation);
-                Layers[chosenLayer] = newAnimation;
+                animator.Play(animation);
+                Layers[chosenLayer] = animation;
 
                 if (block)
                     StartCoroutine(BlockAnimator(layer, animator.GetCurrentAnimatorStateInfo(chosenLayer).length));
             }
-
             if (AllLayers)
             {
                 if (++layer == AnimatorLayers.ALL)
