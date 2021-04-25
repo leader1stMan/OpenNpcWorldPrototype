@@ -35,6 +35,8 @@ public class NPC : NpcData, IAttackable
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponentInChildren<Animator>();
+        controller = GetComponentInChildren<AnimationController>();
 
         /*____________________Might need to change this as this is called every frame, interfering with the code______________________*/
         FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork;
@@ -303,14 +305,14 @@ public class NPC : NpcData, IAttackable
     }
     void OnTriggerStay(Collider other)
     {
-        if (currentState == NpcStates.Scared || currentState == NpcStates.Talking || currentState == NpcStates.Working)
+        if (currentState == NpcStates.Scared || currentState == NpcStates.Talking)
             return;
         if (!other.CompareTag("Npc"))
             return;
         NPC NPCscript = other.GetComponentInParent<NPC>();
-        if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking || NPCscript.currentState == NpcStates.Working)
+        if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking)
             return;
-        if (UnityEngine.Random.Range(0, 1000) == 1)
+        if (UnityEngine.Random.Range(0, 1000) <= 1000)
         {
             if (GetInstanceID() > NPCscript.GetInstanceID())
             {
