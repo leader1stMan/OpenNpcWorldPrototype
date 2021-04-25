@@ -11,7 +11,8 @@ public class NPC : NpcData, IAttackable
     public bool ShowDebugMessages;
     
     public NavMeshAgent agent { get; private set; }
-    private Animator anim;
+    private Animator animator;
+    private string currentAnimation;
 
     public GameObject Attacker;
     public bool isAttacked;
@@ -27,11 +28,13 @@ public class NPC : NpcData, IAttackable
     string path = null;
 
     private TMP_Text text;
+
+    private AnimationController controller;
+
     public List<string> DialoguePaths;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        anim = GetComponentInChildren<Animator>();
 
         /*____________________Might need to change this as this is called every frame, interfering with the code______________________*/
         FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork;
@@ -41,13 +44,30 @@ public class NPC : NpcData, IAttackable
     }
     void Update()
     {
-        anim.SetFloat("InputMagnitude", agent.velocity.magnitude / speedAnimDevider);
-
         if (timeToRun > 0)
         {
             timeToRun -= Time.deltaTime;
         }
         WatchEnvironment();
+    }
+
+    void FixedUpdate()
+    {
+        if (agent.velocity.magnitude == 0)
+        {
+            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
+        }
+        else
+        {
+            if (agent.velocity.magnitude < 2.5f)
+            {
+                controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
+            }
+            else
+            {
+                controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
+            }
+        }
     }
 
     private void WatchEnvironment()
@@ -102,7 +122,6 @@ public class NPC : NpcData, IAttackable
                 StopGoingToWork();
                 break;
             case NpcStates.Working:
-                anim.SetBool("Working", false);
                 break;
             case NpcStates.Talking:
                 EndConversation();
@@ -138,7 +157,6 @@ public class NPC : NpcData, IAttackable
                 agent.isStopped = true;
                 break;
             case NpcStates.Working:
-                anim.SetBool("Working", true);
                 SetMoveTarget(work);
                 break;
             default: break;
