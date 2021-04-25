@@ -32,6 +32,10 @@ public class NPC : NpcData, IAttackable
     private AnimationController controller;
 
     public List<string> DialoguePaths;
+
+    Rigidbody[] rig;
+    SkinnedMeshRenderer[] skin;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -43,6 +47,24 @@ public class NPC : NpcData, IAttackable
         FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome;
 
         text = GetComponentInChildren<TMP_Text>();
+
+        skin = GetComponentsInChildren<SkinnedMeshRenderer>();
+        foreach (SkinnedMeshRenderer skinned in skin)
+        {
+            skinned.updateWhenOffscreen = false;
+        }
+
+        rig = GetComponentsInChildren<Rigidbody>();
+        foreach (Rigidbody rigidbody in rig)
+        {
+            if (rigidbody != this.GetComponent<Rigidbody>())
+            {
+                rigidbody.GetComponent<Collider>().enabled = false;
+                rigidbody.isKinematic = true;
+            }
+        }
+
+        GetComponent<CapsuleCollider>().enabled = true;
     }
     void Update()
     {
@@ -51,6 +73,11 @@ public class NPC : NpcData, IAttackable
             timeToRun -= Time.deltaTime;
         }
         WatchEnvironment();
+
+        if (GetComponent<CharacterStats>().isDead)
+        {
+            ChangeState(NpcStates.Dead);
+        }
     }
 
     void FixedUpdate()
@@ -160,6 +187,26 @@ public class NPC : NpcData, IAttackable
                 break;
             case NpcStates.Working:
                 SetMoveTarget(work);
+                break;
+            case NpcStates.Dead:
+                foreach (SkinnedMeshRenderer skinned in skin)
+                {
+                    skinned.updateWhenOffscreen = true;
+                }
+
+                GetComponentInChildren<Animator>().enabled = false;
+                agent.enabled = false;
+                GetComponent<CapsuleCollider>().enabled = false;
+                GetComponent<Rigidbody>().isKinematic = false;
+
+                foreach (Rigidbody rigidbody in rig)
+                {
+                    if (rigidbody != this.GetComponent<Rigidbody>())
+                    {
+                        rigidbody.GetComponent<Collider>().enabled = true;
+                        rigidbody.isKinematic = false;
+                    }
+                }
                 break;
             default: break;
         }
@@ -312,7 +359,7 @@ public class NPC : NpcData, IAttackable
         NPC NPCscript = other.GetComponentInParent<NPC>();
         if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking)
             return;
-        if (UnityEngine.Random.Range(0, 1000) <= 1000)
+        if (UnityEngine.Random.Range(0, 1000) == 1)
         {
             if (GetInstanceID() > NPCscript.GetInstanceID())
             {
