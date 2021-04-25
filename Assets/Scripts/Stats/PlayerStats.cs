@@ -11,6 +11,16 @@ public class PlayerStats : CharacterStats
 
     void OnEquipmentChanged(EquipableItem newItem, EquipableItem oldItem)
     {
+        if (oldItem != null)
+        {
+            Armor.RemoveModifier(oldItem.armorModifier);
+            Damage.RemoveModifier(oldItem.damageModifier);
+
+            if (oldItem.weapon != null)
+                weapon = null;
+            if (oldItem.shield != null)
+                shield = null;
+        }
         if (newItem != null)
         {
             Armor.AddModifier(newItem.armorModifier);
@@ -20,14 +30,6 @@ public class PlayerStats : CharacterStats
                 weapon = newItem.weapon;
             if (newItem.shield != null)
                 shield = newItem.shield;
-        }
-
-        if (oldItem != null)
-        {
-            Armor.RemoveModifier(oldItem.armorModifier);
-            Damage.RemoveModifier(oldItem.damageModifier);
-            weapon = null;
-            shield = null;
         }
     }
 }

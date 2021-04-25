@@ -1,0 +1,251 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UpperBody
+  m_Mask: 00000000010000000100000000000000000000000100000001000000010000000100000000000000000000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: PlayeMale_FP
+    m_Weight: 1
+  - m_Path: PlayeMale_TP
+    m_Weight: 1
+  - m_Path: RigPlayerM
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFIfth_0.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFIfth_0.L/ToeFifth_1.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFIfth_0.L/ToeFifth_1.L/ToeFifth_2.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFirst_0.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFirst_0.L/ToeFirst_1.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFourth_0.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFourth_0.L/ToeFourth_1.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFourth_0.L/ToeFourth_1.L/ToeFourth_2.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/Toes.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeSecond_0.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeSecond_0.L/ToeSecond_1.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeSecond_0.L/ToeSecond_1.L/ToeSecond_2.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeThird_0.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeThird_0.L/ToeThird_1.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeThird_0.L/ToeThird_1.L/ToeThird_2.L
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFIfth_0.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFIfth_0.R/ToeFifth_1.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFIfth_0.R/ToeFifth_1.R/ToeFifth_2.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFirst_0.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFirst_0.R/ToeFirst_1.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFourth_0.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFourth_0.R/ToeFourth_1.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFourth_0.R/ToeFourth_1.R/ToeFourth_2.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/Toes.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeSecond_0.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeSecond_0.R/ToeSecond_1.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeSecond_0.R/ToeSecond_1.R/ToeSecond_2.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeThird_0.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeThird_0.R/ToeThird_1.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeThird_0.R/ToeThird_1.R/ToeThird_2.R
+    m_Weight: 0
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eye.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eye.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Lower_0.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Lower_0.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Lower_1.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Lower_1.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Lower_2.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Lower_2.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Upper_0.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Upper_0.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Upper_1.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Upper_1.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Upper_2.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Upper_2.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Hair_0
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipLower_0.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipLower_0.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipLower_1.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipLower_1.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipLower_Mid
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipUpper_0.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipUpper_0.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipUpper_1.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipUpper_1.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipUpper_Mid
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Tongue_0
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Tongue_0/Tongue_1
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Tongue_0/Tongue_1/Tongue_2
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Nose
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Fix_Arm_Lower.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerIndex_0.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerIndex_0.L/FingerIndex_1.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerIndex_0.L/FingerIndex_1.L/FingerIndex_2.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerMiddle_0.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerMiddle_0.L/FingerMiddle_1.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerMiddle_0.L/FingerMiddle_1.L/FingerMiddle_2.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerPinky_0.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerPinky_0.L/FingerPinky_1.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerPinky_0.L/FingerPinky_1.L/FingerPinky_2.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerRing_0.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerRing_0.L/FingerRing_1.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerRing_0.L/FingerRing_1.L/FingerRing_2.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerThumb_0.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerThumb_0.L/FingerThumb_1.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerThumb_0.L/FingerThumb_1.L/FingerThumb_2.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Fix_Arm_Lower.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerIndex_0.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerIndex_0.R/FingerIndex_1.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerIndex_0.R/FingerIndex_1.R/FingerIndex_2.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerMiddle_0.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerMiddle_0.R/FingerMiddle_1.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerMiddle_0.R/FingerMiddle_1.R/FingerMiddle_2.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerPinky_0.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerPinky_0.R/FingerPinky_1.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerPinky_0.R/FingerPinky_1.R/FingerPinky_2.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerRing_0.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerRing_0.R/FingerRing_1.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerRing_0.R/FingerRing_1.R/FingerRing_2.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerThumb_0.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerThumb_0.R/FingerThumb_1.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerThumb_0.R/FingerThumb_1.R/FingerThumb_2.R
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Weapon.L
+    m_Weight: 1
+  - m_Path: RigPlayerM/Control_Point/Weapon.R
+    m_Weight: 1

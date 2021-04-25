@@ -44,6 +44,7 @@ public class FirstPersonAIO : MonoBehaviour {
     private Vector3 originalRotation;
 
     private Animator anim;
+    private AnimationController controller;
     #endregion
 
     #region Movement Settings
@@ -63,7 +64,7 @@ public class FirstPersonAIO : MonoBehaviour {
     internal float walkSpeedInternal;
     internal float sprintSpeedInternal;
     internal float jumpPowerInternal;
-
+    bool jumpedBefore;
     [System.Serializable]
     public class CrouchModifiers {
         public bool useCrouch = true;
@@ -136,7 +137,6 @@ public class FirstPersonAIO : MonoBehaviour {
     Transform myTransform;
     bool isMoving;
 
-    public EventGameObject OnClickAttackable;
     #endregion
 
     #region Audio Settings
@@ -172,21 +172,9 @@ public class FirstPersonAIO : MonoBehaviour {
 
     #endregion
 
-    #region BETA Settings
-    /*
-     [System.Serializable]
-public class BETA_SETTINGS{
-
-}
-
-            [Space(15)]
-    [Tooltip("Settings in this feild are currently in beta testing and can prove to be unstable.")]
-    [Space(5)]
-    public BETA_SETTINGS betaSettings = new BETA_SETTINGS();
-     */
-    
-    #endregion
-
+    public CharacterStats stats;
+    public AttackDefinition Attack;
+    public float attackCooldown = 0f;
     #endregion
 
     private void Awake()
@@ -272,6 +260,7 @@ public class BETA_SETTINGS{
         advanced.highFrictionMaterial.bounceCombine = PhysicMaterialCombine.Average;
 
         anim = GetComponent<Animator>();
+        controller = GetComponentInChildren<AnimationController>();
         myTransform = transform;
         lastPosition = myTransform.position;
         isMoving = false;
@@ -287,6 +276,8 @@ public class BETA_SETTINGS{
         #region BETA_SETTINGS - Start
         fOVKick.fovStart = playerCamera.fieldOfView;
         #endregion
+
+        stats = GetComponent<CharacterStats>();
     }
 
     private void Update()
@@ -315,29 +306,21 @@ public class BETA_SETTINGS{
 
         if (Input.GetMouseButtonDown(0))
         {
-            //anim.SetBool("isAttacking", true);
             int layerMask = LayerMask.GetMask("Player");
             layerMask = ~layerMask;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
             {
                 GameObject attackable = hit.collider.gameObject;
-                OnClickAttackable.Invoke(attackable);
+                AttackTarget(attackable);
             }
         }
 
         #endregion
 
-        #region Movement Settings - Update
-
-        #endregion
-
-        #region Headbobbing Settings - Update
-
-        #endregion
-
-        #region BETA_SETTINGS - Update
-
-        #endregion
+        if (Input.GetMouseButton(1) && stats.GetShield() != null)
+            stats.isBlocking = true;
+        else
+            stats.isBlocking = false;
     }
 
     private void FixedUpdate()
@@ -387,70 +370,91 @@ public class BETA_SETTINGS{
                 }
             }
         }
-  
 
 
-       
-    if(advanced.maxSlopeAngle>0){
-        if(Physics.Raycast(new Vector3(transform.position.x,transform.position.y-0.75f,transform.position.z+0.1f), Vector3.down,out advanced.surfaceAngleCheck,1f)){
-        
-            if(Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up)<89){
-                        advanced.tooSteep = false;                       
-                        dMove = transform.forward * inputXY.y * speed + transform.right * inputXY.x * speed;           
-              if(Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up)>advanced.maxSlopeAngle){
+
+
+        if (advanced.maxSlopeAngle > 0)
+        {
+            if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y - 0.75f, transform.position.z + 0.1f), Vector3.down, out advanced.surfaceAngleCheck, 1f))
+            {
+
+                if (Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up) < 89)
+                {
+                    advanced.tooSteep = false;
+                    dMove = transform.forward * inputXY.y * speed + transform.right * inputXY.x * speed;
+                    if (Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up) > advanced.maxSlopeAngle)
+                    {
                         advanced.tooSteep = true;
-                         isSprinting=false;
-                        dMove = new Vector3(0,-4,0);
-                        
-            }else if(Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up)>44){
+                        isSprinting = false;
+                        dMove = new Vector3(0, -4, 0);
+
+                    }
+                    else if (Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up) > 44)
+                    {
                         advanced.tooSteep = true;
-                        isSprinting=false;
-                        dMove = (transform.forward * inputXY.y * speed + transform.right * inputXY.x) + new Vector3(0,-4,0);
-                }
-            }    
-    }
-    
-      else  if(Physics.Raycast( new Vector3(transform.position.x-0.086f,transform.position.y-0.75f,transform.position.z-0.05f), Vector3.down,out advanced.surfaceAngleCheck,1f)){
-       
-            if(Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up)<89){
-                        advanced.tooSteep = false;             
-                        dMove = transform.forward * inputXY.y * speed + transform.right * inputXY.x * walkSpeedInternal;           
-              if(Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up)>70){
-                        advanced.tooSteep = true;
-                         isSprinting=false;
-                        dMove = new Vector3(0,-4,0);
-                        
-            }else if(Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up)>45){
-                        advanced.tooSteep = true;
-                        isSprinting=false;
-                        dMove = (transform.forward * inputXY.y * speed + transform.right * inputXY.x) + new Vector3(0,-4,0);
-                       
-                }
-            }    
-            else  if(Physics.Raycast( new Vector3(transform.position.x+0.086f,transform.position.y-0.75f,transform.position.z-0.05f), Vector3.down,out advanced.surfaceAngleCheck,1f)){
-        
-            if(Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up)<89){
-                        advanced.tooSteep = false;                   
-                        dMove = transform.forward * inputXY.y * speed + transform.right * inputXY.x * walkSpeedInternal;
-              if(Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up)>70){
-                        advanced.tooSteep = true;
-                         isSprinting=false;
-                        dMove = new Vector3(0,-4,0);
-                        
-            }else if(Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up)>45){
-                        advanced.tooSteep = true;
-                        isSprinting=false;
-                        dMove = (transform.forward * inputXY.y * speed + transform.right * inputXY.x) + new Vector3(0,-4,0);
+                        isSprinting = false;
+                        dMove = (transform.forward * inputXY.y * speed + transform.right * inputXY.x) + new Vector3(0, -4, 0);
                     }
                 }
             }
-        }else{advanced.tooSteep = false;
+
+            else if (Physics.Raycast(new Vector3(transform.position.x - 0.086f, transform.position.y - 0.75f, transform.position.z - 0.05f), Vector3.down, out advanced.surfaceAngleCheck, 1f))
+            {
+
+                if (Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up) < 89)
+                {
+                    advanced.tooSteep = false;
+                    dMove = transform.forward * inputXY.y * speed + transform.right * inputXY.x * walkSpeedInternal;
+                    if (Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up) > 70)
+                    {
+                        advanced.tooSteep = true;
+                        isSprinting = false;
+                        dMove = new Vector3(0, -4, 0);
+
+                    }
+                    else if (Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up) > 45)
+                    {
+                        advanced.tooSteep = true;
+                        isSprinting = false;
+                        dMove = (transform.forward * inputXY.y * speed + transform.right * inputXY.x) + new Vector3(0, -4, 0);
+
+                    }
+                }
+                else if (Physics.Raycast(new Vector3(transform.position.x + 0.086f, transform.position.y - 0.75f, transform.position.z - 0.05f), Vector3.down, out advanced.surfaceAngleCheck, 1f))
+                {
+
+                    if (Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up) < 89)
+                    {
+                        advanced.tooSteep = false;
                         dMove = transform.forward * inputXY.y * speed + transform.right * inputXY.x * walkSpeedInternal;
-            }    
-    }
-         else{advanced.tooSteep = false;
-                        dMove = transform.forward * inputXY.y * speed + transform.right * inputXY.x * walkSpeedInternal;
+                        if (Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up) > 70)
+                        {
+                            advanced.tooSteep = true;
+                            isSprinting = false;
+                            dMove = new Vector3(0, -4, 0);
+
+                        }
+                        else if (Vector3.Angle(advanced.surfaceAngleCheck.normal, Vector3.up) > 45)
+                        {
+                            advanced.tooSteep = true;
+                            isSprinting = false;
+                            dMove = (transform.forward * inputXY.y * speed + transform.right * inputXY.x) + new Vector3(0, -4, 0);
+                        }
+                    }
+                }
             }
+            else
+            {
+                advanced.tooSteep = false;
+                dMove = transform.forward * inputXY.y * speed + transform.right * inputXY.x * walkSpeedInternal;
+            }
+        }
+        else
+        {
+            advanced.tooSteep = false;
+            dMove = transform.forward * inputXY.y * speed + transform.right * inputXY.x * walkSpeedInternal;
+        }
 
 
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -461,16 +465,17 @@ public class BETA_SETTINGS{
         float yv = fps_Rigidbody.velocity.y;
         bool didJump = canHoldJump?Input.GetButton("Jump"): Input.GetButton("Jump");
 
-        if (!canJump) didJump = false;
+        if (!canJump) 
+            didJump = false;
 
-        if(IsGrounded && didJump && jumpPowerInternal > 0)
+        if (IsGrounded && didJump && jumpPowerInternal > 0)
         {
             yv += jumpPowerInternal;
             IsGrounded = false;
-            didJump=false;
+            didJump = false;
         }
 
-        if(playerCanMove)
+        if (playerCanMove)
         {
             fps_Rigidbody.velocity = dMove + Vector3.up * yv;
         } else{fps_Rigidbody.velocity = Vector3.zero;}
@@ -499,25 +504,41 @@ public class BETA_SETTINGS{
                 jumpPowerInternal = jumpPower;
             }
         }
-
-        if (myTransform.position != lastPosition)
+        if (System.Math.Round(myTransform.position.x, 2) != System.Math.Round(lastPosition.x, 2) || System.Math.Round(myTransform.position.z, 2) != System.Math.Round(lastPosition.z, 2))
             isMoving = true;
         else
             isMoving = false;
-
-        if (isMoving)
+        if (IsGrounded)
         {
-            anim.SetBool("IsSprinting", true);
+            if (jumpedBefore != IsGrounded)
+            {
+                controller.ChangeAnimation(AnimationController.Jump_2, AnimatorLayers.ALL, true);
+            }
+            else
+            {
+                if (isMoving)
+                {
+                    controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
+                }
+                else
+                {
+                    controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
+                }
+            }
         }
         else
         {
-            anim.SetBool("IsSprinting", false);
+            if (jumpedBefore == IsGrounded)
+            {
+                controller.ChangeAnimation(AnimationController.Jump_1, AnimatorLayers.ALL);
+            }
+            else 
+            {
+                controller.ChangeAnimation(AnimationController.Jump_0, AnimatorLayers.ALL, true);
+            }
         }
+        jumpedBefore = IsGrounded;
         lastPosition = myTransform.position;
-        #endregion
-
-        #region BETA_SETTINGS - FixedUpdate
-
         #endregion
 
         #region Headbobbing Settings - FixedUpdate
@@ -674,36 +695,38 @@ public class BETA_SETTINGS{
                 }
             }
 
-        
+
         #endregion
 
+        if (attackCooldown > 0)
+            attackCooldown -= Time.deltaTime;
     }
 
-/*     public IEnumerator FOVKickOut()
-    {
-        float t = Mathf.Abs((playerCamera.fieldOfView - fOVKick.fovStart) / fOVKick.FOVKickAmount);
-        while(t < fOVKick.changeTime)
+    /*     public IEnumerator FOVKickOut()
         {
-            playerCamera.fieldOfView = fOVKick.fovStart + (fOVKick.KickCurve.Evaluate(t / fOVKick.changeTime) * fOVKick.FOVKickAmount);
-            t += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
+            float t = Mathf.Abs((playerCamera.fieldOfView - fOVKick.fovStart) / fOVKick.FOVKickAmount);
+            while(t < fOVKick.changeTime)
+            {
+                playerCamera.fieldOfView = fOVKick.fovStart + (fOVKick.KickCurve.Evaluate(t / fOVKick.changeTime) * fOVKick.FOVKickAmount);
+                t += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
         }
-    }
 
-    public IEnumerator FOVKickIn()
-    {
-        float t = Mathf.Abs((playerCamera.fieldOfView - fOVKick.fovStart) / fOVKick.FOVKickAmount);
-        while(t > 0)
+        public IEnumerator FOVKickIn()
         {
-            playerCamera.fieldOfView = fOVKick.fovStart + (fOVKick.KickCurve.Evaluate(t / fOVKick.changeTime) * fOVKick.FOVKickAmount);
-            t -= Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-        playerCamera.fieldOfView = fOVKick.fovStart;
-    } */
+            float t = Mathf.Abs((playerCamera.fieldOfView - fOVKick.fovStart) / fOVKick.FOVKickAmount);
+            while(t > 0)
+            {
+                playerCamera.fieldOfView = fOVKick.fovStart + (fOVKick.KickCurve.Evaluate(t / fOVKick.changeTime) * fOVKick.FOVKickAmount);
+                t -= Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+            playerCamera.fieldOfView = fOVKick.fovStart;
+        } */
 
     public IEnumerator CameraShake(float Duration, float Magnitude){
-        float elapsed =0;
+        float elapsed = 0;
         while(elapsed<Duration && enableCameraShake){
             playerCamera.transform.localPosition =Vector3.MoveTowards(playerCamera.transform.localPosition, new Vector3(cameraStartingPosition.x+ Random.Range(-1,1)*Magnitude,cameraStartingPosition.y+Random.Range(-1,1)*Magnitude,cameraStartingPosition.z), Magnitude*2);
             yield return new WaitForSecondsRealtime(0.001f);
@@ -713,8 +736,38 @@ public class BETA_SETTINGS{
         playerCamera.transform.localPosition = cameraStartingPosition;
     }
 
+    public void AttackTarget(GameObject target)
+    {
+        if (attackCooldown <= 0 && !stats.isBlocking)
+        {
+            if (stats.GetWeapon() != null)
+            {
+                if (stats.GetWeapon().type == WeaponType.LongRange)
+                {
+                    stats.GetWeapon().ExecuteAttack(gameObject, gameObject.transform.position + new Vector3(0, 0.4f, 0), playerCamera.transform.rotation, LayerMask.NameToLayer("Player Projectile"));
+                }
+                else
+                {
+                    stats.GetWeapon().ExecuteAttack(gameObject, target);
+                    controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.UP, true);
+                }
+
+                //attackCooldown = stats.GetWeapon().Cooldown;
+            }
+            else
+            {
+                var attack = Attack.CreateAttack(stats, target.GetComponent<CharacterStats>());
+
+                var attackables = target.GetComponentsInChildren(typeof(IAttackable));
+
+                foreach (IAttackable attackable in attackables)
+                {
+                    attackable.OnAttack(gameObject, attack);
+                }
+                controller.ChangeAnimation(AnimationController.UNARMED_ATTACK, AnimatorLayers.UP, true);
+            }
+            attackCooldown = anim.GetCurrentAnimatorStateInfo(1).length;
+        }
+    }
+
 }
-
-[System.Serializable]
-public class EventGameObject : UnityEvent<GameObject> { }
-

@@ -18,7 +18,6 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
     public bool _isdialogue = false;
     private FirstPersonAIO player;
     private PlayerActions _playeractions;
-    private PlayerCombat playerCombat;
     public bool displayingdialogue = false;
     private GameObject _dialogue;
     private Dialogue dialogueScript;
@@ -32,7 +31,6 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
         _playeractions = GameObject.FindWithTag("Player").GetComponent<PlayerActions>();
         _dialogue = _playeractions.dialogue_gameobject;
         dialogueScript = _dialogue.GetComponent<Dialogue>();
-        playerCombat = GameObject.FindWithTag("Player").GetComponent<PlayerCombat>();
     }
     private void Awake()
     {
@@ -68,7 +66,7 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
 
     public void EndDialogue()
     {
-        playerCombat.attackCooldown = 3f;
+        player.attackCooldown = 3f;
         DialogueSystem.instance.Detach();
         npc.GetComponentInChildren<Animator>().enabled = true;
         npc.enabled = true;

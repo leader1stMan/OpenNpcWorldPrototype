@@ -13,13 +13,18 @@ public class EquipableItem : Item
 
     public Weapon weapon = null;
     public Shield shield = null;
+
     override public void OnItemUsed(){
         
     }
 
-    override public void OnItemEquipped()
+    override public void OnItemEquipped(AnimationController controller = null)
     {
         EquipmentController.instance.Equip(this);
+        if (weapon != null && weapon.type == WeaponType.LowRange)
+        { 
+            controller.ChangeAnimation(AnimationController.SWORD_EQUIP, AnimatorLayers.UP);
+        }
     }
 
     override public void OnItemUnEquipped()
