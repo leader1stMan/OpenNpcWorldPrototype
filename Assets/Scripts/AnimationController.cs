@@ -81,6 +81,11 @@ public class AnimationController : MonoBehaviour
         yield return new WaitForSeconds(time);
         Block[(int)layer] = false;
     }
+
+    public void AttackEvent()
+    {
+        GetComponentInParent<SkeletonAi>().AttackEvent();
+    }
 }
 
 public enum AnimatorLayers { DOWN, UP, ALL }

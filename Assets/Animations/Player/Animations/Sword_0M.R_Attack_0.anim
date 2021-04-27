@@ -62414,11 +62414,10 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.3128125
+  - time: 0.33366668
     functionName: AttackEvent
     data: 
-    objectReferenceParameter: {fileID: 11500000, guid: e1dbd17409aeae7459f4804126973340,
-      type: 3}
+    objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

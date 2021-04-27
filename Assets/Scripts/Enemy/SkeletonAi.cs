@@ -58,7 +58,7 @@ public class SkeletonAi : EnemyBase
 
     public override void Attack(GameObject target)
     {
-        controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.ALL);
+        controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.UP);
         //Idk if this is a good way of damaging
         TheTarget = target;
        // 
@@ -70,7 +70,7 @@ public class SkeletonAi : EnemyBase
         {
             stats.GetWeapon().ExecuteAttack(gameObject, TheTarget);
         }
-        
+        controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
     }
 
     public override void DealDamage()
