@@ -53,7 +53,6 @@ public class SkeletonAi : EnemyBase
         else if (newState == EnemyState.Blocking)
         {
           //  print("isblocking");
-          controller.ChangeAnimation(AnimationController.BLOCK, AnimatorLayers.ALL);
         }
     }
 
@@ -73,6 +72,7 @@ public class SkeletonAi : EnemyBase
         }
         
     }
+
     public override void DealDamage()
     {
         Collider[] cols = Physics.OverlapSphere(transform.position, stats.GetWeapon().Range, WhatCanThisEnemyAttack);

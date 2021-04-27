@@ -6250,13 +6250,13 @@ MonoBehaviour:
   PrefferedPatrolAreaCollider: {fileID: 0}
   ShowDebugMessages: 0
   VisualiseAgentActions: 0
-  VisionRange: 0
+  VisionRange: 100
   WhatCanThisEnemyAttack:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   Tags: []
   currentTarget: {fileID: 0}
-  anim: {fileID: 0}
+  controller: {fileID: 0}
 --- !u!1001 &1491741696
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9733,6 +9733,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4364848039031525940, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: weapon
+      value: 
+      objectReference: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9,
+        type: 2}
+    - target: {fileID: 4364848039031525940, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: shield
+      value: 
+      objectReference: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96,
+        type: 2}
     - target: {fileID: 5187884855685300175, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
       propertyPath: PlayerCam
