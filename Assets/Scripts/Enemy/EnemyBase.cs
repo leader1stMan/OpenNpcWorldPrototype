@@ -93,7 +93,10 @@ public abstract class EnemyBase : MonoBehaviour
     {
         ManageState();
         CheckForTargets();
-        if (attackCooldown > 0) { attackCooldown -= Time.deltaTime; }
+        if (attackCooldown > 0) 
+        { 
+            attackCooldown -= Time.deltaTime;
+        }
         if (hasshield == true && blockCooldown > 0) { blockCooldown -= Time.deltaTime / Random.Range(1f, 15f); }
 
         #region Editor Only
@@ -210,7 +213,6 @@ public abstract class EnemyBase : MonoBehaviour
 
     }
 
-
     protected virtual void CheckForTargets()
     {
         if (currentTarget == null)
@@ -258,6 +260,11 @@ public abstract class EnemyBase : MonoBehaviour
             if (currentTarget != null)
             {
                 Chase(currentTarget);
+            }
+            else
+            {
+                if (CurrentState == EnemyState.Attacking || CurrentState == EnemyState.Chasing)
+                    ChangeState(EnemyState.Idle);
             }
         }
         else
