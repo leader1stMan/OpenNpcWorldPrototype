@@ -175,7 +175,7 @@ public abstract class EnemyBase : MonoBehaviour
                 {
                     Attack(currentTarget.gameObject);
                     ChangeState(EnemyState.Attacking);
-                    attackCooldown = stats.GetWeapon().Cooldown * Random.Range(1f, .5f);
+                    attackCooldown = stats.GetWeapon().Cooldown * Random.Range(.01f, .5f);
                     blockCooldown = stats.GetWeapon().Cooldown * Random.Range(.005f, .5f);
                     print("attacking");
 
@@ -195,7 +195,7 @@ public abstract class EnemyBase : MonoBehaviour
                     stats.isBlocking = false;
                     ChangeState(EnemyState.Attacking);
                     Attack(currentTarget.gameObject);
-                    attackCooldown = stats.GetWeapon().Cooldown * Random.Range(1f, .5f);
+                    attackCooldown = stats.GetWeapon().Cooldown * Random.Range(02f, .5f);
                     blockCooldown = stats.GetWeapon().Cooldown * Random.Range(.1f, 1f);
                     print("attacking1");
                 }
