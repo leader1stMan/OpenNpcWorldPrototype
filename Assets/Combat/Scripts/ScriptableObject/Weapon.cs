@@ -71,7 +71,7 @@ public class Weapon : AttackDefinition
             SkeletonAi skai = defender.GetComponent<SkeletonAi>();
             if (skai != null)
             {
-                skai.anim.SetBool("ShieldBlock", true);
+                skai.controller.ChangeAnimation(AnimationController.BLOCK, AnimatorLayers.ALL);
             }
             return;
         }

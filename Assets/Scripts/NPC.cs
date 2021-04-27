@@ -36,6 +36,8 @@ public class NPC : NpcData, IAttackable
     Rigidbody[] rig;
     SkinnedMeshRenderer[] skin;
 
+    public bool combatState;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -65,6 +67,9 @@ public class NPC : NpcData, IAttackable
         }
 
         GetComponent<CapsuleCollider>().enabled = true;
+
+        combatState = false;
+        GetComponent<EnemyBase>().enabled = false;
     }
     void Update()
     {
@@ -72,6 +77,9 @@ public class NPC : NpcData, IAttackable
         {
             timeToRun -= Time.deltaTime;
         }
+
+        if (combatState)
+            ChangeState(NpcStates.Combat);
         WatchEnvironment();
 
         if (GetComponent<CharacterStats>().isDead)
@@ -82,48 +90,54 @@ public class NPC : NpcData, IAttackable
 
     void FixedUpdate()
     {
-        if (agent.velocity.magnitude == 0)
+        if (currentState != NpcStates.Combat)
         {
-            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
-        }
-        else
-        {
-            if (agent.velocity.magnitude < 2.5f)
+            if (agent.velocity.magnitude == 0)
             {
-                controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
+                controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
             }
             else
             {
-                controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
+                if (agent.velocity.magnitude < 2.5f)
+                {
+                    controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
+                }
+                else
+                {
+                    controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
+                }
             }
         }
     }
 
     private void WatchEnvironment()
     {
-        Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, VisionLayers);
-
-        foreach (Collider col in cols)
+        if (currentState != NpcStates.Combat)
         {
-            // If the NPC is looking at another NPC attacking or defending, run
-            if (col.gameObject.GetComponent<NPC>())
+            Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, VisionLayers);
+
+            foreach (Collider col in cols)
             {
-                NPC npc = col.gameObject.GetComponent<NPC>();
-                if (npc.isAttacked)
+                // If the NPC is looking at another NPC attacking or defending, run
+                if (col.gameObject.GetComponent<NPC>())
                 {
-                    Attacker = npc.Attacker;
-                    ChangeState(NpcStates.Scared);
+                    NPC npc = col.gameObject.GetComponent<NPC>();
+                    if (npc.isAttacked)
+                    {
+                        Attacker = npc.Attacker;
+                        ChangeState(NpcStates.Scared);
+                    }
                 }
-            }
-            // If the NPC is looking at an enemy Attacking or defending, run
-            else if (col.gameObject.GetComponent<EnemyBase>())
-            {
-                EnemyBase enemy= col.gameObject.GetComponent<EnemyBase>();
-                EnemyState state = enemy.CurrentState;
-                if (state == EnemyState.Attacking)
+                // If the NPC is looking at an enemy Attacking or defending, run
+                else if (col.gameObject.GetComponent<EnemyBase>())
                 {
-                    Attacker = col.gameObject;
-                    ChangeState(NpcStates.Scared);
+                    EnemyBase enemy = col.gameObject.GetComponent<EnemyBase>();
+                    EnemyState state = enemy.CurrentState;
+                    if (state == EnemyState.Attacking)
+                    {
+                        Attacker = col.gameObject;
+                        ChangeState(NpcStates.Scared);
+                    }
                 }
             }
         }
@@ -154,6 +168,9 @@ public class NPC : NpcData, IAttackable
                 break;
             case NpcStates.Talking:
                 EndConversation();
+                break;
+            case NpcStates.Combat:
+                GetComponent<EnemyBase>().enabled = false;
                 break;
             default:
                 break;
@@ -188,6 +205,9 @@ public class NPC : NpcData, IAttackable
             case NpcStates.Working:
                 SetMoveTarget(work);
                 break;
+            case NpcStates.Combat:
+                GetComponent<EnemyBase>().enabled = true;
+                break;
             case NpcStates.Dead:
                 foreach (SkinnedMeshRenderer skinned in skin)
                 {
@@ -220,7 +240,7 @@ public class NPC : NpcData, IAttackable
 
     void GoToWork()
     {
-        if (currentState == NpcStates.GoingToWork || currentState == NpcStates.Working || currentState == NpcStates.Talking || currentState == NpcStates.Scared)
+        if (currentState == NpcStates.GoingToWork || currentState == NpcStates.Working || currentState == NpcStates.Talking || currentState == NpcStates.Scared || currentState == NpcStates.Combat)
             return;
         StartCoroutine("GoToWorkCoroutine");
     }
@@ -243,7 +263,7 @@ public class NPC : NpcData, IAttackable
 
     void GoHome()
     {
-        if (currentState == NpcStates.GoingHome || currentState == NpcStates.Talking || currentState == NpcStates.Scared)
+        if (currentState == NpcStates.GoingHome || currentState == NpcStates.Talking || currentState == NpcStates.Scared || currentState == NpcStates.Combat)
             return;
         StartCoroutine("GoHomeCoroutine");
     }
@@ -352,12 +372,12 @@ public class NPC : NpcData, IAttackable
     }
     void OnTriggerStay(Collider other)
     {
-        if (currentState == NpcStates.Scared || currentState == NpcStates.Talking)
+        if (currentState == NpcStates.Scared || currentState == NpcStates.Talking || currentState == NpcStates.Combat)
             return;
         if (!other.CompareTag("Npc"))
             return;
         NPC NPCscript = other.GetComponentInParent<NPC>();
-        if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking)
+        if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking || NPCscript.currentState == NpcStates.Combat)
             return;
         if (UnityEngine.Random.Range(0, 1000) == 1)
         {
@@ -374,7 +394,6 @@ public class NPC : NpcData, IAttackable
     public void OnAttack(GameObject attacker, Attack attack)
     {
         Attacker = attacker;
-        ChangeState(NpcStates.Scared);
         StartCoroutine("Attacked");
     }
 

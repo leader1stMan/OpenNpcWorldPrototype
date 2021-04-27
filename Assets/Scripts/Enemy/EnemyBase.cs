@@ -78,12 +78,14 @@ public abstract class EnemyBase : MonoBehaviour
     }
     protected virtual void Start()
     {
+        Debug.Log(true);
+        agent = GetComponent<NavMeshAgent>();
+
         SubscribeToEvents();
         PatrolToAnotherSpot();
         if (stats.shield != null)
         {
             hasshield = true;
-
         }
     }
 
@@ -170,7 +172,7 @@ public abstract class EnemyBase : MonoBehaviour
                 {
                     Attack(currentTarget.gameObject);
                     ChangeState(EnemyState.Attacking);
-                    attackCooldown = stats.GetWeapon().Cooldown * Random.Range(.01f, .5f);
+                    attackCooldown = stats.GetWeapon().Cooldown * Random.Range(1f, .5f);
                     blockCooldown = stats.GetWeapon().Cooldown * Random.Range(.005f, .5f);
                     print("attacking");
 
@@ -190,7 +192,7 @@ public abstract class EnemyBase : MonoBehaviour
                     stats.isBlocking = false;
                     ChangeState(EnemyState.Attacking);
                     Attack(currentTarget.gameObject);
-                    attackCooldown = stats.GetWeapon().Cooldown * Random.Range(.02f, .5f);
+                    attackCooldown = stats.GetWeapon().Cooldown * Random.Range(1f, .5f);
                     blockCooldown = stats.GetWeapon().Cooldown * Random.Range(.1f, 1f);
                     print("attacking1");
                 }
@@ -252,17 +254,11 @@ public abstract class EnemyBase : MonoBehaviour
                 }
 
             }
+
             if (currentTarget != null)
             {
                 Chase(currentTarget);
             }
-            else
-            {
-                if (CurrentState == EnemyState.Attacking || CurrentState == EnemyState.Chasing)
-                    ChangeState(EnemyState.Idle);
-            }
-
-
         }
         else
         {
@@ -386,15 +382,6 @@ public abstract class EnemyBase : MonoBehaviour
             PatrolToAnotherSpot();
         }
     }
-
-
-
-    protected virtual void StopAnimation(string AnimationName)
-    {
-        GetComponent<SkeletonAi>().anim.SetBool(AnimationName, false);
-    }
-
-
 
     protected virtual void OnDrawGizmosSelected()
     {

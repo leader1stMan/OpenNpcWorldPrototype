@@ -25,10 +25,6 @@ public class SkeletonArcherAI : SkeletonAi
 
     public override void Attack(GameObject target)
     {
-        anim.SetBool("isIdle", false);
-        anim.SetBool("isRunning", false);
-        anim.SetBool("isWalking", false);
-        anim.SetBool("isAttacking", true);
 
         switch (stats.GetWeapon().type)
         {

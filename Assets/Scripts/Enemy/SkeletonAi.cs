@@ -2,8 +2,15 @@
 
 public class SkeletonAi : EnemyBase
 {
-    public Animator anim;
+    public AnimationController controller;
+
     GameObject TheTarget;
+
+    protected override void Start()
+    {
+        controller = GetComponentInChildren<AnimationController>();
+        base.Start();
+    }
     protected override void Update()
     {
         base.Update();
@@ -29,54 +36,35 @@ public class SkeletonAi : EnemyBase
         base.ManageStateChange(oldState, newState);
         if (newState == EnemyState.Idle)
         {
-            anim.SetBool("isIdle", true);
-            anim.SetBool("isRunning", false);
-            anim.SetBool("isWalking", false);
-            anim.SetBool("isAttacking", false);
-            anim.SetBool("isBlocking", false);
+            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
             TheTarget = null;
         }
         else if (newState == EnemyState.Chasing)
         {
-            anim.SetBool("isIdle", false);
-            anim.SetBool("isRunning", true);
-            anim.SetBool("isWalking", false);
-            anim.SetBool("isAttacking", false);
-            anim.SetBool("isBlocking", false);
+            controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
             TheTarget = null;
         }
         else if (newState == EnemyState.Patroling)
         {
-            anim.SetBool("isIdle", false);
-            anim.SetBool("isRunning", false);
-            anim.SetBool("isWalking", true);
-            anim.SetBool("isAttacking", false);
-            anim.SetBool("isBlocking", false);
+            controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
             TheTarget = null;
 
         }
         else if (newState == EnemyState.Blocking)
         {
-            anim.SetBool("isIdle", false);
-            anim.SetBool("isRunning", false);
-            anim.SetBool("isWalking", false);
-            anim.SetBool("isAttacking", false);
-            anim.SetBool("isBlocking", true);
           //  print("isblocking");
-
+          controller.ChangeAnimation(AnimationController.BLOCK, AnimatorLayers.ALL);
         }
-
+        else if (newState == EnemyState.Attacking)
+        {
+            controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.ALL);
+        }
     }
     public override void Attack(GameObject target)
     {
-
-        anim.SetBool("isBlocking", false);
-        anim.SetBool("isIdle", false);
-        anim.SetBool("isRunning", false);
-        anim.SetBool("isWalking", false);
-        anim.SetBool("isAttacking", true);
         //Idk if this is a good way of damaging
         TheTarget = target;
+        AttackEvent();
        // 
     }
 

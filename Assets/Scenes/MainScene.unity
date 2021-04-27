@@ -2972,8 +2972,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  BlockUP: 0
-  BlockDOWN: 0
 --- !u!1001 &737805706
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5139,12 +5137,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1018620680}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1032248013 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8995657166687693685, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
-    type: 3}
-  m_PrefabInstance: {fileID: 910410754143012180}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1053341827
 GameObject:
   m_ObjectHideFlags: 0
@@ -6156,12 +6148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!20 &1325280272 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 4642765648561140945, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
-    type: 3}
-  m_PrefabInstance: {fileID: 910410754143012180}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1336964414 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1992123933282040033, guid: d7918e1353055ed46b34521f92fe1024,
@@ -6254,22 +6240,23 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1474046185}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9297a64c9fb819a48a780c7a1827cc8e, type: 3}
+  m_Script: {fileID: 11500000, guid: e1dbd17409aeae7459f4804126973340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueCamera: {fileID: 1325280272}
-  ToDisable:
-  - {fileID: 1032248013}
-  OnStartDialogue:
-    m_PersistentCalls:
-      m_Calls: []
-  _textSpeed: 0
-  _isdialogue: 0
-  displayingdialogue: 0
-  currentSentence: {fileID: 11400000, guid: 0c690bd68ec9d8f4ca5c50ecef85d755, type: 2}
-  defaultSentence: {fileID: 0}
+  agent: {fileID: 0}
+  stats: {fileID: 0}
+  PrefferedPatrolAreaCollider: {fileID: 0}
+  ShowDebugMessages: 0
+  VisualiseAgentActions: 0
+  VisionRange: 0
+  WhatCanThisEnemyAttack:
+    serializedVersion: 2
+    m_Bits: 0
+  Tags: []
+  currentTarget: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1001 &1491741696
 PrefabInstance:
   m_ObjectHideFlags: 0
