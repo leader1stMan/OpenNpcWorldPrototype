@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class SkeletonAi : EnemyBase
 {
@@ -84,5 +85,18 @@ public class SkeletonAi : EnemyBase
             if (col.transform == this.transform)
                 continue;
         }
+    }
+
+    public void ShieldHit()
+    {
+        Debug.Log("anim");
+        controller.ChangeAnimation(AnimationController.SHIELD_HIT, AnimatorLayers.UP);
+        StartCoroutine(ShieldHitAnim());
+    }
+
+    IEnumerator ShieldHitAnim()
+    {
+        yield return new WaitForSeconds(0.5f);
+        controller.ChangeAnimation(AnimationController.SHIELD_READY, AnimatorLayers.UP);
     }
 }

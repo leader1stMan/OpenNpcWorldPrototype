@@ -379,7 +379,7 @@ public class NPC : NpcData, IAttackable
         NPC NPCscript = other.GetComponentInParent<NPC>();
         if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking || NPCscript.currentState == NpcStates.Combat)
             return;
-        if (UnityEngine.Random.Range(0, 1000) == 1)
+        if (UnityEngine.Random.Range(0, 1000) <= 0)
         {
             if (GetInstanceID() > NPCscript.GetInstanceID())
             {

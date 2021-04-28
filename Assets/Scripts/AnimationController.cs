@@ -26,6 +26,8 @@ public class AnimationController : MonoBehaviour
 
     public static readonly string SHIELD_IDLE = "Shield_0M_L_Idle_0";
 
+    public static readonly string SHIELD_HIT = "Shield_0M_L_Hit_0_L";
+
     string[] LayerPrefixs;
 
     string[] Layers;

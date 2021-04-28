@@ -16,7 +16,7 @@ public class Weapon : AttackDefinition
         projectile.Fire(attacker, target, ProjectileSpeed, Range);
 
         projectile.gameObject.layer = layer;
-
+        
         projectile.ProjectileCollided += OnProjectileCollided;
     }
 
@@ -71,7 +71,7 @@ public class Weapon : AttackDefinition
             SkeletonAi skai = defender.GetComponent<SkeletonAi>();
             if (skai != null)
             {
-                
+                skai.ShieldHit();
             }
             return;
         }
