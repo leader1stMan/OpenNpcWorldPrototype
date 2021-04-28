@@ -78,7 +78,6 @@ public abstract class EnemyBase : MonoBehaviour
     }
     protected virtual void Start()
     {
-        Debug.Log(true);
         agent = GetComponent<NavMeshAgent>();
 
         SubscribeToEvents();

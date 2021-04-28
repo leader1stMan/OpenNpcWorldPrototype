@@ -22,6 +22,10 @@ public class AnimationController : MonoBehaviour
 
     public static readonly string SWORD_EQUIP = "Sword_Equip";
 
+    public static readonly string SHIELD_READY = "Shield_0M_L_Ready_0";
+
+    public static readonly string SHIELD_IDLE = "Shield_0M_L_Idle_0";
+
     string[] LayerPrefixs;
 
     string[] Layers;

@@ -52,7 +52,8 @@ public class SkeletonAi : EnemyBase
         }
         else if (newState == EnemyState.Blocking)
         {
-          //  print("isblocking");
+          Debug.Log("shield up");
+          controller.ChangeAnimation(AnimationController.SHIELD_READY, AnimatorLayers.UP);
         }
     }
 
