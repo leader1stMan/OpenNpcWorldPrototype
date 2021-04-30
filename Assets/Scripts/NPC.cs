@@ -11,8 +11,10 @@ public class NPC : NpcData, IAttackable
     public bool ShowDebugMessages;
     
     public NavMeshAgent agent { get; private set; }
+
     private Animator animator;
     private string currentAnimation;
+    private AnimationController controller;
 
     public GameObject Attacker;
     public bool isAttacked;
@@ -24,63 +26,62 @@ public class NPC : NpcData, IAttackable
     private float timeToRun;
     [SerializeField] private float speedAnimDevider = 1;
 
-    private bool isFirst;
+    private bool isFirst; //for the interaction between two npcs
     string path = null;
-
     private TMP_Text text;
-
-    private AnimationController controller;
 
     public List<string> DialoguePaths;
 
-    Rigidbody[] rig;
+    Rigidbody[] rig; //for the ragdoll effect
     SkinnedMeshRenderer[] skin;
 
-    public bool combatState;
+    public bool combatState; //just a debugging feature to check if the npc can turn into combat state
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+
         animator = GetComponentInChildren<Animator>();
         controller = GetComponentInChildren<AnimationController>();
 
         /*____________________Might need to change this as this is called every frame, interfering with the code______________________*/
-        FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork;
-        FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome;
+        FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork; //Connects with the day and night controller
+        FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome; //On a certain time these functions are called so npcs can execute life cycles  
 
         text = GetComponentInChildren<TMP_Text>();
-
+        
+        //For ragdoll effect
         skin = GetComponentsInChildren<SkinnedMeshRenderer>();
-        foreach (SkinnedMeshRenderer skinned in skin)
+        foreach (SkinnedMeshRenderer skinned in skin) 
         {
-            skinned.updateWhenOffscreen = false;
+            skinned.updateWhenOffscreen = false; //has to be enabled when ragdoll is in. Otherwise the character sometimes does not render
         }
 
-        rig = GetComponentsInChildren<Rigidbody>();
+        rig = GetComponentsInChildren<Rigidbody>(); 
         foreach (Rigidbody rigidbody in rig)
         {
             if (rigidbody != this.GetComponent<Rigidbody>())
             {
-                rigidbody.GetComponent<Collider>().enabled = false;
+                rigidbody.GetComponent<Collider>().enabled = false; //Make sure colliders for the ragdoll are disabled while npc is still alive
                 rigidbody.isKinematic = true;
             }
         }
+        GetComponent<CapsuleCollider>().enabled = true; //Main collider for when the npc is alive
+                                                        //We might not need it anymore(?) since the ragdoll colliders might work as well(Dunno)
 
-        GetComponent<CapsuleCollider>().enabled = true;
-
-        combatState = false;
+        combatState = false; //We don't want combat state as the default state
         GetComponent<EnemyBase>().enabled = false;
     }
     void Update()
     {
-        if (timeToRun > 0)
+        if (timeToRun > 0) //Npc fleeds if it senses danger as much as the amount given to 'timeToRun'
         {
             timeToRun -= Time.deltaTime;
         }
 
-        if (combatState)
+        if (combatState) 
             ChangeState(NpcStates.Combat);
-        WatchEnvironment();
+        WatchEnvironment(); //Senses danger
 
         if (GetComponent<CharacterStats>().isDead)
         {
@@ -92,13 +93,13 @@ public class NPC : NpcData, IAttackable
     {
         if (currentState != NpcStates.Combat)
         {
-            if (agent.velocity.magnitude == 0)
+            if (agent.velocity.magnitude == 0) //Meaning if gameobject has reached it's destination
             {
-                controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
+                controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL); //Changes the 'pose' of a character. Each animation in our game is a pose instead of an animation
             }
             else
             {
-                if (agent.velocity.magnitude < 2.5f)
+                if (agent.velocity.magnitude < 2.5f) //Walks or runs depending on the length left for reaching destination
                 {
                     controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
                 }
@@ -110,11 +111,11 @@ public class NPC : NpcData, IAttackable
         }
     }
 
-    private void WatchEnvironment()
+    private void WatchEnvironment() 
     {
         if (currentState != NpcStates.Combat)
         {
-            Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, VisionLayers);
+            Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, VisionLayers); //Returns all the colliders in a given range
 
             foreach (Collider col in cols)
             {
@@ -125,7 +126,7 @@ public class NPC : NpcData, IAttackable
                     if (npc.isAttacked)
                     {
                         Attacker = npc.Attacker;
-                        ChangeState(NpcStates.Scared);
+                        ChangeState(NpcStates.Scared); //ChangeState() changes the state of the npc. Each state has it's own behaviours
                     }
                 }
                 // If the NPC is looking at an enemy Attacking or defending, run
@@ -143,15 +144,15 @@ public class NPC : NpcData, IAttackable
         }
     }
 
-    private void ChangeState(NpcStates NewState)
+    private void ChangeState(NpcStates NewState) //Changes the state
     {
-        if (currentState == NewState)
+        if (currentState == NewState) //No need to change state
             return;
 
-        NpcStates PrevState = currentState;
+        NpcStates PrevState = currentState; //If state needs to be changed current state is now prev state
 
         currentState = NewState; 
-        OnStateChanged(PrevState, NewState); 
+        OnStateChanged(PrevState, NewState); //Make sure npc has stopped the behaviours from the previous state. Enable 'some' of the behaviours for the current state
     }
 
     private void OnStateChanged(NpcStates PrevState, NpcStates NewState)
@@ -170,7 +171,7 @@ public class NPC : NpcData, IAttackable
                 EndConversation();
                 break;
             case NpcStates.Combat:
-                GetComponent<EnemyBase>().enabled = false;
+                GetComponent<EnemyBase>().enabled = false; //Combat has it's own script unlike other states
                 break;
             default:
                 break;
@@ -208,13 +209,13 @@ public class NPC : NpcData, IAttackable
             case NpcStates.Combat:
                 GetComponent<EnemyBase>().enabled = true;
                 break;
-            case NpcStates.Dead:
+            case NpcStates.Dead: //Enables ragdoll
                 foreach (SkinnedMeshRenderer skinned in skin)
                 {
-                    skinned.updateWhenOffscreen = true;
+                    skinned.updateWhenOffscreen = true; //Stops character from disrendering
                 }
 
-                GetComponentInChildren<Animator>().enabled = false;
+                GetComponentInChildren<Animator>().enabled = false; //Have to turn off these before executing ragdoll
                 agent.enabled = false;
                 GetComponent<CapsuleCollider>().enabled = false;
                 GetComponent<Rigidbody>().isKinematic = false;
@@ -240,11 +241,12 @@ public class NPC : NpcData, IAttackable
 
     void GoToWork()
     {
+        //States that are more prioritized than 'GoingToWork' state
         if (currentState == NpcStates.GoingToWork || currentState == NpcStates.Working || currentState == NpcStates.Talking || currentState == NpcStates.Scared || currentState == NpcStates.Combat)
             return;
         StartCoroutine("GoToWorkCoroutine");
     }
-    IEnumerator GoToWorkCoroutine()
+    IEnumerator GoToWorkCoroutine() //Functions 'GoingToWorkState'
     {
         agent.speed = movementSpeed;
         ChangeState(NpcStates.GoingToWork);
@@ -263,6 +265,7 @@ public class NPC : NpcData, IAttackable
 
     void GoHome()
     {
+        //States that are more prioritized than 'GoingHome' state
         if (currentState == NpcStates.GoingHome || currentState == NpcStates.Talking || currentState == NpcStates.Scared || currentState == NpcStates.Combat)
             return;
         StartCoroutine("GoHomeCoroutine");
@@ -274,7 +277,7 @@ public class NPC : NpcData, IAttackable
         StopCoroutine("GoHomeCoroutine");
     }
 
-    IEnumerator GoHomeCoroutine()
+    IEnumerator GoHomeCoroutine() //Functions 'GoingHome'
     {
         agent.speed = movementSpeed;
         ChangeState(NpcStates.GoingHome);
@@ -303,25 +306,25 @@ public class NPC : NpcData, IAttackable
     IEnumerator Conversation(GameObject talker)
     {
         ChangeState(NpcStates.Talking);
-        StartCoroutine("RotateTo", talker);
+        StartCoroutine("RotateTo", talker); //Look at talker
 
         StreamReader reader;
-        NPC npc = talker.GetComponent<NPC>();
+        NPC npc = talker.GetComponent<NPC>(); //Talker's npc script
         string line;
-        List<string> lines = new List<string>();
-        if (isFirst)
+        List<string> lines = new List<string>(); //For storing the sent conversation
+        if (isFirst) //Am I starting the conversation?
         {
-            path = AssignPath();
+            path = AssignPath(); //Assigning the conversation to npc1, npc2
             npc.path = path;
             reader = new StreamReader(path);
-            while ((line = reader.ReadLine()) != "{}")
+            while ((line = reader.ReadLine()) != "{}") //Every converstion is sotred in one file. What separates these conversations is the {}
             {
-                lines.Add(line);
+                lines.Add(line); //Storing the conversation by each line
             }
         }
         else
         {
-            yield return new WaitUntil(() => path != null);
+            yield return new WaitUntil(() => path != null); //Wait till talker sends the conversation he chose
              reader = new StreamReader(path);
             while (reader.ReadLine() != "{}") ;
             while ((line = reader.ReadLine()) != null)
@@ -330,36 +333,36 @@ public class NPC : NpcData, IAttackable
             }
         }
 
-        text.text = null;
-        yield return new WaitUntil(() => isFirst);
+        text.text = null; //Ui for showing text
+        yield return new WaitUntil(() => isFirst); //We now don't need 'isFirst' to tell who started the conversation
         for (int i = 0; i < lines.Count; i++)
         {
-            if (!lines[i].StartsWith(" "))
+            if (!lines[i].StartsWith(" ")) //Displays sentece for 4 secs
             {
                 text.text = lines[i];
                 yield return new WaitForSeconds(4);
                 text.text = null;
             }
-            isFirst = false;
-            npc.isFirst = true;
+            isFirst = false; //Turns 'isFirst' to false while pturning on it for the talker
+            npc.isFirst = true; //Indicating that it's talker's time to speak
             yield return new WaitUntil(() => isFirst);
         }
         npc.isFirst = true;
         EndConversation();
     }
 
-    string AssignPath()
+    string AssignPath() //Choose which conversation
     {
         if (DialoguePaths.Count > 0)
-            return DialoguePaths[UnityEngine.Random.Range(0, DialoguePaths.Count - 1)];
-        else
+            return DialoguePaths[UnityEngine.Random.Range(0, DialoguePaths.Count - 1)]; //Choose which converstion to speak
+        else                                                                           
             return null;
     }
     public void StartConversation(GameObject talker)
     {
-        StartCoroutine("Conversation", talker);
+        StartCoroutine("Conversation", talker); //Ienumerator
     }
-    public void EndConversation()
+    public void EndConversation() //Stops talking state and removes all behaviours from it
     {
         agent.isStopped = false;
         StopCoroutine("Conversation");
@@ -370,19 +373,21 @@ public class NPC : NpcData, IAttackable
         if (currentState == NpcStates.Talking)
             ChangeState(NpcStates.Idle);
     }
-    void OnTriggerStay(Collider other)
+    void OnTriggerStay(Collider other) //Triggers by near colliders every frame. Used for triggering npc conversation
     {
+        // States that are more prioritized
         if (currentState == NpcStates.Scared || currentState == NpcStates.Talking || currentState == NpcStates.Combat)
             return;
-        if (!other.CompareTag("Npc"))
+        if (!other.CompareTag("Npc")) //if the collider is not a npc's
             return;
         NPC NPCscript = other.GetComponentInParent<NPC>();
+        //Checks if the talker's state does not have a higher priority
         if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking || NPCscript.currentState == NpcStates.Combat)
             return;
-        if (UnityEngine.Random.Range(0, 1000) <= 0)
+        if (UnityEngine.Random.Range(0, 1000) <= 0) //At a chance starts a conversation
         {
-            if (GetInstanceID() > NPCscript.GetInstanceID())
-            {
+            if (GetInstanceID() > NPCscript.GetInstanceID()) //Each script has it's own ID. We can use these so one of the npc scripts is more prioritized
+            {                                                //Can stop bug for when both scripts decide to have a conversation at the same time                                                                                                     
                 isFirst = true;
                 NPCscript.isFirst = false;
                 StartConversation(other.gameObject);
@@ -397,13 +402,13 @@ public class NPC : NpcData, IAttackable
         StartCoroutine("Attacked");
     }
 
-    IEnumerator Attacked()
+    IEnumerator Attacked() //Sensing attack checks every update. So we want to use 'IsAttacked' so it will only be called once per danger
     {
         isAttacked = true;
         yield return new WaitForSeconds(1f);
         isAttacked = false;
     }
-    IEnumerator Run(GameObject attacker)
+    IEnumerator Run(GameObject attacker) //When npc senses danger. Can you write comments for this Sans?
     {
         float currentAcceleration = agent.acceleration;
         agent.speed = scaredRunningSpeed;
@@ -456,7 +461,7 @@ public class NPC : NpcData, IAttackable
         ChangeState(NpcStates.Idle);
     }
 
-    IEnumerator RotateTo(GameObject target)
+    IEnumerator RotateTo(GameObject target) //Look at target
     {
         Quaternion lookRotation;
         do

@@ -49,7 +49,7 @@ public abstract class EnemyBase : MonoBehaviour
         if (stats == null)
             stats = GetComponent<CharacterStats>();
 
-        rig = GetComponentsInChildren<Rigidbody>();
+        rig = GetComponentsInChildren<Rigidbody>(); //Ragdoll effect. Currently this script and npc Ai script both has dead state stored separatly
         foreach (Rigidbody rigidbody in rig)
         {
             if (rigidbody != this.GetComponent<Rigidbody>())
@@ -80,23 +80,25 @@ public abstract class EnemyBase : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
 
-        SubscribeToEvents();
+        SubscribeToEvents(); //Adds ManageStateShange() to EnemyListener OnStateChanged
         PatrolToAnotherSpot();
+
         if (stats.shield != null)
         {
-            hasshield = true;
+            hasshield = true; //Npc has shield
         }
     }
 
     protected virtual void Update()
     {
-        ManageState();
+        ManageState(); //Checks which is the current state and makes the Ai do the chosen behaviours
         CheckForTargets();
         if (attackCooldown > 0) 
         { 
-            attackCooldown -= Time.deltaTime;
+            attackCooldown -= Time.deltaTime; //decreases attack cooldown
         }
-        if (hasshield == true && blockCooldown > 0) { blockCooldown -= Time.deltaTime / Random.Range(1f, 15f); }
+        if (hasshield == true && blockCooldown > 0) 
+            blockCooldown -= Time.deltaTime / Random.Range(1f, 15f); //decreases block cooldown
 
         #region Editor Only
 #if UNITY_EDITOR
@@ -119,7 +121,7 @@ public abstract class EnemyBase : MonoBehaviour
         return weaponRange;
     }
 
-    protected virtual void ManageState()
+    protected virtual void ManageState() //Checks which is the current state and makes the Ai do the chosen behaviours every Update
     {
         if (stats.isDead == true)
         {
@@ -129,7 +131,6 @@ public abstract class EnemyBase : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, agent.destination) < agent.stoppingDistance)
             {
-
                 PatrolToAnotherSpot();
             }
         }
@@ -140,7 +141,7 @@ public abstract class EnemyBase : MonoBehaviour
                 ChangeState(EnemyState.Idle);
                 return;
             }
-            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range)
+            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range) 
             {
                 if (attackCooldown <= 0)
                 {
@@ -170,6 +171,7 @@ public abstract class EnemyBase : MonoBehaviour
                     transform.LookAt(currentTarget);
                 }
 
+                //Is the condition ok to attack? 
                 if (attackCooldown <= 0 && hasshield == false || hasshield == true && stats.isBlocking == false && attackCooldown <= 0 && blockCooldown <= 0)
                 {
                     Attack(currentTarget.gameObject);
@@ -179,7 +181,7 @@ public abstract class EnemyBase : MonoBehaviour
                     print("attacking");
 
                 }
-                else if (stats.shield != null && blockCooldown <= 0 && stats.isBlocking == false)
+                else if (stats.shield != null && blockCooldown <= 0 && stats.isBlocking == false) //Is the condition ok to block?
                 {
 
                     stats.isBlocking = true;
@@ -189,7 +191,7 @@ public abstract class EnemyBase : MonoBehaviour
                     ChangeState(EnemyState.Blocking);
 
                 }
-                else if (attackCooldown <= 0 && hasshield == true && stats.isBlocking == true && blockCooldown <= 0)
+                else if (attackCooldown <= 0 && hasshield == true && stats.isBlocking == true && blockCooldown <= 0) //The current state is blocking. But is the condition ok to attack?
                 {
                     stats.isBlocking = false;
                     ChangeState(EnemyState.Attacking);
@@ -216,24 +218,24 @@ public abstract class EnemyBase : MonoBehaviour
     {
         if (currentTarget == null)
         {
-            if (Physics.CheckSphere(transform.position, VisionRange, WhatCanThisEnemyAttack))
+            if (Physics.CheckSphere(transform.position, VisionRange, WhatCanThisEnemyAttack)) 
             {
-                Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, WhatCanThisEnemyAttack);
+                Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, WhatCanThisEnemyAttack); //Return all attackable target colliders in sphere
                 foreach (Collider col in cols)
                 {
 
                     RaycastHit hit;
                     if (VisualiseAgentActions)
                         Debug.DrawRay(transform.position, (col.transform.position - transform.position).normalized * VisionRange, Color.red);
-                    if (Physics.Raycast(transform.position, (col.transform.position - transform.position).normalized, out hit, VisionRange))
+                    if (Physics.Raycast(transform.position, (col.transform.position - transform.position).normalized, out hit, VisionRange)) //Can the Ai see the target?
                     {
-                        if (hit.transform == this.transform)
+                        if (hit.transform == this.transform) //Make sure the collider is not owned by this Ai
                             continue;
                         if (hit.transform == col.transform)
                         {
                             bool DontAttack = false;
 
-                            for (int i = 0; i < Tags.Length; i++)
+                            for (int i = 0; i < Tags.Length; i++) //Every npc, enemy type has different Tags. We cam have the Ai only attack certain enemies using this
                             {
                                 if (col.gameObject.tag == Tags[i])
                                 {
@@ -301,7 +303,7 @@ public abstract class EnemyBase : MonoBehaviour
     {
         if (CurrentState == state)
             return;
-        OnStateChanged.Invoke(CurrentState, state);
+        OnStateChanged.Invoke(CurrentState, state); //Activate ManageStateCahange()
 
         CurrentState = state;
     }
@@ -311,7 +313,7 @@ public abstract class EnemyBase : MonoBehaviour
         OnStateChanged.AddListener(ManageStateChange);
     }
 
-    protected virtual void ManageStateChange(EnemyState oldState, EnemyState newState)
+    protected virtual void ManageStateChange(EnemyState oldState, EnemyState newState) //Unlike MangaeState(), this is only called once when the state is changed
     {
         switch (newState)
         {
