@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 385431215630287512}
   - component: {fileID: 371659652529834820}
   - component: {fileID: 340976799474820992}
-  - component: {fileID: 340976799474820999}
   - component: {fileID: 340976799474820998}
   - component: {fileID: 4242600388388332656}
   - component: {fileID: 4109541673010742780}
@@ -156,21 +155,6 @@ MonoBehaviour:
   useJumdLandMovement: 1
   jumpAngle: 3
   landAngle: 60
-  OnClickAttackable:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 340976799474820999}
-        m_TargetAssemblyTypeName: PlayerCombat, Assembly-CSharp
-        m_MethodName: AttackTarget
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   Volume: 5
   jumpSound: {fileID: 0}
   landSound: {fileID: 0}
@@ -227,6 +211,9 @@ MonoBehaviour:
     - {fileID: 8300000, guid: fef61cddf814a2c49bf7a6c33791c766, type: 3}
     - {fileID: 8300000, guid: 73f938638097f8042ad7842aa5b04ac5, type: 3}
     - {fileID: 8300000, guid: e06c6ae1948cafd45a952ab85ebe4fa7, type: 3}
+  stats: {fileID: 0}
+  Attack: {fileID: 0}
+  attackCooldown: 0
 --- !u!114 &340976799474820992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,23 +237,6 @@ MonoBehaviour:
   InteractionRange: 5
   _indialogue: 0
   isInteracting: 0
---- !u!114 &340976799474820999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 340976799474820994}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ac97732ae0614adaae2ee01aa16703f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  anim: {fileID: 340976799474820998}
-  Attack: {fileID: 11400000, guid: 35399a045580ab2498ab641c410badf8, type: 2}
-  stats: {fileID: 4242600388388332656}
-  camera: {fileID: 6236812467106775262}
-  attackCooldown: 0
 --- !u!95 &340976799474820998
 Animator:
   serializedVersion: 3
@@ -308,6 +278,8 @@ MonoBehaviour:
   shield: {fileID: 0}
   isBlocking: 0
   isDead: 0
+  WeaponBoneL: {fileID: 8494075319421312836}
+  WeaponBoneR: {fileID: 2313957063497010450}
 --- !u!114 &4109541673010742780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -574,6 +546,18 @@ Transform:
 --- !u!4 &2215262869427936221 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2322556421818578096, guid: 920267f8c0532284caf94cee36ab9c43,
+    type: 3}
+  m_PrefabInstance: {fileID: 4718275882403156109}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8494075319421312836 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -5432560966427750455, guid: 920267f8c0532284caf94cee36ab9c43,
+    type: 3}
+  m_PrefabInstance: {fileID: 4718275882403156109}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2313957063497010450 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -2204937138396455521, guid: 920267f8c0532284caf94cee36ab9c43,
     type: 3}
   m_PrefabInstance: {fileID: 4718275882403156109}
   m_PrefabAsset: {fileID: 0}

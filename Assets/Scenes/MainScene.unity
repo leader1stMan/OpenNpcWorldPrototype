@@ -2972,8 +2972,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  BlockUP: 0
-  BlockDOWN: 0
 --- !u!1001 &737805706
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9659,7 +9657,7 @@ PrefabInstance:
     - target: {fileID: 371659652529834820, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
       propertyPath: jumpPower
-      value: 20
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 340976799474820999, guid: 345fccf1aa215da4d8ebb68901fd4bda, type: 3}
