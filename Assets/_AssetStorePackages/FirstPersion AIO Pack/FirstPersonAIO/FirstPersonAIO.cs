@@ -311,7 +311,7 @@ public class FirstPersonAIO : MonoBehaviour {
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
             {
                 GameObject attackable = hit.collider.gameObject;
-                AttackTarget(attackable);
+                StartCoroutine(AttackTarget(attackable));
             }
         }
 
@@ -736,7 +736,7 @@ public class FirstPersonAIO : MonoBehaviour {
         playerCamera.transform.localPosition = cameraStartingPosition;
     }
 
-    public void AttackTarget(GameObject target)
+    IEnumerator AttackTarget(GameObject target)
     {
         if (attackCooldown <= 0 && !stats.isBlocking)
         {
@@ -748,8 +748,11 @@ public class FirstPersonAIO : MonoBehaviour {
                 }
                 else
                 {
-                    stats.GetWeapon().ExecuteAttack(gameObject, target);
                     controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.UP, true);
+                    attackCooldown = anim.GetCurrentAnimatorStateInfo((int)AnimatorLayers.UP).length;
+
+                    yield return new WaitForSeconds(attackCooldown / 2);
+                    stats.GetWeapon().ExecuteAttack(gameObject, target);
                 }
 
                 //attackCooldown = stats.GetWeapon().Cooldown;
@@ -758,15 +761,18 @@ public class FirstPersonAIO : MonoBehaviour {
             {
                 var attack = Attack.CreateAttack(stats, target.GetComponent<CharacterStats>());
 
+                controller.ChangeAnimation(AnimationController.UNARMED_ATTACK, AnimatorLayers.UP, true);
+
+                attackCooldown = anim.GetCurrentAnimatorStateInfo((int)AnimatorLayers.UP).length;
+                yield return new WaitForSeconds(attackCooldown / 2);
+
                 var attackables = target.GetComponentsInChildren(typeof(IAttackable));
 
                 foreach (IAttackable attackable in attackables)
                 {
                     attackable.OnAttack(gameObject, attack);
                 }
-                controller.ChangeAnimation(AnimationController.UNARMED_ATTACK, AnimatorLayers.UP, true);
             }
-            attackCooldown = anim.GetCurrentAnimatorStateInfo(1).length;
         }
     }
 

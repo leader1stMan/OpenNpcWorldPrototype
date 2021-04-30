@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerStats : CharacterStats
 {
+    public Transform WeaponBoneL;
+    public Transform WeaponBoneR;
+
     void Start()
     {
         EquipmentController.instance.onEquipmentChanged += OnEquipmentChanged;
