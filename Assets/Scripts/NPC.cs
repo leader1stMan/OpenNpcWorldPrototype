@@ -91,22 +91,19 @@ public class NPC : NpcData, IAttackable
 
     void FixedUpdate()
     {
-        if (currentState != NpcStates.Combat)
+        if (agent.velocity.magnitude == 0) //Meaning if gameobject has reached it's destination
         {
-            if (agent.velocity.magnitude == 0) //Meaning if gameobject has reached it's destination
+            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL); //Changes the 'pose' of a character. Each animation in our game is a pose instead of an animation
+        }
+        else
+        {
+            if (agent.velocity.magnitude < 2.5f) //Walks or runs depending on the length left for reaching destination
             {
-                controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL); //Changes the 'pose' of a character. Each animation in our game is a pose instead of an animation
+                controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
             }
             else
             {
-                if (agent.velocity.magnitude < 2.5f) //Walks or runs depending on the length left for reaching destination
-                {
-                    controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
-                }
-                else
-                {
-                    controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
-                }
+                controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
             }
         }
     }

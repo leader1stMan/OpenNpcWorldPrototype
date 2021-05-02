@@ -54,13 +54,13 @@ public class SkeletonAi : EnemyBase
         else if (newState == EnemyState.Blocking)
         {
           Debug.Log("shield up");
-          controller.ChangeAnimation(AnimationController.SHIELD_READY, AnimatorLayers.UP);
+          controller.ChangeAnimation(AnimationController.SHIELD_READY, AnimatorLayers.UP, true);
         }
     }
 
     public override void Attack(GameObject target)
     {
-        controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.UP);
+        controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.UP, true);
         //Idk if this is a good way of damaging
         TheTarget = target;
        // 
