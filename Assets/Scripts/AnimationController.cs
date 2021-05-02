@@ -35,6 +35,7 @@ public class AnimationController : MonoBehaviour
 
     const int layersNumber = 2;
 
+    public bool isActive = true;
     public Animator animator;
 
     public AnimationController(Animator anim)
@@ -52,6 +53,9 @@ public class AnimationController : MonoBehaviour
 
     public void ChangeAnimation(string newAnimation, AnimatorLayers layer, bool block = false)
     {
+        if (!isActive)
+            return;
+
         bool AllLayers = layer == AnimatorLayers.ALL;
 
         if (AllLayers)
@@ -86,11 +90,6 @@ public class AnimationController : MonoBehaviour
         Block[(int)layer] = true;
         yield return new WaitForSeconds(time);
         Block[(int)layer] = false;
-    }
-
-    public void AttackEvent()
-    {
-        GetComponentInParent<SkeletonAi>().AttackEvent();
     }
 }
 

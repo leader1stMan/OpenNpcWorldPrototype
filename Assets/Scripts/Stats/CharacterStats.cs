@@ -17,10 +17,19 @@ public class CharacterStats : MonoBehaviour
 
     public event Action OnHealthValueChanged;
 
-    void Awake()
+    public delegate void OnDeath();
+    public OnDeath onDeath;
+
+    void Start()
     {
         currentHealth = new Stat();
         currentHealth.SetValue(maxHealth.GetValue());
+        onDeath += Die;
+    }
+
+    void Die()
+    {
+        isDead = true;
     }
 
     public void TakeDamage(GameObject attacker, float damage)

@@ -18,11 +18,11 @@ public class AttackedTakeDamage : MonoBehaviour, IAttackable
 
         if (stats.GetCurrentHealth().GetValue() <= 0)
         {
-            if (stats.isDead == false && RagdollOnDeath == true)
+            if (!stats.isDead && RagdollOnDeath)
             {
-                stats.isDead = true;
+                stats.onDeath.Invoke();
             }
-            else if(RagdollOnDeath == false)
+            else if(!RagdollOnDeath)
             {
                 var destructibles = GetComponents(typeof(IDestructible));
                 foreach (IDestructible d in destructibles)

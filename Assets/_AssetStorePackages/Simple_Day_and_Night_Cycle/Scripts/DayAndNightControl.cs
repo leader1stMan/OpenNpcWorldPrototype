@@ -19,7 +19,7 @@ public class DayAndNightControl : MonoBehaviour {
 	public DayColors dawnColors;
 	public DayColors dayColors;
 	public DayColors nightColors;
-	public int currentDay = 0; //day 8287... still stuck in this grass prison... no esacape... no freedom...
+	public int currentDay = 0;
 	public Light directionalLight; //the directional light in the scene we're going to work with
 	public float SecondsInAFullDay = 120f; //in realtime, this is about two minutes by default. (every 1 minute/60 seconds is day in game)
 	[Range(0,1)]
@@ -77,10 +77,6 @@ public class DayAndNightControl : MonoBehaviour {
 			OnEveningHandler?.Invoke();
 			nightCall = false;
 		}
-		if (currentDay == 0.3f)
-			OnMorningHandler?.Invoke();
-		if (currentDay == 0.7f)
-			OnEveningHandler?.Invoke();
 	}
 
 	void UpdateLight()

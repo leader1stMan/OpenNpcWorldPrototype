@@ -79,6 +79,7 @@ public abstract class EnemyBase : MonoBehaviour
     protected virtual void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        GetComponent<CharacterStats>().onDeath += Die;
 
         SubscribeToEvents(); //Adds ManageStateShange() to EnemyListener OnStateChanged
         PatrolToAnotherSpot();
@@ -123,17 +124,12 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void ManageState() //Checks which is the current state and makes the Ai do the chosen behaviours every Update
     {
-        if (stats.isDead == true)
+        if (CurrentState == EnemyState.Patroling &&
+            Vector3.Distance(transform.position, agent.destination) < agent.stoppingDistance)
         {
-            ChangeState(EnemyState.Dead);
+            PatrolToAnotherSpot();
         }
-        else if (CurrentState == EnemyState.Patroling)
-        {
-            if (Vector3.Distance(transform.position, agent.destination) < agent.stoppingDistance)
-            {
-                PatrolToAnotherSpot();
-            }
-        }
+
         else if (CurrentState == EnemyState.Chasing)
         {
             if (!currentTarget)
@@ -141,7 +137,7 @@ public abstract class EnemyBase : MonoBehaviour
                 ChangeState(EnemyState.Idle);
                 return;
             }
-            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range) 
+            if ((currentTarget.position - transform.position).magnitude <= stats.GetWeapon().Range)
             {
                 if (attackCooldown <= 0)
                 {
@@ -413,6 +409,11 @@ public abstract class EnemyBase : MonoBehaviour
         }
 #endif
         #endregion
+    }
+
+    void Die()
+    {
+        ChangeState(EnemyState.Dead);
     }
 }
 /// <summary>
