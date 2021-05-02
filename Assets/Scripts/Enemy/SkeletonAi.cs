@@ -72,7 +72,6 @@ public class SkeletonAi : EnemyBase
         {
             stats.GetWeapon().ExecuteAttack(gameObject, TheTarget);
         }
-        controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
     }
 
     public override void DealDamage()

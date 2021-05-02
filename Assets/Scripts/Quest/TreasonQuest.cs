@@ -13,6 +13,7 @@ public class TreasonQuest : Quest
     private SentenceGoal FromNeutralToAgainst;
     private SentenceGoal AgainstEndingComplete;
 
+    //List of sentences that adds to a variable and by that changes the path of the dialogue
     public List<Sentence> trackedSentences1;
     public List<Sentence> redSentences;
     public List<Sentence> pinkSentences;
@@ -21,6 +22,12 @@ public class TreasonQuest : Quest
     private List<Sentence> BetweenNeutralAndAgainst;
     public List<Sentence> TheodoreQuestComplete;
 
+    //Variables that are added by each sentences in each List<Sentence>
+    private int redQuestions = 0;
+    private int pinkQuestions = 0;
+    private int greenQuestions = 0;
+
+    //Start sentences of each section
     public Sentence goAwaySentence;
     public Sentence againstKingSentence;
     public Sentence neutralEnding;
@@ -35,11 +42,7 @@ public class TreasonQuest : Quest
 
     public DayAndNightControl control;
     private DialogueManager dialogue;
-
-    private int redQuestions = 0;
-    private int pinkQuestions = 0;
-    private int greenQuestions = 0;
-
+    
     public NPC Theodore;
     private DialogueManager TheodoreDialogue;
     public NPC Alchemist;
@@ -52,7 +55,7 @@ public class TreasonQuest : Quest
     {
         goal1 = new SentenceGoal(trackedSentences1);
         goal1.AddHandler(CompleteFirstGoal);
-        dialogue = GetComponent<DialogueManager>();
+        dialogue = GetComponent<DialogueManager>(); //DialoguemManager executes the dialogue system
 
         redGoal = new SentenceGoal(redSentences);
         redGoal.AddHandler(RedSentenceCalled);
