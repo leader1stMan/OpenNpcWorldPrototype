@@ -91,7 +91,6 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        ManageState(); //Checks which is the current state and makes the Ai do the chosen behaviours
         CheckForTargets();
         if (attackCooldown > 0) 
         { 
@@ -109,6 +108,11 @@ public abstract class EnemyBase : MonoBehaviour
 #endif
         #endregion
 
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        ManageState(); //Checks which is the current state and makes the Ai do the chosen behaviours
     }
 
     public abstract void Attack(GameObject target);

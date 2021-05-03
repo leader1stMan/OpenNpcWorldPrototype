@@ -12,10 +12,10 @@ public class SkeletonAi : EnemyBase
         controller = GetComponentInChildren<AnimationController>();
         base.Start();
     }
-    protected override void Update()
+
+    protected override void FixedUpdate()
     {
-        base.Update();
-        
+        base.FixedUpdate();
         if (CurrentState != EnemyState.Idle)
         {
             if (CurrentState == EnemyState.Attacking)
@@ -29,7 +29,6 @@ public class SkeletonAi : EnemyBase
                 transform.eulerAngles = new Vector3(rot.x, transform.eulerAngles.y, rot.z);
             }
         }
-
     }
 
     protected override void ManageStateChange(EnemyState oldState, EnemyState newState)
