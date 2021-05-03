@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TreasonQuest : Quest
 {
+    //Handlers are added to goals and are executed when a goal is complete
     private SentenceGoal goal1;
     private SentenceGoal redGoal;
     private SentenceGoal pinkGoal;
@@ -50,12 +51,11 @@ public class TreasonQuest : Quest
 
     private bool withPotion;
 
-    // Start is called before the first frame update
     void Awake()
     {
         goal1 = new SentenceGoal(trackedSentences1);
         goal1.AddHandler(CompleteFirstGoal);
-        dialogue = GetComponent<DialogueManager>(); //DialoguemManager executes the dialogue system
+        dialogue = GetComponent<DialogueManager>(); //DialogueManager executes the dialogue system
 
         redGoal = new SentenceGoal(redSentences);
         redGoal.AddHandler(RedSentenceCalled);
@@ -119,7 +119,7 @@ public class TreasonQuest : Quest
 
     void CompleteQuestionPart()
     {
-        int result = greenQuestions - redQuestions;
+        int result = greenQuestions - redQuestions; //Green is in favour and red is not
         if (result < 0)
         {
             AgainstEnding();

@@ -91,9 +91,9 @@ public class NPC : NpcData, IAttackable
 
     void FixedUpdate()
     {
-        if (agent.velocity.magnitude == 0) //Meaning if gameobject has reached it's destination
+        if (agent.velocity.magnitude == 0) //Has it stopped?
         {
-            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL); //Changes the 'pose' of a character. Each animation in our game is a pose instead of an animation
+            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL); 
         }
         else
         {

@@ -10,7 +10,8 @@ public class Sentence : ScriptableObject
 
     public SentenceGoal goal;
     public Sentence nextSentence;
-    public List<Sentence> choices; //Player's choices at what the npc says. These all have their own Sentence class
+    public List<Sentence> choices; /*Player's choices at what the npc says. These all have their own Sentence class
+                                    * Which means senteces can be connected together without code*/
 
     public string questParameter;
     public bool CallShop;

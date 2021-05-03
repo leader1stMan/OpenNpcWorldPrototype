@@ -59,7 +59,7 @@ public class SkeletonAi : EnemyBase
 
     public override void Attack(GameObject target)
     {
-        controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.UP, true);
+        controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.UP, true); //True stops idle state playing even if it isn't moving
         //Idk if this is a good way of damaging
         TheTarget = target;
        // 
