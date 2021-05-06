@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class CharacterStats : MonoBehaviour
+public class CharacterStats : MonoBehaviour, IDestructible
 {
     public Stat maxHealth;
     public Stat currentHealth { get; private set; }
@@ -9,33 +9,31 @@ public class CharacterStats : MonoBehaviour
     public Stat Damage;
     public Stat Armor;
 
+    public AttackDefinition defaultAttack;
     public Weapon weapon;
     public Shield shield;
     public bool isBlocking;
+    public float attackCooldown;
 
     public bool isDead;
 
     public event Action OnHealthValueChanged;
 
-    public delegate void OnDeath();
-    public OnDeath onDeath;
-
-    void Start()
+    protected virtual void Start()
     {
         currentHealth = new Stat();
         currentHealth.SetValue(maxHealth.GetValue());
-        onDeath += Die;
     }
 
-    void Die()
+    void Update()
     {
-        isDead = true;
+        attackCooldown -= Time.deltaTime;
     }
 
     public void TakeDamage(GameObject attacker, float damage)
     {
         if (damage <= 0f) return;
-
+        
         currentHealth.SetValue(currentHealth.GetValue() - damage);
 
         OnHealthValueChanged?.Invoke();
@@ -73,5 +71,10 @@ public class CharacterStats : MonoBehaviour
             return shield;
         else
             return null;
+    }
+
+    public void OnDestruction(GameObject destroyer)
+    {
+        isDead = true;
     }
 }

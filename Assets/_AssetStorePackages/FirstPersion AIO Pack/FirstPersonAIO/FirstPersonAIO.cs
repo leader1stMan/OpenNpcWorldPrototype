@@ -173,8 +173,6 @@ public class FirstPersonAIO : MonoBehaviour {
     #endregion
 
     public CharacterStats stats;
-    public AttackDefinition Attack;
-    public float attackCooldown = 0f;
     #endregion
 
     private void Awake()
@@ -697,9 +695,6 @@ public class FirstPersonAIO : MonoBehaviour {
 
 
         #endregion
-
-        if (attackCooldown > 0)
-            attackCooldown -= Time.deltaTime;
     }
 
     /*     public IEnumerator FOVKickOut()
@@ -738,7 +733,7 @@ public class FirstPersonAIO : MonoBehaviour {
 
     public void AttackTarget(GameObject target)
     {
-        if (attackCooldown <= 0 && !stats.isBlocking)
+        if (stats.attackCooldown <= 0 && !stats.isBlocking)
         {
             if (stats.GetWeapon() != null)
             {
@@ -756,7 +751,7 @@ public class FirstPersonAIO : MonoBehaviour {
             }
             else
             {
-                var attack = Attack.CreateAttack(stats, target.GetComponent<CharacterStats>());
+                var attack = stats.defaultAttack.CreateAttack(stats, target.GetComponent<CharacterStats>());
 
                 var attackables = target.GetComponentsInChildren(typeof(IAttackable));
 
@@ -766,7 +761,7 @@ public class FirstPersonAIO : MonoBehaviour {
                 }
                 controller.ChangeAnimation(AnimationController.UNARMED_ATTACK, AnimatorLayers.UP, true);
             }
-            attackCooldown = anim.GetCurrentAnimatorStateInfo(1).length;
+            stats.attackCooldown = anim.GetCurrentAnimatorStateInfo(1).length;
         }
     }
 

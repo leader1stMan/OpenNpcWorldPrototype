@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9281eb25f64af449befe21998284bf5, type: 3}
   m_Name: Shield
   m_EditorClassIdentifier: 
+  ShieldDeceleration: 3

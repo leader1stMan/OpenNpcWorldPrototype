@@ -28,6 +28,8 @@ public class AnimationController : MonoBehaviour
 
     public static readonly string SHIELD_HIT = "Shield_0M_L_Hit_0_L";
 
+    public static readonly string SHILD_UNEQUIP = "Shield_Unequip";
+
     string[] LayerPrefixs;
 
     string[] Layers;
@@ -35,7 +37,6 @@ public class AnimationController : MonoBehaviour
 
     const int layersNumber = 2;
 
-    public bool isActive = true;
     public Animator animator;
 
     public AnimationController(Animator anim)
@@ -51,11 +52,14 @@ public class AnimationController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
+    /// <summary>
+    /// Changes animation. 
+    /// </summary>
+    /// <param name="newAnimation">New animation.</param>
+    /// <param name="layer">Animation layer (Upper, Down or All).</param>
+    /// <param name="block">If true, blocks chosen layer, so animation can't be changed, before current animation executes</param>
     public void ChangeAnimation(string newAnimation, AnimatorLayers layer, bool block = false)
     {
-        if (!isActive)
-            return;
-
         bool AllLayers = layer == AnimatorLayers.ALL;
 
         if (AllLayers)
@@ -83,6 +87,11 @@ public class AnimationController : MonoBehaviour
             else
                 break;
         }
+    }
+
+    public float GetAnimationLength(AnimatorLayers layer)
+    {
+        return animator.GetCurrentAnimatorClipInfo((int)layer).Length;
     }
 
     IEnumerator BlockAnimator(AnimatorLayers layer, float time)

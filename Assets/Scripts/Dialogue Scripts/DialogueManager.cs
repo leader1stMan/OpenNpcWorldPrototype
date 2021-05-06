@@ -18,6 +18,7 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
     public bool _isdialogue = false;
     private FirstPersonAIO player;
     private PlayerActions _playeractions;
+    private CharacterStats stats;
     public bool displayingdialogue = false;
     private GameObject _dialogue;
     private Dialogue dialogueScript;
@@ -29,6 +30,7 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
     {
         player = GameObject.FindWithTag("Player").GetComponent<FirstPersonAIO>();
         _playeractions = GameObject.FindWithTag("Player").GetComponent<PlayerActions>();
+        stats = GameObject.FindWithTag("Player").GetComponent<CharacterStats>();
         _dialogue = _playeractions.dialogue_gameobject;
         dialogueScript = _dialogue.GetComponent<Dialogue>();
     }
@@ -66,7 +68,7 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
 
     public void EndDialogue()
     {
-        player.attackCooldown = 3f;
+        stats.attackCooldown = 3f;
         DialogueSystem.instance.Detach();
         npc.GetComponentInChildren<Animator>().enabled = true;
         npc.enabled = true;

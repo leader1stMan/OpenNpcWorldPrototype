@@ -8,8 +8,10 @@ public class Weapon : AttackDefinition
 {
     public Rigidbody weaponPref;
     public WeaponType type;
+
     public Projectile ProjectileToFire;
     public float ProjectileSpeed;
+
     public void ExecuteAttack(GameObject attacker, Vector3 startSpot, Quaternion target, int layer)
     {
         Projectile projectile = Instantiate(ProjectileToFire, startSpot, target);
@@ -68,11 +70,6 @@ public class Weapon : AttackDefinition
         if (defenderStats.isBlocking)
         {
             Debug.Log("block");
-            SkeletonAi skai = defender.GetComponent<SkeletonAi>();
-            if (skai != null)
-            {
-                skai.ShieldHit();
-            }
             return;
         }
 

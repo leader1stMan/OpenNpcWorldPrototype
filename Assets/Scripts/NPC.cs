@@ -6,7 +6,7 @@ using UnityEngine.AI;
 using System.IO;
 using TMPro;
 
-public class NPC : NpcData, IAttackable
+public class NPC : NpcData, IAttackable, IDestructible
 {
     public bool ShowDebugMessages;
     
@@ -44,7 +44,6 @@ public class NPC : NpcData, IAttackable
         skin = GetComponentsInChildren<SkinnedMeshRenderer>();
         rig = GetComponentsInChildren<Rigidbody>();
 
-        GetComponent<CharacterStats>().onDeath += Die;
         FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork; //Connects with the day and night controller
         FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome; //On a certain time these functions are called so npcs can execute life cycles  
 
@@ -61,7 +60,6 @@ public class NPC : NpcData, IAttackable
         
         GetComponent<CapsuleCollider>().enabled = true; //Main collider for when the npc is alive
                                                         //We might not need it anymore(?) since the ragdoll colliders might work as well(Dunno)
-        GetComponent<EnemyBase>().enabled = false;
     }
     void Update()
     {
@@ -122,9 +120,9 @@ public class NPC : NpcData, IAttackable
                 }
             }
             // If the NPC is looking at an enemy Attacking, run
-            else if (col.gameObject.GetComponent<EnemyBase>())
+            else if (col.gameObject.GetComponent<CombatBase>())
             {
-                EnemyBase enemy = col.gameObject.GetComponent<EnemyBase>();
+                CombatBase enemy = col.gameObject.GetComponent<CombatBase>();
 
                 if (enemy.CurrentState == EnemyState.Attacking)
                 {
@@ -163,7 +161,7 @@ public class NPC : NpcData, IAttackable
                 EndConversation();
                 break;
             case NpcStates.Combat:
-                GetComponent<EnemyBase>().enabled = false; //Combat has it's own script unlike other states
+                GetComponent<CombatBase>().enabled = false; //Combat has it's own script unlike other states
                 break;
             default:
                 break;
@@ -199,7 +197,7 @@ public class NPC : NpcData, IAttackable
                 SetMoveTarget(work);
                 break;
             case NpcStates.Combat:
-                GetComponent<EnemyBase>().enabled = true;
+                GetComponent<CombatBase>().enabled = true;
                 break;
             case NpcStates.Dead: //Enables ragdoll
                 foreach (SkinnedMeshRenderer skinned in skin)
@@ -207,7 +205,7 @@ public class NPC : NpcData, IAttackable
                     skinned.updateWhenOffscreen = true; //Stops character from disrendering
                 }
 
-                controller.isActive = false; //Have to turn it off before executing ragdoll
+                controller.enabled = false; //Have to turn it off before executing ragdoll
                 agent.enabled = false;
                 GetComponent<CapsuleCollider>().enabled = false;
                 GetComponent<Rigidbody>().isKinematic = false;
@@ -506,7 +504,7 @@ public class NPC : NpcData, IAttackable
         } while (currentState == NpcStates.Talking);
     }
 
-    void Die()
+    public void OnDestruction(GameObject destroyer)
     {
         ChangeState(NpcStates.Dead);
     }
