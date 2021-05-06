@@ -23,6 +23,7 @@ public class MeleeAI : CombatBase
         if (attackCooldown <= 0)
         {
             stats.GetWeapon().ExecuteAttack(gameObject, target);
+            controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.UP);
             attackCooldown = stats.GetWeapon().Cooldown;
         }
 

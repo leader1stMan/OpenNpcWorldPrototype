@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ShieldMeleeAI : MeleeAI
 {
-    float blockCooldown;
+    float blockTime = 1f;
     bool changingState;
     public float CombatRange;
 
@@ -19,39 +20,36 @@ public class ShieldMeleeAI : MeleeAI
     {
         base.Update();
 
-        if (blockCooldown > 0)
-            blockCooldown -= Time.deltaTime;
+        if (blockTime > 0)
+            blockTime -= Time.deltaTime;
     }
 
-    protected override void ManageStateChange(EnemyState oldState, EnemyState newState)
-    {
-        if (oldState == EnemyState.Attacking && stats.isBlocking)
-            StartCoroutine(StopBlock());
-        base.ManageStateChange(oldState, newState);
-    }
     public override void Attack(GameObject target)
     {
         agent.SetDestination(target.transform.position);
-        if (CanHit(gameObject, target.transform))
-        {
-            if (stats.isBlocking)
-                StartCoroutine(StopBlock());
-            base.Attack(target);
-            return;
-        }
-
-        if (CanHit(target, transform) && blockCooldown <= 0)
+        int chooseMove = Random.Range(1, 10);
+        Debug.Log(chooseMove);
+        if (CanHit(gameObject, target.transform) && attackCooldown <= 0 && chooseMove <= 5)
         {
             if (!stats.isBlocking)
-                StartCoroutine(StartBlock());
-            return;
+            {
+                base.Attack(target);
+            }
         }
-        else if (stats.isBlocking)
+        
+        if (CanHit(target, transform) && blockTime <= 0 && !stats.isBlocking && chooseMove > 5)
+        {
+            StartCoroutine(StartBlock());
+        }
+        else if (stats.isBlocking && blockTime <= 0)
+        {
             StartCoroutine(StopBlock());
+        }
     }
 
     IEnumerator StartBlock()
     {
+        blockTime = 3;
         print("block");
         controller.ChangeAnimation(AnimationController.SHIELD_READY, AnimatorLayers.UP, true);
         changingState = true;
@@ -64,7 +62,7 @@ public class ShieldMeleeAI : MeleeAI
     IEnumerator StopBlock()
     {
         print("stop block");
-        controller.ChangeAnimation(AnimationController.SHILD_UNEQUIP, AnimatorLayers.UP, true);
+        controller.ChangeAnimation(AnimationController.SHILD_UNEQUIP, AnimatorLayers.UP);
         changingState = true;
         stats.isBlocking = false;
         agent.speed *= stats.shield.ShieldDeceleration;

@@ -100,6 +100,11 @@ public class AnimationController : MonoBehaviour
         yield return new WaitForSeconds(time);
         Block[(int)layer] = false;
     }
+
+    void AttackEvent() //Called from animation event
+    {
+        ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP, true);
+    }
 }
 
 public enum AnimatorLayers { DOWN, UP, ALL }
