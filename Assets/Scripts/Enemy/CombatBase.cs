@@ -27,7 +27,7 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
     public float VisionRange;
     public LayerMask WhatCanThisEnemyAttack;
     [TagSelector] public string[] Tags;
-    public EnemyState CurrentState { get; private set; }
+    public EnemyState CurrentState { get; set; }
 
     public Transform currentTarget;
     protected float attackCooldown;
@@ -128,7 +128,10 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
                 }
                 else
                     if ((currentTarget.position - transform.position).magnitude <= AttackDistance)
+                {
+                    agent.isStopped = true;
                     ChangeState(EnemyState.Attacking);
+                }
                 else
                     Chase(currentTarget);
                 break;
@@ -310,25 +313,12 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
         }
     }
 
-    protected virtual void OnDestroy()
-    {
-        #region Debug
-#if UNITY_EDITOR
-        if (VisualiseAgentActions && DebugSphere != null)
-        {
-            Destroy(DebugSphere.gameObject);
-            if (ShowDebugMessages)
-                Debug.Log(this.gameObject.name + " is destroyed");
-        }
-#endif
-        #endregion
-    }
-
     public void OnDestruction(GameObject destroyer)
     {
         //Activate ragdoll
         controller.enabled = false;
-        agent.isStopped = true;
+        GetComponent<NavMeshAgent>().enabled = false;
+        GetComponentInChildren<Animator>().enabled = false;
         GetComponent<CapsuleCollider>().enabled = false;
         GetComponent<Rigidbody>().isKinematic = false;
 

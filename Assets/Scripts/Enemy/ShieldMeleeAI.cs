@@ -27,8 +27,8 @@ public class ShieldMeleeAI : MeleeAI
     public override void Attack(GameObject target)
     {
         agent.SetDestination(target.transform.position);
+
         int chooseMove = Random.Range(1, 10);
-        Debug.Log(chooseMove);
         if (CanHit(gameObject, target.transform) && attackCooldown <= 0 && chooseMove <= 5)
         {
             if (!stats.isBlocking)

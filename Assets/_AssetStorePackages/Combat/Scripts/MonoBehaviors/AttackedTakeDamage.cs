@@ -18,11 +18,7 @@ public class AttackedTakeDamage : MonoBehaviour, IAttackable
 
         if (stats.GetCurrentHealth().GetValue() <= 0)
         {
-            var destructibles = GetComponents(typeof(IDestructible));
-            foreach (IDestructible d in destructibles)
-            {
-                d.OnDestruction(attacker);
-            }
+            GetComponent<CombatBase>().OnDestruction(attacker);
         }
     }
 }
