@@ -66,10 +66,12 @@ public class Weapon : AttackDefinition
         */
         var attackerStats = attacker.GetComponent<CharacterStats>();
         var defenderStats = defender.GetComponent<CharacterStats>();
-
+        bool debug = defender.GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(1).IsName("Shield_0M_L_Ready_0");
         if (defenderStats.isBlocking)
         {
-            Debug.Log("block");
+            Debug.Log("block" + debug);
+            if (!debug)
+                Time.timeScale = 0;
             return;
         }
 

@@ -294,6 +294,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96,
         type: 2}
+    - target: {fileID: 4621996006977177690, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+        type: 3}
+      propertyPath: maxHealth.BaseValue
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 5969122167924320826, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: m_ConnectedAnchor.y
@@ -6280,6 +6285,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96,
         type: 2}
+    - target: {fileID: 4621996006977177690, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+        type: 3}
+      propertyPath: maxHealth.BaseValue
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 5969122167924320826, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: m_ConnectedAnchor.y

@@ -26,6 +26,7 @@ public class ShieldMeleeAI : MeleeAI
 
     public override void Attack(GameObject target)
     {
+        attack = true;
         agent.SetDestination(target.transform.position);
 
         int chooseMove = Random.Range(1, 10);
@@ -45,6 +46,8 @@ public class ShieldMeleeAI : MeleeAI
         {
             StartCoroutine(StopBlock());
         }
+        
+        attack = false;
     }
 
     IEnumerator StartBlock()

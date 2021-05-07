@@ -17,8 +17,12 @@ public class MeleeAI : CombatBase
 
     public override void Attack(GameObject target)
     {
+        attack = true;
         if (target == null)
+        {
+            attack = false;
             return;
+        }
         agent.isStopped = true;
         RotateTo(target);
 

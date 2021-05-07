@@ -18,6 +18,7 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
             "This is an optional field")]
     public Collider PatrolArea;
     Rigidbody[] rig;
+    SkinnedMeshRenderer[] skins;
 
     #region Debugging
     public bool ShowDebugMessages;
@@ -32,6 +33,8 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
     public Transform currentTarget;
     protected float attackCooldown;
     protected float AttackDistance;
+
+    protected bool attack = false;
     #region Editor Only
 
 #if UNITY_EDITOR
@@ -56,6 +59,13 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
                 rigidbody.isKinematic = true;
             }
         }
+        //Skinnedmesh needs to updated off screen when ragdolled. Or disappears
+        skins = GetComponentsInChildren<SkinnedMeshRenderer>();
+        foreach (SkinnedMeshRenderer skinnedMeshRenderer in skins)
+        {
+            skinnedMeshRenderer.updateWhenOffscreen = false;
+        }
+
 
         GetComponent<CapsuleCollider>().enabled = true;
 
@@ -144,7 +154,10 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
                 else
                 {
                     if ((currentTarget.position - transform.position).magnitude <= AttackDistance)
-                        Attack(currentTarget.gameObject);
+                        if (attack == false)
+                        {
+                            Attack(currentTarget.gameObject);
+                        }
                     else
                         ChangeState(EnemyState.Chasing);
                 }
@@ -316,6 +329,11 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
     public void OnDestruction(GameObject destroyer)
     {
         //Activate ragdoll
+        foreach (SkinnedMeshRenderer skinnedMeshRenderer in skins)
+        {
+            skinnedMeshRenderer.updateWhenOffscreen = true;
+        }
+
         controller.enabled = false;
         GetComponent<NavMeshAgent>().enabled = false;
         GetComponentInChildren<Animator>().enabled = false;
