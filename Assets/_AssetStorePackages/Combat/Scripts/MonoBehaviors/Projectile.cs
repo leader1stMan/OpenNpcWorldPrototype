@@ -89,6 +89,5 @@ public class Projectile : MonoBehaviour
         isFlying = false;
         attachedObject = other.gameObject;
         Destroy(GetComponent<CapsuleCollider>());
-        Debug.Log(false);
     }
 }

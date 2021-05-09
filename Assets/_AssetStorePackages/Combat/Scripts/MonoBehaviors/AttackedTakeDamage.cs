@@ -18,7 +18,7 @@ public class AttackedTakeDamage : MonoBehaviour, IAttackable
 
         if (stats.GetCurrentHealth().GetValue() <= 0)
         {
-            GetComponent<CombatBase>().OnDestruction(attacker);
+            GetComponent<NPC>().OnDestruction(attacker);
         }
     }
 }

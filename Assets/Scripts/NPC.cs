@@ -216,6 +216,7 @@ public class NPC : NpcData, IAttackable, IDestructible
                 }
 
                 controller.enabled = false; //Have to turn it off before executing ragdoll
+                controller.animator.enabled = false;
                 agent.enabled = false;
                 GetComponent<CapsuleCollider>().enabled = false;
                 GetComponent<Rigidbody>().isKinematic = false;

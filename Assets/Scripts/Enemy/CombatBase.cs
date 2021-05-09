@@ -5,7 +5,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Collections;
 
-public abstract class CombatBase : MonoBehaviour, IDestructible
+public abstract class CombatBase : MonoBehaviour
 {
     [SerializeField]
     protected NavMeshAgent agent = null;
@@ -324,31 +324,5 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, VisionRange);
         }
-    }
-
-    public void OnDestruction(GameObject destroyer)
-    {
-        //Activate ragdoll
-        foreach (SkinnedMeshRenderer skinnedMeshRenderer in skins)
-        {
-            skinnedMeshRenderer.updateWhenOffscreen = true;
-        }
-
-        controller.enabled = false;
-        GetComponent<NavMeshAgent>().enabled = false;
-        GetComponentInChildren<Animator>().enabled = false;
-        GetComponent<CapsuleCollider>().enabled = false;
-        GetComponent<Rigidbody>().isKinematic = false;
-
-        foreach (Rigidbody rigidbody in rig)
-        {
-            if (rigidbody != this.GetComponent<Rigidbody>())
-            {
-                rigidbody.GetComponent<Collider>().enabled = true;
-                rigidbody.isKinematic = false;
-            }
-        }
-
-        ChangeState(EnemyState.Dead);
     }
 }
