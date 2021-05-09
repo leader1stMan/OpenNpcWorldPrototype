@@ -76,7 +76,6 @@ public class Weapon : AttackDefinition
         }
 
         var attack = CreateAttack(attackerStats, defenderStats);
-
         var attackables = defender.GetComponentsInChildren(typeof(IAttackable));
 
         foreach (IAttackable attackable in attackables)

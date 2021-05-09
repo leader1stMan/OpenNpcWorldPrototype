@@ -3483,7 +3483,7 @@ GameObject:
   - component: {fileID: 794120650}
   - component: {fileID: 794120649}
   - component: {fileID: 794120648}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Patrol Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6227,20 +6227,19 @@ PrefabInstance:
         type: 3}
       propertyPath: defaultAttack
       value: 
-      objectReference: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9,
+      objectReference: {fileID: 11400000, guid: 2b9b62229886429419972221f33b1c3b,
         type: 2}
     - target: {fileID: 4621996006977177690, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: weapon
       value: 
-      objectReference: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9,
+      objectReference: {fileID: 11400000, guid: 2b9b62229886429419972221f33b1c3b,
         type: 2}
     - target: {fileID: 4621996006977177690, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: shield
       value: 
-      objectReference: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 4621996006977177690, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: maxHealth.BaseValue
@@ -7731,6 +7730,38 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1778234747 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6598780603943041308, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1214934957}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1778234748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1778234747}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41aa3d3a9dba71d4cbacf8fffb879c16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  controller: {fileID: 0}
+  stats: {fileID: 0}
+  PatrolArea: {fileID: 0}
+  ShowDebugMessages: 0
+  VisualiseAgentActions: 0
+  VisionRange: 10
+  WhatCanThisEnemyAttack:
+    serializedVersion: 2
+    m_Bits: 768
+  Tags:
+  - Player
+  - Npc
+  currentTarget: {fileID: 0}
 --- !u!4 &1781230555 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,

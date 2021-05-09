@@ -10,7 +10,7 @@ public class ArcherAI : MeleeAI
     public override void Attack(GameObject target)
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, target.transform.position, out hit, ~layersToIgnore))
+        if (Physics.Raycast(transform.position, target.transform.position - transform.position, out hit))
         {
             if (hit.transform.gameObject == target)
                 stats.GetWeapon().ExecuteAttack(gameObject,

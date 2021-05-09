@@ -54,7 +54,7 @@ public class ShieldMeleeAI : MeleeAI
     {
         blockTime = 3;
         print("block");
-        controller.ChangeAnimation(AnimationController.SHIELD_READY, AnimatorLayers.UP, true);
+        controller.ChangeAnimation(AnimationController.SHIELD_READY, AnimatorLayers.UP);
         changingState = true;
         stats.isBlocking = true;
         agent.speed /= stats.shield.ShieldDeceleration;

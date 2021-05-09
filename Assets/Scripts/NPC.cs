@@ -197,7 +197,17 @@ public class NPC : NpcData, IAttackable, IDestructible
                 SetMoveTarget(work);
                 break;
             case NpcStates.Combat:
-                GetComponent<CombatBase>().enabled = true;
+                if (GetComponent<CharacterStats>().weapon != null)
+                {
+                    if (GetComponent<CharacterStats>().weapon.type == WeaponType.LowRange)
+                    {
+                        GetComponent<ShieldMeleeAI>().enabled = true;
+                    }
+                    else
+                    {
+                        GetComponent<ArcherAI>().enabled = true;
+                    }
+                }
                 break;
             case NpcStates.Dead: //Enables ragdoll
                 foreach (SkinnedMeshRenderer skinned in skin)

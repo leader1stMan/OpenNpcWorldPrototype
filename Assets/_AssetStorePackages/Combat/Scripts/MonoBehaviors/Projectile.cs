@@ -37,6 +37,21 @@ public class Projectile : MonoBehaviour
 
     private void fly()
     {
+        /*float distanceToTravel = horizontalSpeed * Time.deltaTime;
+
+        transform.Translate(Vector3.forward * distanceToTravel);
+
+        float step = 0f;
+        step += rotationSpeed * Time.deltaTime;
+        transform.Rotate(rotationSpeed * Time.deltaTime, 0, 0);
+
+        distanceTraveled += distanceToTravel;
+
+        if (distanceTraveled > Range)
+        {
+            Destroy(gameObject);
+        }*/
+
         // Move the arrow in x and y
         Vector3 PrevPosition = transform.position;
         float dx = horizontalSpeed * Mathf.Cos(Direction.x) * Time.deltaTime;
@@ -48,12 +63,22 @@ public class Projectile : MonoBehaviour
 
         transform.Translate(XAxis * dx);
         transform.Translate(YAxis * (horizontalSpeed * Mathf.Sin(Direction.x) - GravityFactor) * Time.deltaTime);
+
+        // Rotate the arrow to face the direction of motion
+        //transform.rotation = new Quaternion(Vector3.Angle(transform.forward, transform.position - PrevPosition), 0, 0, 1);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == Caster)
+        if (other.gameObject == Caster || other.gameObject.transform.root.gameObject == Caster)
+        {
             return;
+        }
+
+        if (other.gameObject.layer == 1)
+        {
+            return;
+        }
 
         if (ProjectileCollided != null)
         {
@@ -64,5 +89,6 @@ public class Projectile : MonoBehaviour
         isFlying = false;
         attachedObject = other.gameObject;
         Destroy(GetComponent<CapsuleCollider>());
+        Debug.Log(false);
     }
 }
