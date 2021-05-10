@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TreasonQuest : Quest
 {
+    //Handlers are added to goals and are executed when a goal is complete
     private SentenceGoal goal1;
     private SentenceGoal redGoal;
     private SentenceGoal pinkGoal;
@@ -13,6 +14,7 @@ public class TreasonQuest : Quest
     private SentenceGoal FromNeutralToAgainst;
     private SentenceGoal AgainstEndingComplete;
 
+    //List of sentences that adds to a variable and by that changes the path of the dialogue
     public List<Sentence> trackedSentences1;
     public List<Sentence> redSentences;
     public List<Sentence> pinkSentences;
@@ -21,6 +23,12 @@ public class TreasonQuest : Quest
     private List<Sentence> BetweenNeutralAndAgainst;
     public List<Sentence> TheodoreQuestComplete;
 
+    //Variables that are added by each sentences in each List<Sentence>
+    private int redQuestions = 0;
+    private int pinkQuestions = 0;
+    private int greenQuestions = 0;
+
+    //Start sentences of each section
     public Sentence goAwaySentence;
     public Sentence againstKingSentence;
     public Sentence neutralEnding;
@@ -35,11 +43,7 @@ public class TreasonQuest : Quest
 
     public DayAndNightControl control;
     private DialogueManager dialogue;
-
-    private int redQuestions = 0;
-    private int pinkQuestions = 0;
-    private int greenQuestions = 0;
-
+    
     public NPC Theodore;
     private DialogueManager TheodoreDialogue;
     public NPC Alchemist;
@@ -47,12 +51,11 @@ public class TreasonQuest : Quest
 
     private bool withPotion;
 
-    // Start is called before the first frame update
     void Awake()
     {
         goal1 = new SentenceGoal(trackedSentences1);
         goal1.AddHandler(CompleteFirstGoal);
-        dialogue = GetComponent<DialogueManager>();
+        dialogue = GetComponent<DialogueManager>(); //DialogueManager executes the dialogue system
 
         redGoal = new SentenceGoal(redSentences);
         redGoal.AddHandler(RedSentenceCalled);
@@ -116,7 +119,7 @@ public class TreasonQuest : Quest
 
     void CompleteQuestionPart()
     {
-        int result = greenQuestions - redQuestions;
+        int result = greenQuestions - redQuestions; //Green is in favour and red is not
         if (result < 0)
         {
             AgainstEnding();
