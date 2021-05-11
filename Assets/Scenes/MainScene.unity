@@ -307,7 +307,7 @@ PrefabInstance:
     - target: {fileID: 4621996006977177690, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: maxHealth.BaseValue
-      value: 1000
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5969122167924320826, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
@@ -6227,23 +6227,24 @@ PrefabInstance:
         type: 3}
       propertyPath: defaultAttack
       value: 
-      objectReference: {fileID: 11400000, guid: 2b9b62229886429419972221f33b1c3b,
+      objectReference: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9,
         type: 2}
     - target: {fileID: 4621996006977177690, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: weapon
       value: 
-      objectReference: {fileID: 11400000, guid: 2b9b62229886429419972221f33b1c3b,
+      objectReference: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9,
         type: 2}
     - target: {fileID: 4621996006977177690, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: shield
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96,
+        type: 2}
     - target: {fileID: 4621996006977177690, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: maxHealth.BaseValue
-      value: 1000
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5969122167924320826, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}

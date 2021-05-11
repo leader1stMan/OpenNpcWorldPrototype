@@ -154,12 +154,16 @@ public abstract class CombatBase : MonoBehaviour
                 else
                 {
                     if ((currentTarget.position - transform.position).magnitude <= AttackDistance)
+                    {
                         if (attack == false)
                         {
                             Attack(currentTarget.gameObject);
                         }
+                    }
                     else
+                    {
                         ChangeState(EnemyState.Chasing);
+                    }
                 }
                 break;
             default:
