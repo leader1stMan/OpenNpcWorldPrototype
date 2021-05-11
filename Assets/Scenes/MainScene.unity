@@ -6264,7 +6264,7 @@ PrefabInstance:
     - target: {fileID: 6598780603943041308, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: m_Name
-      value: FarmerNPC2 (1)
+      value: Finished Ai prefab
       objectReference: {fileID: 0}
     - target: {fileID: 6598780603943041309, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
@@ -6392,7 +6392,7 @@ PrefabInstance:
       value: -0.080612704
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 1893211631, guid: db78526ad1b84a84383ecf5bf5bb69a5, type: 3}
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: db78526ad1b84a84383ecf5bf5bb69a5, type: 3}
 --- !u!1001 &1225692741
 PrefabInstance:
@@ -7731,38 +7731,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1778234747 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6598780603943041308, guid: db78526ad1b84a84383ecf5bf5bb69a5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1214934957}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1778234748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1778234747}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41aa3d3a9dba71d4cbacf8fffb879c16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 0}
-  controller: {fileID: 0}
-  stats: {fileID: 0}
-  PatrolArea: {fileID: 0}
-  ShowDebugMessages: 0
-  VisualiseAgentActions: 0
-  VisionRange: 10
-  WhatCanThisEnemyAttack:
-    serializedVersion: 2
-    m_Bits: 768
-  Tags:
-  - Player
-  - Npc
-  currentTarget: {fileID: 0}
 --- !u!4 &1781230555 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,
