@@ -96,6 +96,13 @@ public abstract class CombatBase : MonoBehaviour
             stats.attackCooldown = attackCooldown;
         }
 
+        if (currentTarget != null)
+        {
+            if (currentTarget.tag == "Dead")
+            {
+                currentTarget = null;
+            }
+        }
         ManageState();
 
         #region Editor Only

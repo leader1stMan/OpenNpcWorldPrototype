@@ -210,6 +210,7 @@ public class NPC : NpcData, IAttackable, IDestructible
                 }
                 break;
             case NpcStates.Dead: //Enables ragdoll
+                transform.gameObject.tag = "Dead";
                 foreach (SkinnedMeshRenderer skinned in skin)
                 {
                     skinned.updateWhenOffscreen = true; //Stops character from disrendering
