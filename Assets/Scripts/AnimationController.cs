@@ -60,10 +60,6 @@ public class AnimationController : MonoBehaviour
     /// <param name="block">If true, blocks chosen layer, so animation can't be changed, before current animation executes</param>
     public void ChangeAnimation(string newAnimation, AnimatorLayers layer, bool block = false)
     {
-        if (newAnimation == AnimationController.SHIELD_READY)
-        {
-            Debug.Log("anim" + true);
-        }
         bool AllLayers = layer == AnimatorLayers.ALL;
 
         if (AllLayers)
@@ -79,11 +75,6 @@ public class AnimationController : MonoBehaviour
             {
                 animator.Play(animation);
                 Layers[chosenLayer] = animation;
-                if (newAnimation == AnimationController.SHIELD_READY)
-                {
-                    Debug.Log("animation" + true);
-                }
-
                 if (block)
                     StartCoroutine(BlockAnimator(layer, animator.GetCurrentAnimatorStateInfo(chosenLayer).length));
             }

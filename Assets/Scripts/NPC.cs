@@ -69,35 +69,40 @@ public class NPC : NpcData, IAttackable, IDestructible
             runTimeLeft -= Time.deltaTime;
         }
 
-        if (combatState) 
-            ChangeState(NpcStates.Combat);
-
-        if (currentState != NpcStates.Combat)
-            WatchEnvironment();
+        if (combatState)
+        {
+            this.enabled = false;
+            if (GetComponent<CharacterStats>().weapon.type == WeaponType.LowRange)
+            {
+                GetComponent<ShieldMeleeAI>().enabled = true;
+            }
+            else
+            {
+                GetComponent<ArcherAI>().enabled = true;
+            }
+        }
+        WatchEnvironment();
     }
 
     void FixedUpdate()
     {
         //Manage animations
-        if (currentState != NpcStates.Combat)
+        if (agent.velocity.magnitude == 0)
         {
-            if (agent.velocity.magnitude == 0)
+            //Idle animation if npc isn't moving
+            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
+        }
+        else
+        {
+            if (agent.velocity.magnitude < 2.5f)
             {
-                //Idle animation if npc isn't moving
-                controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL); 
+                //Walk animation if npc is moving slow
+                controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
             }
             else
             {
-                if (agent.velocity.magnitude < 2.5f)
-                {
-                    //Walk animation if npc is moving slow
-                    controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
-                }
-                else
-                {
-                    //Walk animation if npc is moving fast
-                    controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
-                }
+                //Walk animation if npc is moving fast
+                controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
             }
         }
     }
@@ -160,9 +165,6 @@ public class NPC : NpcData, IAttackable, IDestructible
             case NpcStates.Talking:
                 EndConversation();
                 break;
-            case NpcStates.Combat:
-                GetComponent<CombatBase>().enabled = false; //Combat has it's own script unlike other states
-                break;
             default:
                 break;
         }
@@ -196,20 +198,8 @@ public class NPC : NpcData, IAttackable, IDestructible
             case NpcStates.Working:
                 SetMoveTarget(work);
                 break;
-            case NpcStates.Combat:
-                if (GetComponent<CharacterStats>().weapon != null)
-                {
-                    if (GetComponent<CharacterStats>().weapon.type == WeaponType.LowRange)
-                    {
-                        GetComponent<ShieldMeleeAI>().enabled = true;
-                    }
-                    else
-                    {
-                        GetComponent<ArcherAI>().enabled = true;
-                    }
-                }
-                break;
             case NpcStates.Dead: //Enables ragdoll
+                GetComponent<CombatBase>().enabled = false;
                 foreach (SkinnedMeshRenderer skinned in skin)
                 {
                     skinned.updateWhenOffscreen = true; //Stops character from disrendering
@@ -243,7 +233,7 @@ public class NPC : NpcData, IAttackable, IDestructible
     void GoToWork()
     {
         //States that are more prioritized than 'GoingToWork' state
-        if (currentState == NpcStates.GoingToWork || currentState == NpcStates.Working || currentState == NpcStates.Talking || currentState == NpcStates.Scared || currentState == NpcStates.Combat)
+        if (currentState == NpcStates.GoingToWork || currentState == NpcStates.Working || currentState == NpcStates.Talking || currentState == NpcStates.Scared)
             return;
         StartCoroutine("GoToWorkCoroutine");
     }
@@ -269,7 +259,7 @@ public class NPC : NpcData, IAttackable, IDestructible
     void GoHome()
     {
         //States that are more prioritized than 'GoingHome' state
-        if (currentState == NpcStates.GoingHome || currentState == NpcStates.Talking || currentState == NpcStates.Scared || currentState == NpcStates.Combat)
+        if (currentState == NpcStates.GoingHome || currentState == NpcStates.Talking || currentState == NpcStates.Scared)
             return;
         StartCoroutine("GoHomeCoroutine");
     }
@@ -329,6 +319,7 @@ public class NPC : NpcData, IAttackable, IDestructible
             //Converstion is sotred in .txt file. "{}" separates first and second NPC's part 
             while ((line = reader.ReadLine()) != "{}") 
             {
+                Debug.Log(true);
                 lines.Add(line); //Storing the conversation by each line
             }
         }
@@ -391,8 +382,10 @@ public class NPC : NpcData, IAttackable, IDestructible
     //Start NPC-NPC interaction with nearby NPCs with 
     void OnTriggerStay(Collider other) 
     {
+        if (this.enabled == false)
+            return;
         // States that are more prioritized
-        if (currentState == NpcStates.Scared || currentState == NpcStates.Talking || currentState == NpcStates.Combat)
+        if (currentState == NpcStates.Scared || currentState == NpcStates.Talking)
             return;
 
         if (!other.CompareTag("Npc"))
@@ -401,9 +394,9 @@ public class NPC : NpcData, IAttackable, IDestructible
         NPC NPCscript = other.GetComponentInParent<NPC>();
 
         //Checks if the talker's state does not have a higher priority
-        if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking || NPCscript.currentState == NpcStates.Combat)
+        if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking)
             return;
-        if (UnityEngine.Random.Range(0, 1000) <= 0) //At a chance starts a conversation
+        if (UnityEngine.Random.Range(0, 1000) <= 1000) //At a chance starts a conversation
         {
             if (GetInstanceID() > NPCscript.GetInstanceID()) //Each script has it's own ID. We can use these so one of the npc scripts is more prioritized
             {                                                //Can stop bug for when both scripts decide to have a conversation at the same time                                                                                                     

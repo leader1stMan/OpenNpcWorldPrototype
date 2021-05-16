@@ -6,7 +6,8 @@ TagManager:
   tags:
   - Npc
   - Enemy
-  - Theodore
+  - TreasonRioteer
+  - TreasonGuard
   layers:
   - Default
   - TransparentFX

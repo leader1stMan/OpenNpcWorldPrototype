@@ -20,5 +20,5 @@ MonoBehaviour:
     selectedSentence: {fileID: 0}
   nextSentence: {fileID: 11400000, guid: b4678608876949647ada22f4493dbf8e, type: 2}
   choices: []
-  quest: {fileID: 0}
   questParameter: pink
+  CallShop: 0

@@ -7,7 +7,6 @@
     InteractingWithPlayer,
     Talking,
     Scared,
-    Combat,
     Dead
 }
 

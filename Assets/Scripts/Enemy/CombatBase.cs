@@ -28,9 +28,10 @@ public abstract class CombatBase : MonoBehaviour
     public float VisionRange;
     public LayerMask WhatCanThisEnemyAttack;
     [TagSelector] public string[] Tags;
-    public EnemyState CurrentState { get; set; }
+    public EnemyState CurrentState{get; private set;}
 
     public Transform currentTarget;
+    public float CombatRange;
     protected float attackCooldown;
     protected float AttackDistance;
 
@@ -65,10 +66,7 @@ public abstract class CombatBase : MonoBehaviour
         {
             skinnedMeshRenderer.updateWhenOffscreen = false;
         }
-
-
         GetComponent<CapsuleCollider>().enabled = true;
-
         #region Editor Only
 #if UNITY_EDITOR
         if (VisualiseAgentActions)
@@ -96,7 +94,24 @@ public abstract class CombatBase : MonoBehaviour
             stats.attackCooldown = attackCooldown;
         }
 
+        if (currentTarget != null)
+        {
+            if (currentTarget.tag == "Npc")
+            {
+                if (currentTarget.GetComponent<NPC>().enabled)
+                {
+                    if (currentTarget.GetComponent<NPC>().currentState == NpcStates.Dead)
+                        currentTarget = null;
+                }
+                else
+                {
+                    if (currentTarget.GetComponent<CombatBase>().CurrentState == EnemyState.Dead)
+                        currentTarget = null;
+                }
+            }
+        }
         ManageState();
+        MoveAnimaton();
 
         #region Editor Only
 #if UNITY_EDITOR
@@ -106,6 +121,29 @@ public abstract class CombatBase : MonoBehaviour
         }
 #endif
         #endregion
+    }
+
+    protected virtual void MoveAnimaton()
+    {
+        //Manage animations
+        if (agent.velocity.magnitude == 0)
+        {
+            //Idle animation if npc isn't moving
+            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
+        }
+        else
+        {
+            if (agent.velocity.magnitude < 2.5f)
+            {
+                //Walk animation if npc is moving slow
+                controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
+            }
+            else
+            {
+                //Walk animation if npc is moving fast
+                controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
+            }
+        }
     }
 
     //Checks which is the current state and makes the Ai do the chosen behaviours every Update
@@ -163,6 +201,29 @@ public abstract class CombatBase : MonoBehaviour
                     else
                     {
                         ChangeState(EnemyState.Chasing);
+                    }
+                }
+                break;
+
+            case EnemyState.Dead:
+                GetComponent<CombatBase>().enabled = false;
+                foreach (SkinnedMeshRenderer skinned in skins)
+                {
+                    skinned.updateWhenOffscreen = true; //Stops character from disrendering
+                }
+
+                controller.enabled = false; //Have to turn it off before executing ragdoll
+                controller.animator.enabled = false;
+                agent.enabled = false;
+                GetComponent<CapsuleCollider>().enabled = false;
+                GetComponent<Rigidbody>().isKinematic = false;
+
+                foreach (Rigidbody rigidbody in rig)
+                {
+                    if (rigidbody != this.GetComponent<Rigidbody>())
+                    {
+                        rigidbody.GetComponent<Collider>().enabled = true;
+                        rigidbody.isKinematic = false;
                     }
                 }
                 break;
@@ -328,5 +389,10 @@ public abstract class CombatBase : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, VisionRange);
         }
+    }
+
+    public void OnDestruction(GameObject destroyer)
+    {
+        ChangeState(EnemyState.Dead);
     }
 }

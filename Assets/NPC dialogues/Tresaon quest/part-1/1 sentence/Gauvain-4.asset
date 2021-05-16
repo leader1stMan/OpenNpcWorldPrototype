@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: Gauvain-4
   m_EditorClassIdentifier: 
   text: 
-  answer: Can I ask you some questions first?
+  answer: Just the other day, a pheasant's tongue was cut out for speaking against
+    the nobel for taking his coins.
   goal:
     trackedSentences: []
     selectedSentence: {fileID: 11400000}
   nextSentence: {fileID: 11400000, guid: 6407673e35ec7ae40b5eb36b89b66747, type: 2}
   choices: []
-  quest: {fileID: 0}
+  questParameter: 
+  CallShop: 0

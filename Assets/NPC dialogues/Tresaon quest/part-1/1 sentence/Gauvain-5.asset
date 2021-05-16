@@ -13,14 +13,13 @@ MonoBehaviour:
   m_Name: Gauvain-5
   m_EditorClassIdentifier: 
   text: 
-  answer: That would reassure me. Of course I will offer you some gold coins in exchange.
+  answer: What is your opinion on this?
   goal:
     trackedSentences: []
     selectedSentence: {fileID: 11400000}
   nextSentence: {fileID: 0}
   choices:
-  - {fileID: 11400000, guid: e3d2bab8266b8174a8d6fac40024701a, type: 2}
-  - {fileID: 11400000, guid: 81c3724c616e7c945a86d58e5ca53607, type: 2}
-  - {fileID: 11400000, guid: 6400f2995e7659e41a3c8dc375530a5e, type: 2}
-  - {fileID: 11400000, guid: 3ea111c300b163f42aab8c54262cfaac, type: 2}
-  quest: {fileID: 0}
+  - {fileID: 11400000, guid: dcf8a4d64f0b7344798dc6cc0dc01879, type: 2}
+  - {fileID: 11400000, guid: 5a2146184aeb4c44cab44d848a916c40, type: 2}
+  questParameter: 
+  CallShop: 0

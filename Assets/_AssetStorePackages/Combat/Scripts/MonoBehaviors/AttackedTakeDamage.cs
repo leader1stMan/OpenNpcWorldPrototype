@@ -18,7 +18,21 @@ public class AttackedTakeDamage : MonoBehaviour, IAttackable
 
         if (stats.GetCurrentHealth().GetValue() <= 0)
         {
-            GetComponent<NPC>().OnDestruction(attacker);
+            if (gameObject.tag == "Npc")
+            {
+                if (GetComponent<NPC>().enabled)
+                {
+                    GetComponent<NPC>().OnDestruction(attacker);
+                }
+                else if (GetComponent<CombatBase>().enabled)
+                {
+                    GetComponent<CombatBase>().OnDestruction(attacker);
+                }
+            }
+            else
+            {
+
+            }
         }
     }
 }

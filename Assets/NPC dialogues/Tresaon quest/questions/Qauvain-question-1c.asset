@@ -19,5 +19,5 @@ MonoBehaviour:
     selectedSentence: {fileID: 0}
   nextSentence: {fileID: 11400000, guid: 1b2fd923c572ea84298cd66d3b928d18, type: 2}
   choices: []
-  quest: {fileID: 0}
   questParameter: green
+  CallShop: 0

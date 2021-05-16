@@ -29,7 +29,7 @@ public class SentenceGoal
         }
     }
 
-    public void completeSentence(Sentence sentence) //Is called when last sentence of a section is called
+    public void completeSentence(Sentence sentence) 
     {
         selectedSentence = sentence;
         goalHandlers?.Invoke();

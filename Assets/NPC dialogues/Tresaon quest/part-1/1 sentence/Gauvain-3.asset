@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Gauvain-3
   m_EditorClassIdentifier: 
   text: 
-  answer: I would like to ask you for help but in these times it is difficult to
-    trust.
+  answer: I like having conversations that discusses about current matters.
   goal:
     trackedSentences: []
     selectedSentence: {fileID: 11400000}
   nextSentence: {fileID: 11400000, guid: 929cff02993ce2f43a39c9b35a0c9b6a, type: 2}
   choices: []
-  quest: {fileID: 0}
+  questParameter: 
+  CallShop: 0

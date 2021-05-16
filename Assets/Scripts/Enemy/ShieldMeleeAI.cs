@@ -6,9 +6,8 @@ using Random = UnityEngine.Random;
 
 public class ShieldMeleeAI : MeleeAI
 {
-    float blockTime = 1f;
+    public float blockTime;
     bool changingState;
-    public float CombatRange;
 
     protected override void Start()
     {
@@ -24,13 +23,20 @@ public class ShieldMeleeAI : MeleeAI
             blockTime -= Time.deltaTime;
     }
 
+    protected override void MoveAnimaton()
+    {
+        if (blockTime <= 0)
+            base.MoveAnimaton();
+    }
+
     public override void Attack(GameObject target)
     {
         attack = true;
-        agent.SetDestination(target.transform.position);
+        if (agent.enabled)
+            agent.SetDestination(target.transform.position);
 
         int chooseMove = Random.Range(1, 10);
-        if (CanHit(gameObject, target.transform) && attackCooldown <= 0 && chooseMove <= 5)
+        if (CanHit(gameObject, target.transform) && attackCooldown <= 0 && !stats.isBlocking && chooseMove <= 5)
         {
             if (!stats.isBlocking)
             {
