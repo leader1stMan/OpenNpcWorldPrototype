@@ -6113,7 +6113,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1321745950}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.43, y: 0.186, z: -16.14}
+  m_LocalPosition: {x: -8.43, y: -0.1, z: -16.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -6201,6 +6201,8 @@ MonoBehaviour:
   againstNobleSentence: {fileID: 11400000, guid: bde8a1b5dc3ff7943b11da7871fbd60f,
     type: 2}
   theodoreStart: {fileID: 11400000, guid: 2e0cbee6f521f754c9fa6a58e38e5fec, type: 2}
+  DialoguePaths:
+  - Assets/NPC dialogues/Treason quest/Speach.txt
   Theodore: {fileID: 1405135086}
   CenterofTown: {fileID: 1321745951}
 --- !u!114 &1474046187
@@ -9525,7 +9527,7 @@ PrefabInstance:
     - target: {fileID: 338504425366044328, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.94
+      value: -8.17
       objectReference: {fileID: 0}
     - target: {fileID: 338504425366044328, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
@@ -9535,7 +9537,7 @@ PrefabInstance:
     - target: {fileID: 338504425366044328, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 16.73
+      value: -14.46
       objectReference: {fileID: 0}
     - target: {fileID: 338504425366044328, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
@@ -11873,7 +11875,7 @@ PrefabInstance:
     - target: {fileID: 622297471873179661, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.23
+      value: -12.65
       objectReference: {fileID: 0}
     - target: {fileID: 622297471873179661, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
@@ -11883,7 +11885,7 @@ PrefabInstance:
     - target: {fileID: 622297471873179661, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 22.82
+      value: -4.4
       objectReference: {fileID: 0}
     - target: {fileID: 622297471873179661, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}

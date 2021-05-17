@@ -61,6 +61,12 @@ public class NPC : NpcData, IAttackable, IDestructible
         GetComponent<CapsuleCollider>().enabled = true; //Main collider for when the npc is alive
                                                         //We might not need it anymore(?) since the ragdoll colliders might work as well(Dunno)
     }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+    }
+
     void Update()
     {
         //Decrease run time after hit
@@ -232,6 +238,9 @@ public class NPC : NpcData, IAttackable, IDestructible
 
     void GoToWork()
     {
+        if (this.enabled == false)
+            return;
+
         //States that are more prioritized than 'GoingToWork' state
         if (currentState == NpcStates.GoingToWork || currentState == NpcStates.Working || currentState == NpcStates.Talking || currentState == NpcStates.Scared)
             return;
@@ -258,6 +267,8 @@ public class NPC : NpcData, IAttackable, IDestructible
 
     void GoHome()
     {
+        if (this.enabled == false)
+            return;
         //States that are more prioritized than 'GoingHome' state
         if (currentState == NpcStates.GoingHome || currentState == NpcStates.Talking || currentState == NpcStates.Scared)
             return;
@@ -396,7 +407,7 @@ public class NPC : NpcData, IAttackable, IDestructible
         //Checks if the talker's state does not have a higher priority
         if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking)
             return;
-        if (UnityEngine.Random.Range(0, 1000) <= 1000) //At a chance starts a conversation
+        if (UnityEngine.Random.Range(0, 1000) <= 0) //At a chance starts a conversation
         {
             if (GetInstanceID() > NPCscript.GetInstanceID()) //Each script has it's own ID. We can use these so one of the npc scripts is more prioritized
             {                                                //Can stop bug for when both scripts decide to have a conversation at the same time                                                                                                     
