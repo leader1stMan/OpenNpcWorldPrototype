@@ -35,9 +35,13 @@ public class NPC : NpcData, IAttackable, IDestructible
     SkinnedMeshRenderer[] skin;
 
     public bool combatState = false;
+    public bool treasonQuestNPC = false;
+    public GameObject defaultHome;
+    public GameObject defaultWork;
 
     void Start()
     {
+        GameEvents.current.onNpcTurnAgressive += OnNpcTurnAgressive;
         agent = GetComponent<NavMeshAgent>();
         controller = GetComponentInChildren<AnimationController>();
         text = GetComponentInChildren<TMP_Text>();
@@ -60,6 +64,17 @@ public class NPC : NpcData, IAttackable, IDestructible
         
         GetComponent<CapsuleCollider>().enabled = true; //Main collider for when the npc is alive
                                                         //We might not need it anymore(?) since the ragdoll colliders might work as well(Dunno)
+
+        defaultHome = GameObject.FindGameObjectWithTag("DefaultHome");
+        defaultWork = GameObject.FindGameObjectWithTag("DefaultWork");
+
+        if(home == null)
+            home = defaultHome.transform;
+
+        if (work == null)
+            work = defaultWork.transform;
+            
+        
     }
     void Update()
     {
@@ -75,6 +90,8 @@ public class NPC : NpcData, IAttackable, IDestructible
         if (currentState != NpcStates.Combat)
             WatchEnvironment();
     }
+
+    
 
     void FixedUpdate()
     {
@@ -220,7 +237,8 @@ public class NPC : NpcData, IAttackable, IDestructible
                 agent.enabled = false;
                 GetComponent<CapsuleCollider>().enabled = false;
                 GetComponent<Rigidbody>().isKinematic = false;
-
+                if(treasonQuestNPC)
+                    GameEvents.current.TreasonQuestNpcKill();
                 foreach (Rigidbody rigidbody in rig)
                 {
                     if (rigidbody != this.GetComponent<Rigidbody>())
@@ -518,5 +536,10 @@ public class NPC : NpcData, IAttackable, IDestructible
     public void OnDestruction(GameObject destroyer)
     {
         ChangeState(NpcStates.Dead);
+    }
+
+    void OnNpcTurnAgressive()
+    {
+        combatState = true;
     }
 }

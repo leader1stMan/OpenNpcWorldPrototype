@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb67e22c87943d842b22e74f76b976e4, type: 3}
+  m_Name: Peaceful2-3-3-1
+  m_EditorClassIdentifier: 
+  text: No I'm sure there is a more peaceful way.
+  answer: You're to weak and pathetic. We don't need your type of people anyway.
+  goal:
+    trackedSentences: []
+    selectedSentence: {fileID: 11400000}
+  nextSentence: {fileID: 11400000, guid: d7c2602f40e748d41840f8cd803c4c9b, type: 2}
+  choices: []
+  questParameter: 
+  CallShop: 0

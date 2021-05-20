@@ -38,7 +38,7 @@ public class TreasonQuest : Quest
     public Sentence redEnding;
     public Sentence orangeEnding;
     public Sentence kingEnding;
-    public Sentence TheodoreStartSentence;
+
     public Sentence AlchemistStartSentence;
 
     public DayAndNightControl control;
@@ -48,8 +48,29 @@ public class TreasonQuest : Quest
     private DialogueManager TheodoreDialogue;
     public NPC Alchemist;
     private DialogueManager AlchemistDialogue;
+    public NPC Noble;
+    private DialogueManager NobleDialogue;
 
     private bool withPotion;
+
+    //Theodore Quest Setence (When this comes up a theodores current sentence we trigger the next part of the treason quest
+    public List<Sentence> TheodoreEndingDialogue;
+    public List<Sentence> GauvainEndingDialogue;
+    public List<Sentence> GauvainEndingDialogueAgressive;
+    public List<Sentence> NobleEndingDialogue;
+    public Sentence TheodoreStartSentence;
+    public Sentence NobleStartSentence;
+    bool againstNoble = true;
+    bool againstRioters = false;
+    int enemiesKilled = 0;
+    int enemiesSpawned = 0;
+    public int enemiesSpawnLimit = 5;
+    public int enemiesRequiredToKill = 20;
+    public GameObject Guard;
+    public GameObject Rioter;
+    public GameObject TownSquare;
+    bool theodoreQuestDialogueTriggered = false;
+    bool nobleQuestDialogueTriggered = false;
 
     void Awake()
     {
@@ -80,6 +101,34 @@ public class TreasonQuest : Quest
 
         AgainstEndingComplete = new SentenceGoal(TheodoreQuestComplete);
         AgainstEndingComplete.AddHandler(AgainstEndingCompleted);
+    }
+
+    public void Start()
+    {
+        GameEvents.current.onTreasonQuestNpcKill += KillcountIncrease;
+        GameEvents.current.onTreasonTriggerEnter += SpawnEnemies;
+        TheodoreDialogue = Theodore.GetComponent<DialogueManager>();
+        NobleDialogue = Noble.GetComponent<DialogueManager>();
+    }
+
+    private void Update()
+    {
+        if (GauvainEndingDialogue.Contains(dialogue.currentSentence) && !theodoreQuestDialogueTriggered)
+            TheodoreTreasonQuestDialogue();
+
+        if (GauvainEndingDialogueAgressive.Contains(dialogue.currentSentence) && !nobleQuestDialogueTriggered)
+            NobleTreasonQuestDialogue();
+
+        if (TheodoreEndingDialogue.Contains(TheodoreDialogue.currentSentence))
+        {
+            againstNoble = true;
+        }
+
+        if (NobleEndingDialogue.Contains(NobleDialogue.currentSentence))
+        {
+            againstRioters = true;
+        }
+        
     }
 
     void CompleteFirstGoal()
@@ -186,5 +235,65 @@ public class TreasonQuest : Quest
     {
         //complete quest 
         Debug.Log("Complete against");
+    }
+
+    
+
+    void TheodoreTreasonQuestDialogue()
+    {
+        theodoreQuestDialogueTriggered = true;
+        TheodoreDialogue.currentSentence = TheodoreStartSentence;
+    }
+
+    void NobleTreasonQuestDialogue()
+    {
+        nobleQuestDialogueTriggered = true;
+        NobleDialogue.currentSentence = NobleStartSentence;
+    }
+
+    void KillcountIncrease()
+    {
+        enemiesSpawned--;
+        enemiesKilled++;
+    }
+
+    public void SpawnEnemies()
+    {
+        Debug.LogWarning("Test2");
+        if (enemiesSpawned < enemiesSpawnLimit)
+        {
+            Bounds bounds = TownSquare.GetComponent<BoxCollider>().bounds;
+            float offsetX = Random.Range(-bounds.extents.x, bounds.extents.x);
+            float offsetY = Random.Range(-bounds.extents.y, bounds.extents.y);
+            float offsetZ = Random.Range(-bounds.extents.z, bounds.extents.z);
+
+            if (againstNoble)
+            {
+                GameObject guard = Instantiate(Guard);
+                guard.transform.position = bounds.center + new Vector3(offsetX, offsetY, offsetZ);
+            }
+            if (againstRioters)
+            {
+                GameObject rioter = Instantiate(Rioter);
+                Guard.transform.position = bounds.center + new Vector3(offsetX, offsetY, offsetZ);
+            }
+            enemiesSpawned++;
+        }
+        
+    }
+
+    public bool GetAgainstRioterEnding()
+    {
+        if (againstRioters)
+            return againstRioters;
+
+        return false;
+    }
+
+    public bool GetAgainstNobleEnding()
+    {
+        if (againstNoble == true)
+            return againstNoble;
+        return false;
     }
 }

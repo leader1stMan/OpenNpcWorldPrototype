@@ -24,7 +24,7 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
     private Dialogue dialogueScript;
     public Sentence currentSentence;
     public Sentence defaultSentence;
-    private MerchantInventory shop;
+    private MerchantInventory shop;    
     NPC npc;
     private void Start() 
     {
@@ -81,6 +81,11 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
         _playeractions._indialogue = false;
         _playeractions.isInteracting = false;
         _playeractions.dialogue_gameobject.SetActive(false);
+
+        if (currentSentence.agressiveAfter)
+        {
+            GameEvents.current.NpcTurnAgressive();
+        }
     }
 
 

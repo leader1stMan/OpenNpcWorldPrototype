@@ -15,6 +15,7 @@ public class Sentence : ScriptableObject
 
     public string questParameter;
     public bool CallShop;
+    public bool agressiveAfter;
 
     public Sentence(string newText)
     {
@@ -29,4 +30,5 @@ public class Sentence : ScriptableObject
     public int GetPaths() { return choices.Count; }
 
     public Sentence GetSentence(int number) { return choices[number]; }
+
 }

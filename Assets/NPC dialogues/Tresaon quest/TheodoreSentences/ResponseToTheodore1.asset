@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb67e22c87943d842b22e74f76b976e4, type: 3}
+  m_Name: ResponseToTheodore1
+  m_EditorClassIdentifier: 
+  text: Your friend Guavain sent me so I can join the riot and do the orders you
+    give me.
+  answer: You're here to join the rebellion against the nobel are you?
+  goal:
+    trackedSentences: []
+    selectedSentence: {fileID: 11400000}
+  nextSentence: {fileID: 11400000, guid: 5cb27ce77d624e54c867ea979ddc8a2e, type: 2}
+  choices: []
+  questParameter: 
+  CallShop: 0
+  agressiveAfter: 0

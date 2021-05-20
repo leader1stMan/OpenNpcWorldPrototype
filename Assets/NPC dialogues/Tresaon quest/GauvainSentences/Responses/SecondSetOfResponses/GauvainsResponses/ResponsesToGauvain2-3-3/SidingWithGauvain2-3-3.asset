@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb67e22c87943d842b22e74f76b976e4, type: 3}
+  m_Name: SidingWithGauvain2-3-3
+  m_EditorClassIdentifier: 
+  text: Yes that's right. I'll join.
+  answer: Good go to my friend theodore he's in charge of planning the whole riot.
+  goal:
+    trackedSentences: []
+    selectedSentence: {fileID: 11400000}
+  nextSentence: {fileID: 11400000, guid: ef8485f5f67b4be42935b3ac8974604f, type: 2}
+  choices: []
+  questParameter: 
+  CallShop: 0

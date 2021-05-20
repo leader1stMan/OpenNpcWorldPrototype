@@ -7,6 +7,9 @@ TagManager:
   - Npc
   - Enemy
   - Theodore
+  - DefaultWork
+  - DefaultHome
+  - TownSquare
   layers:
   - Default
   - TransparentFX

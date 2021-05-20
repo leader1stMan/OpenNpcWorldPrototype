@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb67e22c87943d842b22e74f76b976e4, type: 3}
+  m_Name: TreasonSentence7
+  m_EditorClassIdentifier: 
+  text: 
+  answer: Together we'll stick the nobel on a stick and roast him like the pig he
+    is! And celebrate by eating him with beer!
+  goal:
+    trackedSentences: []
+    selectedSentence: {fileID: 11400000}
+  nextSentence: {fileID: 0}
+  choices:
+  - {fileID: 11400000, guid: 2698cddf46cad6b49a2bb5f7417e226e, type: 2}
+  - {fileID: 11400000, guid: f6d6ae0d4b70b7440aead126ec4a788c, type: 2}
+  - {fileID: 11400000, guid: e627d3dd013226e4c91913866a25a7d6, type: 2}
+  - {fileID: 11400000, guid: 0b87b8f4ac0b8ee41a32520cb57dc584, type: 2}
+  questParameter: 
+  CallShop: 0
