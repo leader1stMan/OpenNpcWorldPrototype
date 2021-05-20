@@ -338,6 +338,18 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.z
       value: -0.0000001601875
       objectReference: {fileID: 0}
+    - target: {fileID: 4575109230519276086, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: weapon
+      value: 
+      objectReference: {fileID: 11400000, guid: 2b9b62229886429419972221f33b1c3b,
+        type: 2}
+    - target: {fileID: 4575109230519276086, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: defaultAttack
+      value: 
+      objectReference: {fileID: 11400000, guid: 2b9b62229886429419972221f33b1c3b,
+        type: 2}
     - target: {fileID: 4674607809050203063, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}
       propertyPath: m_ConnectedAnchor.x

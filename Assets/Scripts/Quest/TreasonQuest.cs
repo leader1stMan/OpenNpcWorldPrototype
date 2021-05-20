@@ -60,7 +60,7 @@ public class TreasonQuest : Quest
     public List<Sentence> NobleEndingDialogue;
     public Sentence TheodoreStartSentence;
     public Sentence NobleStartSentence;
-    bool againstNoble = true;
+    bool againstNoble = false;
     bool againstRioters = false;
     int enemiesKilled = 0;
     int enemiesSpawned = 0;
@@ -275,7 +275,7 @@ public class TreasonQuest : Quest
             if (againstRioters)
             {
                 GameObject rioter = Instantiate(Rioter);
-                Guard.transform.position = bounds.center + new Vector3(offsetX, offsetY, offsetZ);
+                rioter.transform.position = bounds.center + new Vector3(offsetX, offsetY, offsetZ);
             }
             enemiesSpawned++;
         }
