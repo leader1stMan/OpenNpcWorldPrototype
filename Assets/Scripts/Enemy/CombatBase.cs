@@ -17,6 +17,8 @@ public abstract class CombatBase : MonoBehaviour
             "It can still be lured out of the area by npcs and the player. " +
             "This is an optional field")]
     public Collider PatrolArea;
+    public Transform attackPoint; //Npc attacks enemies while going to area 
+
     Rigidbody[] rig;
     SkinnedMeshRenderer[] skins;
 
@@ -96,7 +98,7 @@ public abstract class CombatBase : MonoBehaviour
 
         if (currentTarget != null)
         {
-            if (currentTarget.tag == "Npc")
+            if (currentTarget.gameObject.layer == 8)
             {
                 if (currentTarget.GetComponent<NPC>().enabled)
                 {
@@ -105,8 +107,13 @@ public abstract class CombatBase : MonoBehaviour
                 }
                 else
                 {
-                    if (currentTarget.GetComponent<CombatBase>().CurrentState == EnemyState.Dead)
-                        currentTarget = null;
+                    if (currentTarget.GetComponent<ShieldMeleeAI>().enabled)
+                    {
+                        if (currentTarget.GetComponent<ShieldMeleeAI>().CurrentState == EnemyState.Dead)
+                        {
+                            currentTarget = null;
+                        }
+                    }
                 }
             }
         }
@@ -126,7 +133,7 @@ public abstract class CombatBase : MonoBehaviour
     protected virtual void MoveAnimaton()
     {
         //Manage animations
-        if (agent.velocity.magnitude == 0)
+        if (agent.velocity.magnitude == 0 || agent.isStopped == true)
         {
             //Idle animation if npc isn't moving
             controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
@@ -157,9 +164,17 @@ public abstract class CombatBase : MonoBehaviour
                 Transform target = CheckForTargets();
                 if (target == null)
                 {
-                    //If point is reached, patrol to another
-                    if (agent.remainingDistance <= agent.stoppingDistance * 2)
-                        PatrolToAnotherSpot();
+                    if (!attackPoint)
+                    {
+                        //If point is reached, patrol to another
+                        if (agent.remainingDistance <= agent.stoppingDistance * 2)
+                            PatrolToAnotherSpot();
+                    }
+                    else
+                    {
+                        ChangeState(EnemyState.Patroling);
+                        agent.SetDestination(attackPoint.position);
+                    }
                 }
                 else
                 {
@@ -206,26 +221,6 @@ public abstract class CombatBase : MonoBehaviour
                 break;
 
             case EnemyState.Dead:
-                GetComponent<CombatBase>().enabled = false;
-                foreach (SkinnedMeshRenderer skinned in skins)
-                {
-                    skinned.updateWhenOffscreen = true; //Stops character from disrendering
-                }
-
-                controller.enabled = false; //Have to turn it off before executing ragdoll
-                controller.animator.enabled = false;
-                agent.enabled = false;
-                GetComponent<CapsuleCollider>().enabled = false;
-                GetComponent<Rigidbody>().isKinematic = false;
-
-                foreach (Rigidbody rigidbody in rig)
-                {
-                    if (rigidbody != this.GetComponent<Rigidbody>())
-                    {
-                        rigidbody.GetComponent<Collider>().enabled = true;
-                        rigidbody.isKinematic = false;
-                    }
-                }
                 break;
             default:
                 break;
@@ -268,7 +263,39 @@ public abstract class CombatBase : MonoBehaviour
                     < Vector3.Distance(nearestTarget.transform.position, transform.position))
                     nearestTarget = possibleTargets[i];
             }
-            return nearestTarget.transform;
+
+            CombatBase[] combatBases = GameObject.FindObjectsOfType<CombatBase>();
+            Debug.Log(combatBases[0]);
+            for (int i = 0; i < combatBases.Length; i++)
+            {
+                if (GetComponent<CombatBase>() == combatBases[i] || combatBases[i].enabled == false)
+                {
+                    for (int a = i; a < combatBases.Length - 1; a++)
+                    {
+                        // moving elements downwards, to fill the gap at [index]
+                        combatBases[a] = combatBases[a + 1];
+                    }
+                    System.Array.Resize(ref combatBases, combatBases.Length - 1);
+                }
+            }
+
+            int howmanyTarget = 0;
+            for (int i = 0; i < combatBases.Length; i++)
+            {
+               if (combatBases[i].currentTarget == nearestTarget.transform)
+               {
+                    howmanyTarget++;
+               }
+            }
+
+            if (howmanyTarget < 2)
+            {
+                return nearestTarget.transform;
+            }
+            else
+            {
+                return null;
+            }
         }
         else
             return null;
@@ -350,35 +377,43 @@ public abstract class CombatBase : MonoBehaviour
     //Pick random spot and start moving there
     protected virtual void PatrolToAnotherSpot()
     {
-        Vector3 dest;
-        if (PatrolArea == null)
+        if (!attackPoint)
         {
-            //Pick spot within X4 VisionRange 
-            dest = new Vector3(
-                Random.Range(transform.position.x - VisionRange * 2, transform.position.x + VisionRange * 2),
-                (transform.position.y),
-                Random.Range(transform.position.z - VisionRange * 2, transform.position.z + VisionRange * 2)
-                );
+            Vector3 dest;
+            if (PatrolArea == null)
+            {
+                //Pick spot within X4 VisionRange 
+                dest = new Vector3(
+                    Random.Range(transform.position.x - VisionRange * 2, transform.position.x + VisionRange * 2),
+                    (transform.position.y),
+                    Random.Range(transform.position.z - VisionRange * 2, transform.position.z + VisionRange * 2)
+                    );
+            }
+            else
+            {
+                //Pick spot within Patrol Area collider
+                dest = new Vector3(
+                    Random.Range(PatrolArea.bounds.min.x, PatrolArea.bounds.max.x),
+                    Random.Range(PatrolArea.bounds.min.y, PatrolArea.bounds.max.y),
+                    Random.Range(PatrolArea.bounds.min.z, PatrolArea.bounds.max.z)
+                    );
+            }
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(dest, out hit, VisionRange, agent.areaMask))
+            {
+                ChangeState(EnemyState.Patroling);
+                agent.SetDestination(hit.position);
+            }
+            else
+            {
+                //Repeat till reachable spot is found
+                PatrolToAnotherSpot();
+            }
         }
         else
-        {
-            //Pick spot within Patrol Area collider
-            dest = new Vector3(
-                Random.Range(PatrolArea.bounds.min.x, PatrolArea.bounds.max.x),
-                Random.Range(PatrolArea.bounds.min.y, PatrolArea.bounds.max.y),
-                Random.Range(PatrolArea.bounds.min.z, PatrolArea.bounds.max.z)
-                );
-        }
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(dest, out hit, VisionRange, agent.areaMask))
         {
             ChangeState(EnemyState.Patroling);
-            agent.SetDestination(hit.position);
-        }
-        else
-        {
-            //Repeat till reachable spot is found
-            PatrolToAnotherSpot();
+            agent.SetDestination(attackPoint.position);
         }
     }
 
@@ -394,5 +429,38 @@ public abstract class CombatBase : MonoBehaviour
     public void OnDestruction(GameObject destroyer)
     {
         ChangeState(EnemyState.Dead);
+        stats.isDead = true;
+
+        foreach (SkinnedMeshRenderer skinned in skins)
+        {
+            skinned.updateWhenOffscreen = true; //Stops character from disrendering
+        }
+
+        controller.enabled = false; //Have to turn it off before executing ragdoll
+        controller.animator.enabled = false;
+        agent.enabled = false;
+        GetComponent<CapsuleCollider>().enabled = false;
+        GetComponent<Rigidbody>().isKinematic = false;
+
+        foreach (Rigidbody rigidbody in rig)
+        {
+            if (rigidbody != this.GetComponent<Rigidbody>())
+            {
+                rigidbody.GetComponent<Collider>().enabled = true;
+                rigidbody.isKinematic = false;
+            }
+        }
+    }
+
+    public void EnableCombat()
+    {
+        if (GetComponent<CharacterStats>().weapon.type == WeaponType.LowRange)
+        {
+            GetComponent<ShieldMeleeAI>().enabled = true;
+        }
+        else
+        {
+            GetComponent<ArcherAI>().enabled = true;
+        }
     }
 }

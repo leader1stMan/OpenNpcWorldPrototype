@@ -18,20 +18,16 @@ public class AttackedTakeDamage : MonoBehaviour, IAttackable
 
         if (stats.GetCurrentHealth().GetValue() <= 0)
         {
-            if (gameObject.tag == "Npc")
+            if (gameObject.layer == 8)
             {
                 if (GetComponent<NPC>().enabled)
                 {
                     GetComponent<NPC>().OnDestruction(attacker);
                 }
-                else if (GetComponent<CombatBase>().enabled)
+                else if (GetComponent<ShieldMeleeAI>().enabled)
                 {
-                    GetComponent<CombatBase>().OnDestruction(attacker);
+                    GetComponent<ShieldMeleeAI>().OnDestruction(attacker);
                 }
-            }
-            else
-            {
-
             }
         }
     }

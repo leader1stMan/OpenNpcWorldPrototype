@@ -38,6 +38,7 @@ public class AnimationController : MonoBehaviour
     const int layersNumber = 2;
 
     public Animator animator;
+    public GameObject target;
 
     public AnimationController(Animator anim)
     {
@@ -109,6 +110,8 @@ public class AnimationController : MonoBehaviour
 
     void AttackEvent() //Called from animation event
     {
+        GetComponentInParent<CharacterStats>().GetWeapon().ExecuteAttack(transform.parent.gameObject, target);
+        target = null;
         ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
     }
 }

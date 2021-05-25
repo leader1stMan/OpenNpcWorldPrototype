@@ -27,13 +27,27 @@ public class TreasonQuest : Quest
 
     private DialogueManager dialogue;
     public List<string> DialoguePaths;
-    string path = null;
-    private TMP_Text text;
+    public string path = null;
+    private TMP_Text text; 
+    public bool isFirst;
 
     public NPC Theodore;
+    public GameObject Noble;
+
     public Transform CenterofTown;
+    public Transform nobleHouse;
 
     private GameObject target;
+
+    public GameObject rioteer;
+    public GameObject guard;
+
+    public bool siegeNobel = false;
+
+    public int numberOfGuardsDead = 0;
+
+    public QuestState state;
+    public enum QuestState { NotStarted, TalkingWithGaunavin, AttackingNobleHouse, GuardBossFight, Complete };
 
     void Awake()
     {
@@ -54,6 +68,8 @@ public class TreasonQuest : Quest
         agent = GetComponent<NavMeshAgent>();
         controller = GetComponentInChildren<AnimationController>();
         text = GetComponentInChildren<TMP_Text>();
+
+        Noble.GetComponent<NobleQuestScript>().rioteerLeader = gameObject;
     }
 
     private void Update()
@@ -121,46 +137,143 @@ public class TreasonQuest : Quest
 
     IEnumerator ReachedCenter()
     {
+        SpawnSoldiers();
         yield return new WaitUntil(() => GetComponent<NavMeshAgent>().remainingDistance == 0);
         target = null;
         StartCoroutine(Conversation(0));
     }
 
-    IEnumerator Conversation(int n)
+    IEnumerator Conversation(int n, bool talkToNoble = false)
     {
-        StreamReader reader;
-        string line;
-        List<string> lines = new List<string>();
-
-        path = DialoguePaths[0];
-
-        reader = new StreamReader(path);
-        //Converstion is sotred in .txt file. "{}" separates first and second NPC's part 
-        while ((line = reader.ReadLine()) != "{}")
+        if (!talkToNoble)
         {
-            Debug.Log(true);
-            lines.Add(line); //Storing the conversation by each line
-        }
+            StreamReader reader;
+            string line;
+            List<string> lines = new List<string>();
 
-        text.text = null; //Ui for showing text
-        for (int i = 0; i < lines.Count; i++)
-        {
-            if (!lines[i].StartsWith(" ")) //Displays sentece for 4 secs
+            path = DialoguePaths[n];
+
+            reader = new StreamReader(path);
+            //Converstion is sotred in .txt file. "{}" separates first and second NPC's part 
+            while ((line = reader.ReadLine()) != "{}")
             {
-                text.text = lines[i];
-                yield return new WaitForSeconds(4);
-                text.text = null;
+                lines.Add(line); //Storing the conversation by each line
+            }
+
+            text.text = null; //Ui for showing text
+            for (int i = 0; i < lines.Count; i++)
+            {
+                if (!lines[i].StartsWith(" ")) //Displays sentece for 4 secs
+                {
+                    text.text = lines[i];
+                    yield return new WaitForSeconds(4);
+                    text.text = null;
+                }
             }
         }
-        EndConversation();
+        else
+        {
+            StreamReader reader;
+            NobleQuestScript npc = Noble.GetComponent<NobleQuestScript>();
+            string line;
+            List<string> lines = new List<string>();
+
+            // if NPC is first, it randomly chooses conversation and assigns it to the second NPC
+            // if NPC is second, it waits till conversation is assigned to him by the first NPC
+            if (isFirst)
+            {
+                //Assigning the conversation to npc1, npc2
+                path = DialoguePaths[n];
+                npc.path = path;
+
+                reader = new StreamReader(path);
+                //Converstion is sotred in .txt file. "{}" separates first and second NPC's part 
+                while ((line = reader.ReadLine()) != "{}")
+                {
+                    lines.Add(line); //Storing the conversation by each line
+                }
+            }
+            else
+            {
+                yield return new WaitUntil(() => path != null); //Wait till first NPC sends the conversation he chose
+                reader = new StreamReader(path);
+                while (reader.ReadLine() != "{}") ;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    lines.Add(line);
+                }
+            }
+
+            text.text = null; //Ui for showing text
+            yield return new WaitUntil(() => isFirst); //We now don't need 'isFirst' to tell who started the conversation
+            for (int i = 0; i < lines.Count; i++)
+            {
+                if (!lines[i].StartsWith(" ")) //Displays sentece for 4 secs
+                {
+                    text.text = lines[i];
+                    yield return new WaitForSeconds(4);
+                    text.text = null;
+                }
+                isFirst = false; //Turns 'isFirst' to false while pturning on it for the talker
+                npc.isFirst = true; //Indicating that it's talker's time to speak
+                yield return new WaitUntil(() => isFirst);
+            }
+            npc.isFirst = true;
+        }
+    
+        EndConversation(n);
     }
 
-    void EndConversation()
+    void EndConversation(int n)
     {
         agent.isStopped = false;
         StopCoroutine("Conversation");
         StopCoroutine("RotateTo");
         path = null;
+        isFirst = false;
         text.text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
+
+        switch(n)
+        {
+            case 0:
+                agent.SetDestination(nobleHouse.position);
+                state = QuestState.AttackingNobleHouse;
+                break;
+        }
+    }
+
+    void SpawnSoldiers()
+    {
+        for(int i = 0; i < 5; i++)
+        {
+            Vector3 position = new Vector3(CenterofTown.position.x + Random.Range(-10.0F, 10.0F), CenterofTown.position.y, CenterofTown.position.z + Random.Range(-10.0F, 10.0F));
+            Instantiate(rioteer, position, Quaternion.identity);
+            Vector3 position1 = new Vector3(nobleHouse.position.x + Random.Range(-10.0F, 10.0F), nobleHouse.position.y, nobleHouse.position.z + Random.Range(-10.0F, 10.0F));
+            Instantiate(guard, position1, Quaternion.identity);
+        }
+    }
+
+    public void SpawnRioteerAgain()
+    {
+        Vector3 position = new Vector3(CenterofTown.position.x + Random.Range(-10.0F, 10.0F), CenterofTown.position.y, CenterofTown.position.z + Random.Range(-10.0F, 10.0F));
+        Instantiate(rioteer, position, Quaternion.identity);
+    }
+
+    public void SpawnGuardAgain()
+    {
+        Vector3 position1 = new Vector3(nobleHouse.position.x + Random.Range(-10.0F, 10.0F), nobleHouse.position.y, nobleHouse.position.z + Random.Range(-10.0F, 10.0F));
+        Instantiate(guard, position1, Quaternion.identity);
+    }
+
+    public void NumberofGuardsDead()
+    {
+        numberOfGuardsDead++;
+        if (numberOfGuardsDead > 1)
+        {
+            state = QuestState.GuardBossFight;
+            isFirst = true;
+            StartCoroutine(Conversation(1, true));
+            Noble.GetComponent<NobleQuestScript>().StartConversation(1, true);
+        }
     }
 }
