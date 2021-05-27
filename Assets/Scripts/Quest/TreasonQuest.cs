@@ -236,8 +236,9 @@ public class TreasonQuest : Quest
         switch(n)
         {
             case 0:
-                agent.SetDestination(nobleHouse.position);
                 state = QuestState.AttackingNobleHouse;
+                CombatBase combatScript = GetComponent<CombatBase>().EnableCombat();
+                combatScript.attackPoint = nobleHouse;
                 break;
         }
     }
@@ -271,9 +272,19 @@ public class TreasonQuest : Quest
         if (numberOfGuardsDead > 1)
         {
             state = QuestState.GuardBossFight;
+            GetComponent<ShieldMeleeAI>().enabled = false;
+
             isFirst = true;
-            StartCoroutine(Conversation(1, true));
-            Noble.GetComponent<NobleQuestScript>().StartConversation(1, true);
+            StartCoroutine(StartNobleExecution());
         }
+    }
+
+    IEnumerator StartNobleExecution()
+    {
+        agent.SetDestination(Noble.transform.position);
+        yield return new WaitUntil(() => (Noble.transform.position - transform.position).magnitude <= 1);
+
+        StartCoroutine(Conversation(1, true));
+        Noble.GetComponent<NobleQuestScript>().StartConversation(1, true);
     }
 }

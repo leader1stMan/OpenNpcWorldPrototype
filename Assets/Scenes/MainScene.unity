@@ -13149,7 +13149,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1474046185}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1dbd17409aeae7459f4804126973340, type: 3}
+  m_Script: {fileID: 11500000, guid: 41aa3d3a9dba71d4cbacf8fffb879c16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
@@ -13159,13 +13159,57 @@ MonoBehaviour:
   attackPoint: {fileID: 0}
   ShowDebugMessages: 0
   VisualiseAgentActions: 0
-  VisionRange: 100
+  VisionRange: 0
   WhatCanThisEnemyAttack:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   Tags: []
   currentTarget: {fileID: 0}
   CombatRange: 0
+--- !u!114 &1474046188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474046185}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 437d4f95aecdff34ab4f8ae1655ef27f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  controller: {fileID: 0}
+  stats: {fileID: 0}
+  PatrolArea: {fileID: 0}
+  attackPoint: {fileID: 0}
+  ShowDebugMessages: 0
+  VisualiseAgentActions: 0
+  VisionRange: 10
+  WhatCanThisEnemyAttack:
+    serializedVersion: 2
+    m_Bits: 768
+  Tags:
+  - TreasonGuard
+  currentTarget: {fileID: 0}
+  CombatRange: 2
+  blockTime: 0
+--- !u!208 &1474046198
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474046185}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.01, y: 1, z: 0.01}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &1491741696
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13474,6 +13518,28 @@ Transform:
   m_Father: {fileID: 1255353465}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 60.218933, y: -77.24646, z: -51.27397}
+--- !u!1 &1525707411 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6598780603943041308, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+    type: 3}
+  m_PrefabInstance: {fileID: 9131209755506925617}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &1525707412
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1525707411}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.5, y: 1, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1533317228
 GameObject:
   m_ObjectHideFlags: 0
@@ -19966,6 +20032,11 @@ PrefabInstance:
       propertyPath: stopDistance
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 2820446562284331889, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2820446562284331890, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
       propertyPath: m_Name
@@ -20078,6 +20149,11 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.z
       value: -0.0983318
       objectReference: {fileID: 0}
+    - target: {fileID: 6950482010443781678, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7197825730962236353, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
       propertyPath: m_ConnectedAnchor.y
@@ -20132,6 +20208,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ConnectedAnchor.z
       value: -0.12029669
+      objectReference: {fileID: 0}
+    - target: {fileID: 9196853126298876968, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b2ae5c70ce5cee40835f02d129fdba2, type: 3}
@@ -24904,6 +24985,11 @@ PrefabInstance:
       propertyPath: m_ConnectedAnchor.z
       value: -0.00000064074976
       objectReference: {fileID: 0}
+    - target: {fileID: 2072425877942062144, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2257568500174649775, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: m_ConnectedAnchor.y
@@ -25048,6 +25134,11 @@ PrefabInstance:
         type: 3}
       propertyPath: stopDistance
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598780603943041311, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7024729463515889746, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}

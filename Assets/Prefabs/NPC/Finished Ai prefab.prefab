@@ -32,6 +32,7 @@ MonoBehaviour:
   controller: {fileID: 0}
   stats: {fileID: 0}
   PatrolArea: {fileID: 0}
+  attackPoint: {fileID: 0}
   ShowDebugMessages: 0
   VisualiseAgentActions: 0
   VisionRange: 10
@@ -43,6 +44,7 @@ MonoBehaviour:
   - Npc
   currentTarget: {fileID: 0}
   CombatRange: 3
+  blockTime: 0
 --- !u!114 &2954997807301128260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,6 +61,7 @@ MonoBehaviour:
   controller: {fileID: 0}
   stats: {fileID: 0}
   PatrolArea: {fileID: 0}
+  attackPoint: {fileID: 0}
   ShowDebugMessages: 0
   VisualiseAgentActions: 0
   VisionRange: 10
@@ -69,6 +72,7 @@ MonoBehaviour:
   - Player
   - Npc
   currentTarget: {fileID: 0}
+  CombatRange: 0
 --- !u!1001 &3200905690131235708
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -383,6 +387,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ConnectedAnchor.x
       value: -0.19087526
+      objectReference: {fileID: 0}
+    - target: {fileID: 7176504838547576364, guid: cd5633ded9ea10e42be05f617848635f,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7264595487819622895, guid: cd5633ded9ea10e42be05f617848635f,
         type: 3}

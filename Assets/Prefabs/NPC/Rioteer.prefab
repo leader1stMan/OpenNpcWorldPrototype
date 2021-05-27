@@ -2098,6 +2098,7 @@ GameObject:
   - component: {fileID: 4048806211004669946}
   - component: {fileID: 1587090069560675943}
   - component: {fileID: 5884745981065655631}
+  - component: {fileID: -7520177028937820104}
   m_Layer: 8
   m_Name: Rioteer
   m_TagString: TreasonRioteer
@@ -2190,7 +2191,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4010139478790561327}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
@@ -2366,6 +2367,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2ad8d3e12257384a84327d57870e5e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!208 &-7520177028937820104
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4010139478790561327}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.01, y: 1, z: 0.01}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &4057993206221474603
 GameObject:
   m_ObjectHideFlags: 0

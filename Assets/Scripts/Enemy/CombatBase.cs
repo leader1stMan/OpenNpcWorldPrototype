@@ -9,6 +9,7 @@ public abstract class CombatBase : MonoBehaviour
 {
     [SerializeField]
     protected NavMeshAgent agent = null;
+
     public AnimationController controller;
 
     public CharacterStats stats;
@@ -120,6 +121,12 @@ public abstract class CombatBase : MonoBehaviour
         ManageState();
         MoveAnimaton();
 
+        if (agent.isStopped == true)
+        {
+            agent.enabled = false;
+            GetComponent<NavMeshObstacle>().enabled = true;
+        }
+
         #region Editor Only
 #if UNITY_EDITOR
         if (VisualiseAgentActions)
@@ -173,7 +180,6 @@ public abstract class CombatBase : MonoBehaviour
                     else
                     {
                         ChangeState(EnemyState.Patroling);
-                        agent.SetDestination(attackPoint.position);
                     }
                 }
                 else
@@ -189,8 +195,7 @@ public abstract class CombatBase : MonoBehaviour
                 {
                     ChangeState(EnemyState.Idle);
                 }
-                else
-                    if ((currentTarget.position - transform.position).magnitude <= AttackDistance)
+                else if ((currentTarget.position - transform.position).magnitude <= AttackDistance)
                 {
                     agent.isStopped = true;
                     ChangeState(EnemyState.Attacking);
@@ -265,7 +270,6 @@ public abstract class CombatBase : MonoBehaviour
             }
 
             CombatBase[] combatBases = GameObject.FindObjectsOfType<CombatBase>();
-            Debug.Log(combatBases[0]);
             for (int i = 0; i < combatBases.Length; i++)
             {
                 if (GetComponent<CombatBase>() == combatBases[i] || combatBases[i].enabled == false)
@@ -288,7 +292,7 @@ public abstract class CombatBase : MonoBehaviour
                }
             }
 
-            if (howmanyTarget < 2)
+            if (howmanyTarget < 1)
             {
                 return nearestTarget.transform;
             }
@@ -327,6 +331,8 @@ public abstract class CombatBase : MonoBehaviour
         switch (oldState)
         {
             case EnemyState.Attacking:
+                GetComponent<NavMeshObstacle>().enabled = false;
+                agent.enabled = true;
                 agent.isStopped = false;
                 break;
             default:
@@ -356,6 +362,7 @@ public abstract class CombatBase : MonoBehaviour
                 #endregion
                 break;
             case EnemyState.Patroling:
+                agent.SetDestination(attackPoint.position + new Vector3(Random.Range(-10, 10), attackPoint.position.y, Random.Range(-10, 10)));
                 #region Debug
 
                 if (ShowDebugMessages)
@@ -452,15 +459,17 @@ public abstract class CombatBase : MonoBehaviour
         }
     }
 
-    public void EnableCombat()
+    public CombatBase EnableCombat()
     {
         if (GetComponent<CharacterStats>().weapon.type == WeaponType.LowRange)
         {
             GetComponent<ShieldMeleeAI>().enabled = true;
+            return GetComponent<ShieldMeleeAI>();
         }
         else
         {
             GetComponent<ArcherAI>().enabled = true;
+            return GetComponent<ArcherAI>();
         }
     }
 }

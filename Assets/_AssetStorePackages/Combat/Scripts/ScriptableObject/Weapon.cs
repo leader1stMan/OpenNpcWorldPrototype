@@ -55,8 +55,6 @@ public class Weapon : AttackDefinition
             return;
         if (Vector3.Distance(attacker.transform.position, defender.transform.position) > Range)
         {
-            Debug.Log("out of range");
-
             return;
         }
       

@@ -56,8 +56,8 @@ public class Rioteer : MonoBehaviour
             yield return new WaitForEndOfFrame();
         } while (treasonQuestNpc.GetComponent<TreasonQuest>().state != TreasonQuest.QuestState.AttackingNobleHouse);
 
-        GetComponent<CombatBase>().attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().nobleHouse;
-        GetComponent<CombatBase>().EnableCombat();
+        CombatBase combat = GetComponent<CombatBase>().EnableCombat();
+        combat.attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().nobleHouse;
     }
 
     void OnQuestState()
