@@ -25,11 +25,11 @@ public class TreasonQuest : Quest
     public Sentence againstNobleSentence;
     public Sentence theodoreStart;
 
+    public string speachAtCenter;
+    public string executeNoble;
+
     private DialogueManager dialogue;
-    public List<string> DialoguePaths;
     public string path = null;
-    private TMP_Text text; 
-    public bool isFirst;
 
     public NPC Theodore;
     public GameObject Noble;
@@ -67,7 +67,6 @@ public class TreasonQuest : Quest
     {
         agent = GetComponent<NavMeshAgent>();
         controller = GetComponentInChildren<AnimationController>();
-        text = GetComponentInChildren<TMP_Text>();
 
         Noble.GetComponent<NobleQuestScript>().rioteerLeader = gameObject;
     }
@@ -140,107 +139,14 @@ public class TreasonQuest : Quest
         SpawnSoldiers();
         yield return new WaitUntil(() => GetComponent<NavMeshAgent>().remainingDistance == 0);
         target = null;
-        StartCoroutine(Conversation(0));
+        StartCoroutine(GetComponent<NPC>().Conversation(null, speachAtCenter, this));
     }
 
-    IEnumerator Conversation(int n, bool talkToNoble = false)
+    public void EndSpeach()
     {
-        if (!talkToNoble)
-        {
-            StreamReader reader;
-            string line;
-            List<string> lines = new List<string>();
-
-            path = DialoguePaths[n];
-
-            reader = new StreamReader(path);
-            //Converstion is sotred in .txt file. "{}" separates first and second NPC's part 
-            while ((line = reader.ReadLine()) != "{}")
-            {
-                lines.Add(line); //Storing the conversation by each line
-            }
-
-            text.text = null; //Ui for showing text
-            for (int i = 0; i < lines.Count; i++)
-            {
-                if (!lines[i].StartsWith(" ")) //Displays sentece for 4 secs
-                {
-                    text.text = lines[i];
-                    yield return new WaitForSeconds(4);
-                    text.text = null;
-                }
-            }
-        }
-        else
-        {
-            StreamReader reader;
-            NobleQuestScript npc = Noble.GetComponent<NobleQuestScript>();
-            string line;
-            List<string> lines = new List<string>();
-
-            // if NPC is first, it randomly chooses conversation and assigns it to the second NPC
-            // if NPC is second, it waits till conversation is assigned to him by the first NPC
-            if (isFirst)
-            {
-                //Assigning the conversation to npc1, npc2
-                path = DialoguePaths[n];
-                npc.path = path;
-
-                reader = new StreamReader(path);
-                //Converstion is sotred in .txt file. "{}" separates first and second NPC's part 
-                while ((line = reader.ReadLine()) != "{}")
-                {
-                    lines.Add(line); //Storing the conversation by each line
-                }
-            }
-            else
-            {
-                yield return new WaitUntil(() => path != null); //Wait till first NPC sends the conversation he chose
-                reader = new StreamReader(path);
-                while (reader.ReadLine() != "{}") ;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    lines.Add(line);
-                }
-            }
-
-            text.text = null; //Ui for showing text
-            yield return new WaitUntil(() => isFirst); //We now don't need 'isFirst' to tell who started the conversation
-            for (int i = 0; i < lines.Count; i++)
-            {
-                if (!lines[i].StartsWith(" ")) //Displays sentece for 4 secs
-                {
-                    text.text = lines[i];
-                    yield return new WaitForSeconds(4);
-                    text.text = null;
-                }
-                isFirst = false; //Turns 'isFirst' to false while pturning on it for the talker
-                npc.isFirst = true; //Indicating that it's talker's time to speak
-                yield return new WaitUntil(() => isFirst);
-            }
-            npc.isFirst = true;
-        }
-    
-        EndConversation(n);
-    }
-
-    void EndConversation(int n)
-    {
-        agent.isStopped = false;
-        StopCoroutine("Conversation");
-        StopCoroutine("RotateTo");
-        path = null;
-        isFirst = false;
-        text.text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
-
-        switch(n)
-        {
-            case 0:
-                state = QuestState.AttackingNobleHouse;
-                CombatBase combatScript = GetComponent<CombatBase>().EnableCombat();
-                combatScript.attackPoint = nobleHouse;
-                break;
-        }
+        state = QuestState.AttackingNobleHouse;
+        CombatBase combatScript = GetComponent<CombatBase>().EnableCombat();
+        combatScript.attackPoint = nobleHouse;
     }
 
     void SpawnSoldiers()
@@ -274,7 +180,6 @@ public class TreasonQuest : Quest
             state = QuestState.GuardBossFight;
             GetComponent<ShieldMeleeAI>().enabled = false;
 
-            isFirst = true;
             StartCoroutine(StartNobleExecution());
         }
     }
@@ -282,9 +187,12 @@ public class TreasonQuest : Quest
     IEnumerator StartNobleExecution()
     {
         agent.SetDestination(Noble.transform.position);
-        yield return new WaitUntil(() => (Noble.transform.position - transform.position).magnitude <= 1);
-
-        StartCoroutine(Conversation(1, true));
-        Noble.GetComponent<NobleQuestScript>().StartConversation(1, true);
+        yield return new WaitUntil(() => (Noble.transform.position - transform.position).magnitude <= 2);
+        
+        GetComponent<NPC>().isFirst = true;
+        StartCoroutine(GetComponent<NPC>().Conversation(Noble, executeNoble, this));
+        StartCoroutine(Noble.GetComponent<NPC>().Conversation(this.gameObject, null, null));
     }
+
+    //chasing change block
 }

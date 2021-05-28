@@ -25,7 +25,7 @@ public class NPC : NpcData, IAttackable, IDestructible
     private float runTimeLeft;
 
     //NPC-NPC interaction
-    private bool isFirst;
+    public bool isFirst;
     string path = null;
     private TMP_Text text;
     public List<string> DialoguePaths;
@@ -199,7 +199,7 @@ public class NPC : NpcData, IAttackable, IDestructible
             case NpcStates.InteractingWithPlayer:
                 break;
             case NpcStates.Talking:
-                agent.isStopped = true;
+                GetComponent<NavMeshAgent>().isStopped = true;
                 break;
             case NpcStates.Working:
                 SetMoveTarget(work);
@@ -308,59 +308,102 @@ public class NPC : NpcData, IAttackable, IDestructible
         }
     }
 
-    IEnumerator Conversation(GameObject talker)
+    public IEnumerator Conversation(GameObject talker = null, string converPath = null, Component senderScript = null)
     {
-        ChangeState(NpcStates.Talking);
-        StartCoroutine("RotateTo", talker); //Look at talker
-
-        StreamReader reader;
-        NPC npc = talker.GetComponent<NPC>(); 
-        string line;
-        List<string> lines = new List<string>();
-
-        // if NPC is first, it randomly chooses conversation and assigns it to the second NPC
-        // if NPC is second, it waits till conversation is assigned to him by the first NPC
-        if (isFirst)
+        if (talker != null)
+            Debug.Log(gameObject.name + talker.gameObject);
+        if (talker == null)
         {
-            //Assigning the conversation to npc1, npc2
-            path = AssignPath();
-            npc.path = path;
+            StreamReader reader;
+            string line;
+            List<string> lines = new List<string>();
+
+            path = converPath;
 
             reader = new StreamReader(path);
             //Converstion is sotred in .txt file. "{}" separates first and second NPC's part 
-            while ((line = reader.ReadLine()) != "{}") 
+            while ((line = reader.ReadLine()) != "{}")
             {
-                Debug.Log(true);
                 lines.Add(line); //Storing the conversation by each line
+            }
+
+            text.text = null; //Ui for showing text
+            for (int i = 0; i < lines.Count; i++)
+            {
+                if (!lines[i].StartsWith(" ")) //Displays sentece for 4 secs
+                {
+                    text.text = lines[i];
+                    yield return new WaitForSeconds(4);
+                    text.text = null;
+                }
             }
         }
         else
         {
-            yield return new WaitUntil(() => path != null); //Wait till first NPC sends the conversation he chose
-             reader = new StreamReader(path);
-            while (reader.ReadLine() != "{}") ;
-            while ((line = reader.ReadLine()) != null)
+            Debug.Log(gameObject.name + 5);
+            ChangeState(NpcStates.Talking);
+            Debug.Log(gameObject.name + 4);
+            StartCoroutine("RotateTo", talker); //Look at talker
+            Debug.Log(gameObject.name + 3);
+
+            StreamReader reader;
+            NPC npc = talker.GetComponent<NPC>();
+            string line;
+            List<string> lines = new List<string>();
+
+            // if NPC is first, it randomly chooses conversation and assigns it to the second NPC
+            // if NPC is second, it waits till conversation is assigned to him by the first NPC
+            if (isFirst)
             {
-                lines.Add(line);
+                Debug.Log(gameObject.name + 2);
+                //Assigning the conversation to npc1, npc2
+                if (converPath == null)
+                {
+                    path = AssignPath();
+                }
+                else
+                {
+                    path = converPath;
+                }
+                npc.path = path;
+
+                reader = new StreamReader(path);
+                //Converstion is sotred in .txt file. "{}" separates first and second NPC's part 
+                while ((line = reader.ReadLine()) != "{}")
+                {
+                    lines.Add(line); //Storing the conversation by each line
+                }
             }
+            else
+            {
+                Debug.Log(gameObject.name);
+                yield return new WaitUntil(() => path != null); //Wait till first NPC sends the conversation he chose
+                reader = new StreamReader(path);
+                while (reader.ReadLine() != "{}") ;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    lines.Add(line);
+                }
+            }
+
+            GetComponentInChildren<TMP_Text>().text = null; //Ui for showing text
+            yield return new WaitUntil(() => isFirst); //We now don't need 'isFirst' to tell who started the conversation
+            for (int i = 0; i < lines.Count; i++)
+            {
+                if (!lines[i].StartsWith(" ")) //Displays sentece for 4 secs
+                {
+                    GetComponentInChildren<TMP_Text>().text = lines[i];
+                    yield return new WaitForSeconds(4);
+                    GetComponentInChildren<TMP_Text>().text = null;
+                }
+                isFirst = false; //Turns 'isFirst' to false while pturning on it for the talker
+                npc.isFirst = true; //Indicating that it's talker's time to speak
+                yield return new WaitUntil(() => isFirst);
+            }
+            npc.isFirst = true;
         }
 
-        text.text = null; //Ui for showing text
-        yield return new WaitUntil(() => isFirst); //We now don't need 'isFirst' to tell who started the conversation
-        for (int i = 0; i < lines.Count; i++)
-        {
-            if (!lines[i].StartsWith(" ")) //Displays sentece for 4 secs
-            {
-                text.text = lines[i];
-                yield return new WaitForSeconds(4);
-                text.text = null;
-            }
-            isFirst = false; //Turns 'isFirst' to false while pturning on it for the talker
-            npc.isFirst = true; //Indicating that it's talker's time to speak
-            yield return new WaitUntil(() => isFirst);
-        }
-        npc.isFirst = true;
-        EndConversation();
+        EndConversation(senderScript);
     }
 
     //Randomly choose a path from DialoguePaths 
@@ -378,7 +421,7 @@ public class NPC : NpcData, IAttackable, IDestructible
     }
 
     //Stops talking state and removes all behaviours from it
-    public void EndConversation() 
+    public void EndConversation(Component senderScript = null) 
     {
         agent.isStopped = false;
         StopCoroutine("Conversation");
@@ -386,8 +429,16 @@ public class NPC : NpcData, IAttackable, IDestructible
         path = null;
         isFirst = false;
         text.text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
-        if (currentState == NpcStates.Talking)
-            ChangeState(NpcStates.Idle);
+        
+        if (senderScript == null)
+        {
+            if (currentState == NpcStates.Talking)
+                ChangeState(NpcStates.Idle);
+        }
+        else if (senderScript == GetComponent<TreasonQuest>())
+        {
+            GetComponent<TreasonQuest>().EndSpeach();
+        }
     }
 
     //Start NPC-NPC interaction with nearby NPCs with 
@@ -514,7 +565,7 @@ public class NPC : NpcData, IAttackable, IDestructible
         {
             Vector3 direction = (target.transform.position - transform.position).normalized;
             lookRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime / (Quaternion.Angle(transform.rotation, lookRotation) / agent.angularSpeed));
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime / (Quaternion.Angle(transform.rotation, lookRotation) / GetComponent<NavMeshAgent>().angularSpeed));
             yield return new WaitForEndOfFrame();
         } while (currentState == NpcStates.Talking);
     }
