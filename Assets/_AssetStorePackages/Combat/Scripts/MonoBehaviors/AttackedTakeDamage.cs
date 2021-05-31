@@ -15,6 +15,14 @@ public class AttackedTakeDamage : MonoBehaviour, IAttackable
     public void OnAttack(GameObject attacker, Attack attack)
     {
         stats.TakeDamage(attacker, attack.Damage);
+        CombatBase[] combatScripts = GetComponents<CombatBase>();
+        foreach (CombatBase combatScript in combatScripts)
+        {
+            if (combatScript.enabled)
+            {
+                combatScript.currentTarget = attacker.transform;
+            }
+        }
 
         if (stats.GetCurrentHealth().GetValue() <= 0)
         {

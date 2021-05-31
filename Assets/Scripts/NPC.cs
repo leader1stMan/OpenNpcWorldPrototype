@@ -310,8 +310,6 @@ public class NPC : NpcData, IAttackable, IDestructible
 
     public IEnumerator Conversation(GameObject talker = null, string converPath = null, Component senderScript = null)
     {
-        if (talker != null)
-            Debug.Log(gameObject.name + talker.gameObject);
         if (talker == null)
         {
             StreamReader reader;
@@ -423,13 +421,13 @@ public class NPC : NpcData, IAttackable, IDestructible
     //Stops talking state and removes all behaviours from it
     public void EndConversation(Component senderScript = null) 
     {
-        agent.isStopped = false;
+        GetComponent<NavMeshAgent>().isStopped = false;
         StopCoroutine("Conversation");
         StopCoroutine("RotateTo");
         path = null;
         isFirst = false;
-        text.text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
-        
+        GetComponentInChildren<TMP_Text>().text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
+
         if (senderScript == null)
         {
             if (currentState == NpcStates.Talking)
@@ -437,7 +435,7 @@ public class NPC : NpcData, IAttackable, IDestructible
         }
         else if (senderScript == GetComponent<TreasonQuest>())
         {
-            GetComponent<TreasonQuest>().EndSpeach();
+            GetComponent<TreasonQuest>().EndConversation();
         }
     }
 

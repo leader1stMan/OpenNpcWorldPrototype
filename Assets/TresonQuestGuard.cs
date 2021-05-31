@@ -60,7 +60,9 @@ public class TresonQuestGuard : MonoBehaviour
                 break;
             case TreasonQuest.QuestState.GuardBossFight:
                 GetComponent<CombatBase>().enabled = false;
-                GetComponent<NavMeshAgent>().isStopped = true;
+
+                if (GetComponent<NavMeshAgent>().enabled)
+                    GetComponent<NavMeshAgent>().isStopped = true;
                 break;
         }
     }

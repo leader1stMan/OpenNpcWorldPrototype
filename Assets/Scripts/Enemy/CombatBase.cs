@@ -121,10 +121,13 @@ public abstract class CombatBase : MonoBehaviour
         ManageState();
         MoveAnimaton();
 
-        if (agent.isStopped == true)
+        if (agent.enabled)
         {
-            agent.enabled = false;
-            GetComponent<NavMeshObstacle>().enabled = true;
+            if (agent.isStopped == true)
+            {
+                agent.enabled = false;
+                GetComponent<NavMeshObstacle>().enabled = true;
+            }
         }
 
         #region Editor Only
@@ -166,26 +169,29 @@ public abstract class CombatBase : MonoBehaviour
         switch (CurrentState)
         {
             case EnemyState.Patroling:
-            case EnemyState.Idle:
                 //Find new target and start chasing it, else patrol
                 Transform target = CheckForTargets();
-                if (target == null)
-                {
-                    if (!attackPoint)
-                    {
-                        //If point is reached, patrol to another
-                        if (agent.remainingDistance <= agent.stoppingDistance * 2)
-                            PatrolToAnotherSpot();
-                    }
-                    else
-                    {
-                        ChangeState(EnemyState.Patroling);
-                    }
-                }
-                else
+                if (target != null)
                 {
                     currentTarget = target;
                     ChangeState(EnemyState.Chasing);
+                }
+
+                if (agent.remainingDistance == 0)
+                {
+                    ChangeState(EnemyState.Idle);
+                }
+                break;
+            case EnemyState.Idle:
+                if (!attackPoint)
+                {
+                    //If point is reached, patrol to another
+                    if (agent.remainingDistance <= agent.stoppingDistance * 2)
+                        PatrolToAnotherSpot();
+                }
+                else
+                {
+                    ChangeState(EnemyState.Patroling);
                 }
                 break;
                 
@@ -312,9 +318,12 @@ public abstract class CombatBase : MonoBehaviour
             ChangeState(EnemyState.Idle);
             return;
         }
-
-        currentTarget = target;
-        agent.SetDestination(target.position);
+        
+        if (agent.destination != currentTarget.position)
+        {
+            currentTarget = target;
+            agent.SetDestination(target.position);
+        }
     }
     public abstract void Attack(GameObject target);
 

@@ -47,7 +47,7 @@ public class TreasonQuest : Quest
     public int numberOfGuardsDead = 0;
 
     public QuestState state;
-    public enum QuestState { NotStarted, TalkingWithGaunavin, AttackingNobleHouse, GuardBossFight, Complete };
+    public enum QuestState { NotStarted, TalkingWithGaunavin, AttackingNobleHouse, GuardBossFight, ExecuteNoble, Complete };
 
     void Awake()
     {
@@ -142,11 +142,20 @@ public class TreasonQuest : Quest
         StartCoroutine(GetComponent<NPC>().Conversation(null, speachAtCenter, this));
     }
 
-    public void EndSpeach()
+    public void EndConversation()
     {
-        state = QuestState.AttackingNobleHouse;
-        CombatBase combatScript = GetComponent<CombatBase>().EnableCombat();
-        combatScript.attackPoint = nobleHouse;
+        switch (state)
+        {
+            case QuestState.NotStarted:
+                state = QuestState.AttackingNobleHouse;
+                CombatBase combatScript = GetComponent<CombatBase>().EnableCombat();
+                combatScript.attackPoint = nobleHouse;
+                break;
+
+            case QuestState.GuardBossFight:
+                state = QuestState.ExecuteNoble;
+                break;
+        }
     }
 
     void SpawnSoldiers()
@@ -186,6 +195,8 @@ public class TreasonQuest : Quest
 
     IEnumerator StartNobleExecution()
     {
+        GetComponent<NavMeshObstacle>().enabled = false;
+        agent.enabled = true;
         agent.SetDestination(Noble.transform.position);
         yield return new WaitUntil(() => (Noble.transform.position - transform.position).magnitude <= 2);
         

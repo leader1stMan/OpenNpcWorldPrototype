@@ -70,7 +70,9 @@ public class Rioteer : MonoBehaviour
         {
             case TreasonQuest.QuestState.GuardBossFight:
                 GetComponent<CombatBase>().enabled = false;
-                GetComponent<NavMeshAgent>().isStopped = true;
+
+                if (GetComponent<NavMeshAgent>().enabled)
+                    GetComponent<NavMeshAgent>().isStopped = true;
 
                 int random = Random.Range(0, 999);
                 if (random == 0)

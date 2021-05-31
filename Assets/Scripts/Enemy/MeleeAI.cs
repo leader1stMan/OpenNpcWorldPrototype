@@ -23,7 +23,11 @@ public class MeleeAI : CombatBase
             attack = false;
             return;
         }
-        agent.isStopped = true;
+
+        if (agent.enabled)
+        {
+            agent.isStopped = true;
+        }
         RotateTo(target);
 
         if (attackCooldown <= 0)
