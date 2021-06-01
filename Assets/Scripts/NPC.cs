@@ -41,13 +41,22 @@ public class NPC : NpcData, IAttackable, IDestructible
         agent = GetComponent<NavMeshAgent>();
         controller = GetComponentInChildren<AnimationController>();
         text = GetComponentInChildren<TMP_Text>();
-        skin = GetComponentsInChildren<SkinnedMeshRenderer>();
-        rig = GetComponentsInChildren<Rigidbody>();
 
         FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork; //Connects with the day and night controller
         FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome; //On a certain time these functions are called so npcs can execute life cycles  
 
-        foreach (SkinnedMeshRenderer skinned in skin) 
+        DisableRagdoll();
+        
+        GetComponent<CapsuleCollider>().enabled = true; //Main collider for when the npc is alive
+                                                        //We might not need it anymore(?) since the ragdoll colliders might work as well(Dunno)
+    }
+
+    public void DisableRagdoll()
+    {
+        skin = GetComponentsInChildren<SkinnedMeshRenderer>();
+        rig = GetComponentsInChildren<Rigidbody>();
+
+        foreach (SkinnedMeshRenderer skinned in skin)
         {
             skinned.updateWhenOffscreen = false; //has to be enabled when ragdoll is in. Otherwise the character sometimes does not render
         }
@@ -57,9 +66,6 @@ public class NPC : NpcData, IAttackable, IDestructible
             rigidbody.GetComponent<Collider>().enabled = false; //Make sure colliders for the ragdoll are disabled while npc is still alive
             rigidbody.isKinematic = true;
         }
-        
-        GetComponent<CapsuleCollider>().enabled = true; //Main collider for when the npc is alive
-                                                        //We might not need it anymore(?) since the ragdoll colliders might work as well(Dunno)
     }
 
     private void OnDisable()

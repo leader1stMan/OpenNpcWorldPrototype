@@ -9,16 +9,21 @@ public class ArcherAI : MeleeAI
 
     public override void Attack(GameObject target)
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, target.transform.position - transform.position, out hit))
+        if (attackCooldown <= 0)
         {
-            if (hit.transform.gameObject == target)
-                stats.GetWeapon().ExecuteAttack(gameObject,
-                                                gameObject.transform.position + gameObject.transform.forward * 0 + new Vector3(0, LaunchHeight, 0),
-                                                TakeAim(),
-                                                LayerMask.NameToLayer("Enemy Projectile"));
-            else
-                PickBetterPosition();
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, target.transform.position - transform.position, out hit))
+            {
+                if (hit.transform.gameObject == target)
+                {
+                    attackCooldown = stats.GetWeapon().Cooldown;
+
+                    stats.GetWeapon().ExecuteAttack(gameObject,
+                                                    gameObject.transform.position + gameObject.transform.forward * 0 + new Vector3(0, LaunchHeight, 0),
+                                                    TakeAim(),
+                                                    LayerMask.NameToLayer("Enemy Projectile"));
+                }
+            }
         }
     }
             
@@ -55,5 +60,6 @@ public class ArcherAI : MeleeAI
     void PickBetterPosition()
     {
         //implemet later
+        Debug.Log("Pick");
     }
 }

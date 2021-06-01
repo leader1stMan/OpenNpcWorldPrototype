@@ -53,23 +53,7 @@ public abstract class CombatBase : MonoBehaviour
         stats = GetComponent<CharacterStats>();
         AttackDistance = stats.weapon.Range;
 
-        //Ragdoll effect. Currently this script and npc Ai script both has dead state stored separatly
-        rig = GetComponentsInChildren<Rigidbody>();
-        foreach (Rigidbody rigidbody in rig)
-        {
-            if (rigidbody != this.GetComponent<Rigidbody>())
-            {
-                rigidbody.GetComponent<Collider>().enabled = false;
-                rigidbody.isKinematic = true;
-            }
-        }
-        //Skinnedmesh needs to updated off screen when ragdolled. Or disappears
-        skins = GetComponentsInChildren<SkinnedMeshRenderer>();
-        foreach (SkinnedMeshRenderer skinnedMeshRenderer in skins)
-        {
-            skinnedMeshRenderer.updateWhenOffscreen = false;
-        }
-        GetComponent<CapsuleCollider>().enabled = true;
+        GetComponent<NPC>().DisableRagdoll();
         #region Editor Only
 #if UNITY_EDITOR
         if (VisualiseAgentActions)
@@ -371,7 +355,10 @@ public abstract class CombatBase : MonoBehaviour
                 #endregion
                 break;
             case EnemyState.Patroling:
-                agent.SetDestination(attackPoint.position + new Vector3(Random.Range(-10, 10), attackPoint.position.y, Random.Range(-10, 10)));
+                if (attackPoint)
+                {
+                    agent.SetDestination(attackPoint.position + new Vector3(Random.Range(-10, 10), attackPoint.position.y, Random.Range(-10, 10)));
+                }
                 #region Debug
 
                 if (ShowDebugMessages)
