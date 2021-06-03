@@ -46,9 +46,6 @@ public class NPC : NpcData, IAttackable, IDestructible
         FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome; //On a certain time these functions are called so npcs can execute life cycles  
 
         DisableRagdoll();
-        
-        GetComponent<CapsuleCollider>().enabled = true; //Main collider for when the npc is alive
-                                                        //We might not need it anymore(?) since the ragdoll colliders might work as well(Dunno)
     }
 
     public void DisableRagdoll()
@@ -66,6 +63,8 @@ public class NPC : NpcData, IAttackable, IDestructible
             rigidbody.GetComponent<Collider>().enabled = false; //Make sure colliders for the ragdoll are disabled while npc is still alive
             rigidbody.isKinematic = true;
         }
+
+        GetComponent<CapsuleCollider>().enabled = true;
     }
 
     private void OnDisable()
@@ -344,11 +343,8 @@ public class NPC : NpcData, IAttackable, IDestructible
         }
         else
         {
-            Debug.Log(gameObject.name + 5);
             ChangeState(NpcStates.Talking);
-            Debug.Log(gameObject.name + 4);
             StartCoroutine("RotateTo", talker); //Look at talker
-            Debug.Log(gameObject.name + 3);
 
             StreamReader reader;
             NPC npc = talker.GetComponent<NPC>();

@@ -69,12 +69,14 @@ public class AnimationController : MonoBehaviour
         while (true)
         {
             int chosenLayer = (int)layer;
-
             string animation = LayerPrefixs[chosenLayer] + newAnimation;
+
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName(animation))
+                return;
 
             if (Layers[chosenLayer] != animation && !Block[chosenLayer])
             {
-                animator.Play(animation);
+                animator.CrossFade(animation, 0.5f);
                 Layers[chosenLayer] = animation;
                 if (block)
                     StartCoroutine(BlockAnimator(layer, animator.GetCurrentAnimatorStateInfo(chosenLayer).length));

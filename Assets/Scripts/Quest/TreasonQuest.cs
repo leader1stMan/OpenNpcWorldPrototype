@@ -110,6 +110,10 @@ public class TreasonQuest : Quest
 
     void GotoTheodore()
     {
+        GetComponent<CharacterStats>().isInvincible = true;
+        Theodore.GetComponent<CharacterStats>().isInvincible = true;
+        Noble.GetComponent<CharacterStats>().isInvincible = true;
+
         dialogue.currentSentence = againstNobleSentence; 
         Theodore.GetComponent<DialogueManager>().currentSentence = theodoreStart;
     }
@@ -154,6 +158,7 @@ public class TreasonQuest : Quest
 
             case QuestState.GuardBossFight:
                 state = QuestState.ExecuteNoble;
+                Noble.GetComponent<CharacterStats>().isInvincible = false;
                 break;
         }
     }
@@ -204,6 +209,4 @@ public class TreasonQuest : Quest
         StartCoroutine(GetComponent<NPC>().Conversation(Noble, executeNoble, this));
         StartCoroutine(Noble.GetComponent<NPC>().Conversation(this.gameObject, null, null));
     }
-
-    //chasing change block
 }

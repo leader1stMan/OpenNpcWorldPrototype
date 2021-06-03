@@ -15,6 +15,7 @@ public class CharacterStats : MonoBehaviour, IDestructible
     public bool isBlocking;
     public float attackCooldown;
 
+    public bool isInvincible = false;
     public bool isDead;
 
     public event Action OnHealthValueChanged;

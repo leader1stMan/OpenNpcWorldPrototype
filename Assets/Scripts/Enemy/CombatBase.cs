@@ -166,6 +166,7 @@ public abstract class CombatBase : MonoBehaviour
                     ChangeState(EnemyState.Idle);
                 }
                 break;
+
             case EnemyState.Idle:
                 if (!attackPoint)
                 {
@@ -324,6 +325,9 @@ public abstract class CombatBase : MonoBehaviour
         switch (oldState)
         {
             case EnemyState.Attacking:
+                if (GetComponent<CharacterStats>().isBlocking)
+                    GetComponent<CharacterStats>().isBlocking = false;
+
                 GetComponent<NavMeshObstacle>().enabled = false;
                 agent.enabled = true;
                 agent.isStopped = false;
@@ -434,6 +438,7 @@ public abstract class CombatBase : MonoBehaviour
         ChangeState(EnemyState.Dead);
         stats.isDead = true;
 
+        skins = GetComponentsInChildren<SkinnedMeshRenderer>();
         foreach (SkinnedMeshRenderer skinned in skins)
         {
             skinned.updateWhenOffscreen = true; //Stops character from disrendering
@@ -445,6 +450,7 @@ public abstract class CombatBase : MonoBehaviour
         GetComponent<CapsuleCollider>().enabled = false;
         GetComponent<Rigidbody>().isKinematic = false;
 
+        rig = GetComponentsInChildren<Rigidbody>();
         foreach (Rigidbody rigidbody in rig)
         {
             if (rigidbody != this.GetComponent<Rigidbody>())
