@@ -189,7 +189,7 @@ public class TreasonQuest : Quest
     public void NumberofGuardsDead()
     {
         numberOfGuardsDead++;
-        if (numberOfGuardsDead > 1)
+        if (numberOfGuardsDead > 0)
         {
             state = QuestState.GuardBossFight;
             GetComponent<ShieldMeleeAI>().enabled = false;

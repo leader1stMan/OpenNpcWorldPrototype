@@ -85,21 +85,8 @@ public abstract class CombatBase : MonoBehaviour
         {
             if (currentTarget.gameObject.layer == 8)
             {
-                if (currentTarget.GetComponent<NPC>().enabled)
-                {
-                    if (currentTarget.GetComponent<NPC>().currentState == NpcStates.Dead)
-                        currentTarget = null;
-                }
-                else
-                {
-                    if (currentTarget.GetComponent<ShieldMeleeAI>().enabled)
-                    {
-                        if (currentTarget.GetComponent<ShieldMeleeAI>().CurrentState == EnemyState.Dead)
-                        {
-                            currentTarget = null;
-                        }
-                    }
-                }
+                if (currentTarget.GetComponent<NPC>().currentState == NpcStates.Dead)
+                    currentTarget = null;
             }
         }
         ManageState();
@@ -430,34 +417,6 @@ public abstract class CombatBase : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, VisionRange);
-        }
-    }
-
-    public void OnDestruction(GameObject destroyer)
-    {
-        ChangeState(EnemyState.Dead);
-        stats.isDead = true;
-
-        skins = GetComponentsInChildren<SkinnedMeshRenderer>();
-        foreach (SkinnedMeshRenderer skinned in skins)
-        {
-            skinned.updateWhenOffscreen = true; //Stops character from disrendering
-        }
-
-        controller.enabled = false; //Have to turn it off before executing ragdoll
-        controller.animator.enabled = false;
-        agent.enabled = false;
-        GetComponent<CapsuleCollider>().enabled = false;
-        GetComponent<Rigidbody>().isKinematic = false;
-
-        rig = GetComponentsInChildren<Rigidbody>();
-        foreach (Rigidbody rigidbody in rig)
-        {
-            if (rigidbody != this.GetComponent<Rigidbody>())
-            {
-                rigidbody.GetComponent<Collider>().enabled = true;
-                rigidbody.isKinematic = false;
-            }
         }
     }
 
