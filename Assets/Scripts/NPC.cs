@@ -212,7 +212,7 @@ public class NPC : NpcData, IAttackable, IDestructible
             case NpcStates.Dead: //Enables ragdoll
                 GetComponent<CombatBase>().enabled = false;
                 GetComponent<CharacterStats>().isDead = true;
-                foreach (SkinnedMeshRenderer skinned in skin)
+                foreach (SkinnedMeshRenderer skinned in GetComponentsInChildren<SkinnedMeshRenderer>())
                 {
                     skinned.updateWhenOffscreen = true; //Stops character from disrendering
                 }
@@ -223,7 +223,7 @@ public class NPC : NpcData, IAttackable, IDestructible
                 GetComponent<CapsuleCollider>().enabled = false;
                 GetComponent<Rigidbody>().isKinematic = false;
 
-                foreach (Rigidbody rigidbody in rig)
+                foreach (Rigidbody rigidbody in GetComponentsInChildren<Rigidbody>())
                 {
                     if (rigidbody != this.GetComponent<Rigidbody>())
                     {
