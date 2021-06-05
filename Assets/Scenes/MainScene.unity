@@ -932,6 +932,7 @@ MonoBehaviour:
   shield: {fileID: 0}
   isBlocking: 0
   attackCooldown: 0
+  isInvincible: 0
   isDead: 0
 --- !u!114 &102010721
 MonoBehaviour:
@@ -3010,6 +3011,7 @@ MonoBehaviour:
   shield: {fileID: 0}
   isBlocking: 0
   attackCooldown: 0
+  isInvincible: 0
   isDead: 0
 --- !u!114 &371236411
 MonoBehaviour:
@@ -4241,6 +4243,7 @@ MonoBehaviour:
   shield: {fileID: 0}
   isBlocking: 0
   attackCooldown: 0
+  isInvincible: 0
   isDead: 0
 --- !u!114 &465457737
 MonoBehaviour:
@@ -10104,6 +10107,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 622297471873179663, guid: 343aaf64225e76d4cab4f5940af40065,
+        type: 3}
+      propertyPath: m_StoppingDistance
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2377172287341229196, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
@@ -16183,6 +16191,7 @@ MonoBehaviour:
   shield: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96, type: 2}
   isBlocking: 0
   attackCooldown: 0
+  isInvincible: 0
   isDead: 0
 --- !u!114 &1781499113
 MonoBehaviour:
@@ -16804,6 +16813,7 @@ MonoBehaviour:
   shield: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96, type: 2}
   isBlocking: 0
   attackCooldown: 0
+  isInvincible: 0
   isDead: 0
 --- !u!114 &1861797423
 MonoBehaviour:
@@ -20332,6 +20342,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Radius
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2820446562284331889, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: m_StoppingDistance
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2820446562284331890, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}

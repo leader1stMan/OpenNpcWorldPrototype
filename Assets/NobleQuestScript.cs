@@ -35,4 +35,10 @@ public class NobleQuestScript : MonoBehaviour
 
         text = GetComponentInChildren<TMP_Text>();
     }
+
+    private void Update()
+    {
+        if (GetComponent<CharacterStats>().isDead)
+            StartCoroutine(rioteerLeader.GetComponent<TreasonQuest>().NobleIsExecuted());
+    }
 }
