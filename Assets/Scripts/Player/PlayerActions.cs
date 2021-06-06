@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.AI;
 using TMPro;
 
 public class PlayerActions : MonoBehaviour
@@ -18,7 +19,9 @@ public class PlayerActions : MonoBehaviour
     public float InteractionRange;
 
     public bool _indialogue = false;
+    public bool _NpcInDialogue = false;
     private RaycastHit _currenthit;
+    private GameObject ConversationStartNpc;
 
     public bool isInteracting;
     public IInteractWindow openedWindow;
@@ -56,11 +59,37 @@ public class PlayerActions : MonoBehaviour
         {
             PressSpeakButton(_currenthit.transform.GetComponentInParent<DialogueManager>());
         }
+        if (_NpcInDialogue == true)
+        {
+            PressSpeakButton(ConversationStartNpc.transform.GetComponentInParent<DialogueManager>());
+        }
         QuestWindowToggle();
         if (isInteracting && Input.GetKeyDown(EscapeButton))
         {
             isInteracting = false;
             openedWindow.OnClose();
+        }
+    }
+
+    public void ReceiveInteraction(GameObject npc) //Recieve interaction from npc
+    {
+        ConversationStartNpc = npc;
+        DialogueManager dialogue = npc.transform.GetComponentInParent<DialogueManager>();
+
+        if (dialogue == null)
+            dialogue = npc.transform.GetComponentInChildren<DialogueManager>();
+        if (dialogue == null)
+            return;
+        if (dialogue._isdialogue == false)
+        {
+            openedWindow = dialogue;
+            isInteracting = true;
+            dialogue_gameobject.SetActive(true);
+            _NpcInDialogue = true;
+            Vector3 rot = dialogue.transform.eulerAngles;
+            dialogue.transform.LookAt(transform);
+            dialogue.transform.eulerAngles = new Vector3(rot.x, dialogue.transform.eulerAngles.y, rot.z);
+            dialogue.say(npc.transform.gameObject);
         }
     }
 

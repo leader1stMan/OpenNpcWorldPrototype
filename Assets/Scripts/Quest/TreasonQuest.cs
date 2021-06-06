@@ -214,9 +214,11 @@ public class TreasonQuest : Quest
     {
         state = QuestState.NobleIsExecuted;
 
-        agent.SetDestination(FindObjectOfType<FirstPersonAIO>().gameObject.transform.position);
+        target = FindObjectOfType<FirstPersonAIO>().gameObject;
+        agent.SetDestination(target.transform.position);
         yield return new WaitUntil(() => GetComponent<NavMeshAgent>().remainingDistance <= 2);
 
-        agent.isStopped = true;
+        target.GetComponent<PlayerActions>().ReceiveInteraction(gameObject);
+        this.enabled = false;
     }
 }

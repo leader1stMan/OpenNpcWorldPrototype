@@ -13,6 +13,8 @@ public class NobleQuestScript : MonoBehaviour
     public bool isFirst;
 
     public GameObject rioteerLeader;
+    
+    private bool nobleDead = false;
 
     private void Start()
     {
@@ -38,7 +40,10 @@ public class NobleQuestScript : MonoBehaviour
 
     private void Update()
     {
-        if (GetComponent<CharacterStats>().isDead)
+        if (GetComponent<CharacterStats>().isDead && nobleDead == false)
+        {
+            nobleDead = true;
             StartCoroutine(rioteerLeader.GetComponent<TreasonQuest>().NobleIsExecuted());
+        }
     }
 }
