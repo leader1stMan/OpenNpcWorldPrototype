@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEditor;
 using System.IO;
 using TMPro;
 
@@ -25,7 +26,7 @@ public class TreasonQuest : Quest
     public Sentence againstNobleSentence;
     public Sentence theodoreStart;
 
-    public string speachAtCenter;
+    public TextAsset speachAtCenter;
     public string executeNoble;
 
     private DialogueManager dialogue;
@@ -143,7 +144,7 @@ public class TreasonQuest : Quest
         SpawnSoldiers();
         yield return new WaitUntil(() => GetComponent<NavMeshAgent>().remainingDistance == 0);
         target = null;
-        StartCoroutine(GetComponent<NPC>().Conversation(null, speachAtCenter, this));
+        StartCoroutine(GetComponent<NPC>().Conversation(null, AssetDatabase.GetAssetPath(speachAtCenter), this));
     }
 
     public void EndConversation()
@@ -217,6 +218,8 @@ public class TreasonQuest : Quest
         target = FindObjectOfType<FirstPersonAIO>().gameObject;
         agent.SetDestination(target.transform.position);
         yield return new WaitUntil(() => GetComponent<NavMeshAgent>().remainingDistance <= 2);
+
+        agent.SetDestination(transform.position);
 
         target.GetComponent<PlayerActions>().ReceiveInteraction(gameObject);
         this.enabled = false;

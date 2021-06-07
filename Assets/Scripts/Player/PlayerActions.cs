@@ -112,6 +112,7 @@ public class PlayerActions : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
         }
     }
+
     private void PressSpeakButton(DialogueManager dialogue)
     {
         var pointer = new PointerEventData(EventSystem.current);
