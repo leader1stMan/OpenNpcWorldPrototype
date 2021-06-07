@@ -13432,8 +13432,9 @@ MonoBehaviour:
   againstNobleSentence: {fileID: 11400000, guid: bde8a1b5dc3ff7943b11da7871fbd60f,
     type: 2}
   theodoreStart: {fileID: 11400000, guid: 2e0cbee6f521f754c9fa6a58e38e5fec, type: 2}
+  executedNoble: {fileID: 11400000, guid: 3b09b0353e4cbee4bbb44216388ef4ef, type: 2}
   speachAtCenter: {fileID: 4900000, guid: 52833aeba6db2bd4c888227b4df41569, type: 3}
-  executeNoble: Assets/NPC dialogues/Treason quest/Events/Vs.txt
+  executeNoble: {fileID: 4900000, guid: fd16225f443c08446b270d5083834369, type: 3}
   path: 
   Theodore: {fileID: 1405135086}
   Noble: {fileID: 1170737955}

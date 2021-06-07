@@ -25,9 +25,10 @@ public class TreasonQuest : Quest
     public Sentence goAwaySentence;
     public Sentence againstNobleSentence;
     public Sentence theodoreStart;
+    public Sentence executedNoble;
 
     public TextAsset speachAtCenter;
-    public string executeNoble;
+    public TextAsset executeNoble;
 
     private DialogueManager dialogue;
     public string path = null;
@@ -207,7 +208,7 @@ public class TreasonQuest : Quest
         yield return new WaitUntil(() => (Noble.transform.position - transform.position).magnitude <= 2);
         
         GetComponent<NPC>().isFirst = true;
-        StartCoroutine(GetComponent<NPC>().Conversation(Noble, executeNoble, this));
+        StartCoroutine(GetComponent<NPC>().Conversation(Noble, AssetDatabase.GetAssetPath(executeNoble), this));
         StartCoroutine(Noble.GetComponent<NPC>().Conversation(this.gameObject, null, null));
     }
 
@@ -221,7 +222,9 @@ public class TreasonQuest : Quest
 
         agent.SetDestination(transform.position);
 
+        GetComponent<DialogueManager>().currentSentence = executedNoble;
         target.GetComponent<PlayerActions>().ReceiveInteraction(gameObject);
+
         this.enabled = false;
     }
 }
