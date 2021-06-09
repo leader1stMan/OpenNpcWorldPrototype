@@ -20,9 +20,6 @@ public abstract class CombatBase : MonoBehaviour
     public Collider PatrolArea;
     public Transform attackPoint; //Npc attacks enemies while going to area 
 
-    Rigidbody[] rig;
-    SkinnedMeshRenderer[] skins;
-
     #region Debugging
     public bool ShowDebugMessages;
     public bool VisualiseAgentActions;
@@ -30,7 +27,7 @@ public abstract class CombatBase : MonoBehaviour
 
     public float VisionRange;
     public LayerMask WhatCanThisEnemyAttack;
-    [TagSelector] public string[] Tags;
+    [TagSelector] public List<string> Tags;
     public EnemyState CurrentState{get; private set;}
 
     public Transform currentTarget;
@@ -158,8 +155,11 @@ public abstract class CombatBase : MonoBehaviour
                 if (!attackPoint)
                 {
                     //If point is reached, patrol to another
-                    if (agent.remainingDistance <= agent.stoppingDistance * 2)
-                        PatrolToAnotherSpot();
+                    if (agent.enabled)
+                    {
+                        if (agent.remainingDistance <= agent.stoppingDistance * 2)
+                            PatrolToAnotherSpot();
+                    }
                 }
                 else
                 {
@@ -226,7 +226,7 @@ public abstract class CombatBase : MonoBehaviour
                 continue;
 
             //Check if collider has attackable tag
-            for (int i = 0; i < Tags.Length; i++)
+            for (int i = 0; i < Tags.Capacity; i++)
             {
                 if (col.gameObject.tag == Tags[i])
                 {
