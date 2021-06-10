@@ -1,7 +1,6 @@
 ﻿using UnityEngine.Events;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
@@ -73,11 +72,7 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
         DialogueSystem.instance.Detach();
         npc.GetComponentInChildren<Animator>().enabled = true;
         npc.enabled = true;
-
-        npc.GetComponent<NavMeshObstacle>().enabled = false;
-        npc.agent.enabled = true;
         npc.agent.isStopped = false;
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _isdialogue = false;

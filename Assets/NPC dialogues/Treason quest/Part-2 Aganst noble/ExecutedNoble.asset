@@ -17,7 +17,7 @@ MonoBehaviour:
   goal:
     trackedSentences: []
     selectedSentence: {fileID: 11400000}
-  nextSentence: {fileID: 11400000, guid: 8290c43e643cd5c4ca55ff404820758d, type: 2}
+  nextSentence: {fileID: 0}
   choices: []
   questParameter: 
   CallShop: 0
