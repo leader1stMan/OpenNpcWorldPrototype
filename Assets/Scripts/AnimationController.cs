@@ -116,6 +116,20 @@ public class AnimationController : MonoBehaviour
         target = null;
         ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
     }
+
+    void BlockEvent() //Same as up
+    {
+        ShieldMeleeAI shieldMeleeAI = GetComponentInParent<ShieldMeleeAI>();
+        shieldMeleeAI.changingState = true;
+        shieldMeleeAI.stats.isBlocking = true;
+    }
+
+    IEnumerator ForBlockEvent()
+    {
+        ShieldMeleeAI shieldMeleeAI = GetComponentInParent<ShieldMeleeAI>();
+        yield return new WaitForSeconds(shieldMeleeAI.controller.GetAnimationLength(AnimatorLayers.UP));
+        shieldMeleeAI.changingState = false;
+    }
 }
 
 public enum AnimatorLayers { DOWN, UP, ALL }

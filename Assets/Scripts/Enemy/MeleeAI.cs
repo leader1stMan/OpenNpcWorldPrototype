@@ -11,7 +11,7 @@ public class MeleeAI : CombatBase
     protected override void Update()
     {
         base.Update();
-        if (CurrentState == EnemyState.Attacking)
+        if (CurrentState == EnemyState.Attacking && !agent.enabled)
             RotateTo(currentTarget.gameObject);
     }
 
@@ -24,12 +24,6 @@ public class MeleeAI : CombatBase
             return;
         }
 
-        if (agent.enabled)
-        {
-            agent.isStopped = true;
-        }
-        RotateTo(target);
-
         if (attackCooldown <= 0)
         {
             GetComponentInChildren<AnimationController>().target = target;
@@ -37,15 +31,13 @@ public class MeleeAI : CombatBase
             attackCooldown = stats.GetWeapon().Cooldown;
         }
 
-        StopCoroutine("RotateTo");
+        attack = false;
+        return;
     }
 
     void RotateTo(GameObject target)
     {
-        Quaternion lookRotation;
-
-        Vector3 direction = (target.transform.position - transform.position).normalized;
-        lookRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime / (Quaternion.Angle(transform.rotation, lookRotation) / agent.angularSpeed));
+        Vector3 targetTransform = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
+        transform.LookAt(targetTransform);
     }
 }

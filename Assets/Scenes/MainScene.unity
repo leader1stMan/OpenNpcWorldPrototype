@@ -13586,6 +13586,7 @@ MonoBehaviour:
   currentTarget: {fileID: 0}
   CombatRange: 2
   blockTime: 0
+  changingState: 0
 --- !u!208 &1474046198
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -20311,6 +20312,11 @@ PrefabInstance:
       propertyPath: PlayerCamera
       value: 
       objectReference: {fileID: 1624113314}
+    - target: {fileID: 340976799474820992, guid: 345fccf1aa215da4d8ebb68901fd4bda,
+        type: 3}
+      propertyPath: InteractionRange
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 340976799474820994, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
       propertyPath: m_Name
@@ -20376,6 +20382,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1706849248}
     m_Modifications:
+    - target: {fileID: 1958132157, guid: 7b2ae5c70ce5cee40835f02d129fdba2, type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 365870303058462613, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
       propertyPath: m_ConnectedAnchor.y

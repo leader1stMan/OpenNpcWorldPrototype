@@ -8,7 +8,7 @@ using System.Collections;
 public abstract class CombatBase : MonoBehaviour
 {
     [SerializeField]
-    protected NavMeshAgent agent = null;
+    public NavMeshAgent agent = null;
 
     public AnimationController controller;
 
@@ -98,6 +98,7 @@ public abstract class CombatBase : MonoBehaviour
             }
         }
 
+
         #region Editor Only
 #if UNITY_EDITOR
         if (VisualiseAgentActions)
@@ -179,7 +180,9 @@ public abstract class CombatBase : MonoBehaviour
                     ChangeState(EnemyState.Attacking);
                 }
                 else
+                {
                     Chase(currentTarget);
+                }
                 break;
 
             case EnemyState.Attacking:
@@ -291,10 +294,13 @@ public abstract class CombatBase : MonoBehaviour
             return;
         }
         
-        if (agent.destination != currentTarget.position)
+        if (agent.enabled)
         {
-            currentTarget = target;
-            agent.SetDestination(target.position);
+            if (agent.destination != currentTarget.position)
+            {
+                currentTarget = target;
+                agent.SetDestination(target.position);
+            }
         }
     }
     public abstract void Attack(GameObject target);
@@ -316,8 +322,7 @@ public abstract class CombatBase : MonoBehaviour
                     GetComponent<CharacterStats>().isBlocking = false;
 
                 GetComponent<NavMeshObstacle>().enabled = false;
-                agent.enabled = true;
-                agent.isStopped = false;
+                StartCoroutine(EnablenNavmeshAgain());
                 break;
             default:
                 break;
@@ -432,5 +437,12 @@ public abstract class CombatBase : MonoBehaviour
             GetComponent<ArcherAI>().enabled = true;
             return GetComponent<ArcherAI>();
         }
+    }
+
+    public IEnumerator EnablenNavmeshAgain()
+    {
+        yield return 2;
+        agent.enabled = true;
+        agent.isStopped = false;
     }
 }

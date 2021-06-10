@@ -12,7 +12,7 @@ public class CharacterStats : MonoBehaviour, IDestructible
     public AttackDefinition defaultAttack;
     public Weapon weapon;
     public Shield shield;
-    public bool isBlocking;
+    public bool isBlocking = false;
     public float attackCooldown;
 
     public bool isInvincible = false;

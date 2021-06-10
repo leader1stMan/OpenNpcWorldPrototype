@@ -1,8 +1,8 @@
 ﻿using UnityEngine.Events;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.AI;
 using System.Collections;
+using UnityEngine.AI;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using TMPro;
@@ -27,6 +27,7 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
     public Sentence defaultSentence;
     private MerchantInventory shop;
     NPC npc;
+
     private void Start() 
     {
         player = GameObject.FindWithTag("Player").GetComponent<FirstPersonAIO>();
@@ -72,11 +73,12 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
         stats.attackCooldown = 3f;
         DialogueSystem.instance.Detach();
         npc.GetComponentInChildren<Animator>().enabled = true;
-        npc.enabled = true;
+
+        if (!npc.GetComponent<ShieldMeleeAI>().enabled && !npc.GetComponent<ArcherAI>().enabled)
+            npc.enabled = true;
 
         npc.GetComponent<NavMeshObstacle>().enabled = false;
-        npc.agent.enabled = true;
-        npc.agent.isStopped = false;
+        StartCoroutine(npc.GetComponent<ShieldMeleeAI>().EnablenNavmeshAgain()); //change
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

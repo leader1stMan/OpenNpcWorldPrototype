@@ -129,6 +129,7 @@ public class TreasonQuest : Quest
     {
         dialogue.currentSentence = goAwaySentence;
 
+        GetComponent<NPC>().enabled = false;
         CombatBase combatBaseScript = GetComponent<CombatBase>().EnableCombat();
         combatBaseScript.Tags.Add("Player");
     }
@@ -199,7 +200,7 @@ public class TreasonQuest : Quest
     public void NumberofGuardsDead()
     {
         numberOfGuardsDead++;
-        if (numberOfGuardsDead > 0)
+        if (numberOfGuardsDead > 9)
         {
             state = QuestState.GuardBossFight;
             GetComponent<ShieldMeleeAI>().enabled = false;

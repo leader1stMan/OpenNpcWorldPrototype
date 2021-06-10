@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class ShieldMeleeAI : MeleeAI
 {
     public float blockTime;
-    bool changingState;
+    public bool changingState;
 
     protected override void Start()
     {
@@ -36,36 +36,35 @@ public class ShieldMeleeAI : MeleeAI
             agent.SetDestination(target.transform.position);
 
         int chooseMove = Random.Range(1, 10);
-        if (CanHit(gameObject, target.transform) && attackCooldown <= 0 && !stats.isBlocking && chooseMove <= 5)
+        if (CanHit(gameObject, target.transform) && attackCooldown <= 0 && chooseMove <= 5)
         {
             if (!stats.isBlocking)
             {
                 base.Attack(target);
+                return;
             }
         }
         
-        if (CanHit(target, transform) && blockTime <= 0 && !stats.isBlocking && chooseMove > 5)
+        if (attackCooldown <= 0)
         {
-            StartCoroutine(StartBlock());
+            if (CanHit(target, transform) && blockTime <= 0 && !stats.isBlocking && chooseMove > 5)
+            {
+                StartBlock();
+            }
+            else if (stats.isBlocking && blockTime <= 0)
+            {
+                StartCoroutine(StopBlock());
+            }
         }
-        else if (stats.isBlocking && blockTime <= 0)
-        {
-            StartCoroutine(StopBlock());
-        }
-        
+
         attack = false;
     }
 
-    IEnumerator StartBlock()
+    void StartBlock()
     {
         blockTime = 3;
         print("block");
-        controller.ChangeAnimation(AnimationController.SHIELD_READY, AnimatorLayers.UP);
-        changingState = true;
-        stats.isBlocking = true;
-        agent.speed /= stats.shield.ShieldDeceleration;
-        yield return new WaitForSeconds(controller.GetAnimationLength(AnimatorLayers.UP));
-        changingState = false;
+        controller.ChangeAnimation(AnimationController.SHIELD_READY, AnimatorLayers.UP, true);
     }
 
     IEnumerator StopBlock()
