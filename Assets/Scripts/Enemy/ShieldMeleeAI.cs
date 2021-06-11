@@ -73,7 +73,6 @@ public class ShieldMeleeAI : MeleeAI
         controller.ChangeAnimation(AnimationController.SHILD_UNEQUIP, AnimatorLayers.UP);
         changingState = true;
         stats.isBlocking = false;
-        agent.speed *= stats.shield.ShieldDeceleration;
         yield return new WaitForSeconds(controller.GetAnimationLength(AnimatorLayers.UP));
         changingState = false;
     }

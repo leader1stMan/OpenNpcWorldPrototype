@@ -51,7 +51,7 @@ public class TreasonQuest : Quest
     public int numberOfGuardsDead = 0;
 
     public QuestState state;
-    public enum QuestState { NotStarted, TalkingWithGaunavin, AttackingNobleHouse, GuardBossFight, ExecuteNoble, NobleIsExecuted, Complete };
+    public enum QuestState { NotStarted, AttackingNobleHouse, ResumeNoblePower, GotoNoble, GuardBossFight, ExecuteNoble, NobleIsExecuted, Complete };
 
     void Awake()
     {
@@ -104,6 +104,11 @@ public class TreasonQuest : Quest
         {
             RotateTo(target);
         }
+
+        if (state == QuestState.ResumeNoblePower && GetComponent<CharacterStats>().isDead)
+        {
+            state = QuestState.GotoNoble;
+        }
     }
 
     void RotateTo(GameObject target)
@@ -127,6 +132,7 @@ public class TreasonQuest : Quest
 
     void GotoNoble()
     {
+        state = QuestState.ResumeNoblePower;
         dialogue.currentSentence = goAwaySentence;
 
         GetComponent<NPC>().enabled = false;

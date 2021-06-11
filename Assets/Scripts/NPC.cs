@@ -210,7 +210,8 @@ public class NPC : NpcData, IAttackable, IDestructible
                 SetMoveTarget(work);
                 break;
             case NpcStates.Dead: //Enables ragdoll
-                GetComponent<CombatBase>().enabled = false;
+                GetComponent<ShieldMeleeAI>().enabled = false;
+                GetComponent<ArcherAI>().enabled = false;
                 GetComponent<CharacterStats>().isDead = true;
                 foreach (SkinnedMeshRenderer skinned in GetComponentsInChildren<SkinnedMeshRenderer>())
                 {
