@@ -5,22 +5,17 @@ using UnityEngine;
 
 public class ShieldMeleeAI : MeleeAI
 {
-    float blockCooldown;
-    bool changingState;
-    public float CombatRange;
-
     protected override void Start()
     {
         base.Start();
         AttackDistance = CombatRange;
+
+        StartCoroutine(ConnectShield());
     }
 
     protected override void Update()
     {
         base.Update();
-
-        if (blockCooldown > 0)
-            blockCooldown -= Time.deltaTime;
     }
 
     protected override void ManageStateChange(EnemyState oldState, EnemyState newState)
@@ -29,50 +24,62 @@ public class ShieldMeleeAI : MeleeAI
             StartCoroutine(StopBlock());
         base.ManageStateChange(oldState, newState);
     }
+
     public override void Attack(GameObject target)
     {
         agent.SetDestination(target.transform.position);
+
+        if (changingState)
+            return;
+
         if (CanHit(gameObject, target.transform))
         {
             if (stats.isBlocking)
+            {
                 StartCoroutine(StopBlock());
-            base.Attack(target);
+            }
+            else
+            {
+                base.Attack(target);
+            }
             return;
         }
 
-        if (CanHit(target, transform) && blockCooldown <= 0)
+        if (CanHit(target, transform, 2) && stats.shieldCooldown <= 0 && !target.GetComponent<CharacterStats>().isBlocking)
         {
             if (!stats.isBlocking)
+            {
                 StartCoroutine(StartBlock());
+            }
             return;
         }
         else if (stats.isBlocking)
+        {
             StartCoroutine(StopBlock());
+        }
     }
 
     IEnumerator StartBlock()
     {
-        print("block");
-        controller.ChangeAnimation(AnimationController.SHIELD_READY, AnimatorLayers.UP, true);
         changingState = true;
         stats.isBlocking = true;
         agent.speed /= stats.shield.ShieldDeceleration;
+        controller.ChangeAnimation(AnimationController.SHIELD_READY, AnimatorLayers.UP, true);
         yield return new WaitForSeconds(controller.GetAnimationLength(AnimatorLayers.UP));
         changingState = false;
     }
 
     IEnumerator StopBlock()
     {
-        print("stop block");
-        controller.ChangeAnimation(AnimationController.SHILD_UNEQUIP, AnimatorLayers.UP, true);
         changingState = true;
         stats.isBlocking = false;
         agent.speed *= stats.shield.ShieldDeceleration;
+        controller.ChangeAnimation(AnimationController.SHILD_UNEQUIP, AnimatorLayers.UP, true);
         yield return new WaitForSeconds(controller.GetAnimationLength(AnimatorLayers.UP));
         changingState = false;
     }
 
-    bool CanHit(GameObject attacker, Transform target)
+    bool CanHit(GameObject attacker, Transform target, float rangeMultiplayer = 1)
     {
         CharacterStats characterStats = attacker.GetComponent<CharacterStats>();
         Weapon weapon = characterStats.weapon;
@@ -83,7 +90,7 @@ public class ShieldMeleeAI : MeleeAI
             if (attack == null || stats.attackCooldown > 0)
                 return false;
             else
-                return Vector3.Distance(transform.position, target.position) < attack.Range;
+                return Vector3.Distance(transform.position, target.position) < attack.Range * rangeMultiplayer;
         }
         else
         {
@@ -92,7 +99,13 @@ public class ShieldMeleeAI : MeleeAI
                 return false;
             }
             else
-                return Vector3.Distance(transform.position, target.position) < weapon.Range;
+                return Vector3.Distance(transform.position, target.position) < weapon.Range * rangeMultiplayer;
         }
+    }
+
+    IEnumerator ConnectShield()
+    {
+        yield return new WaitUntil(() => controller.animator != null);
+        //controller.ChangeAnimation(AnimationController.SHIELD_EQUIP, AnimatorLayers.UP, true);
     }
 }

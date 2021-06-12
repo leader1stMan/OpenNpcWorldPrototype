@@ -18,12 +18,12 @@ public class EquipableItem : Item
         
     }
 
-    override public void OnItemEquipped(AnimationController controller = null)
+    override public void OnItemEquipped(AnimationController controller)
     {
         EquipmentController.instance.Equip(this);
         if (weapon != null && weapon.type == WeaponType.LowRange)
         { 
-            controller.ChangeAnimation(AnimationController.SWORD_EQUIP, AnimatorLayers.UP);
+            controller.ChangeAnimation(AnimationController.SWORD_EQUIP, AnimatorLayers.UP, true);
         }
     }
 

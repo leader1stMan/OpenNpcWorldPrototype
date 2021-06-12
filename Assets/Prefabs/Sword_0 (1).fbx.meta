@@ -1,44 +1,14 @@
 fileFormatVersion: 2
-guid: 920267f8c0532284caf94cee36ab9c43
+guid: 028ef86d1277d8a4caac9b62df29ae8b
 ModelImporter:
   serializedVersion: 20101
-  internalIDToNameTable:
-  - first:
-      74: -5822196001156853049
-    second: Unarmed.R_Attack_0
-  - first:
-      74: -1513138420410874736
-    second: Sword_0M.R_Attack_0
-  - first:
-      74: 1679122706784407109
-    second: Sword_0M.R_Equip_0
-  - first:
-      74: 253931124315751078
-    second: PlayerM_Jump_2_0
-  - first:
-      74: -3131437018499462867
-    second: PlayerM_Jump_1_0
-  - first:
-      74: 2386283630956732129
-    second: PlayerM_Jump_0_0
-  - first:
-      74: 2707884196090351358
-    second: PlayerM_Run_0
-  - first:
-      74: -7195489146064828792
-    second: PlayerM_Walk_0
-  - first:
-      74: -2349021974219226017
-    second: PlayerM_Idle_0
-  - first:
-      74: 8674230344873778419
-    second: PlayerM_Static
+  internalIDToNameTable: []
   externalObjects: {}
   materials:
     materialImportMode: 1
     materialName: 0
-    materialSearch: 0
-    materialLocation: 0
+    materialSearch: 1
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -93,7 +63,7 @@ ModelImporter:
     secondaryUVMinLightmapResolution: 40
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
-    useFileScale: 0
+    useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -116,7 +86,7 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
-    rootMotionBoneName: Control_Point
+    rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
@@ -124,7 +94,7 @@ ModelImporter:
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

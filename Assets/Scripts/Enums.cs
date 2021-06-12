@@ -6,9 +6,7 @@
     GoingHome,
     InteractingWithPlayer,
     Talking,
-    Scared,
-    Combat,
-    Dead
+    Scared
 }
 
 public enum EnemyState
@@ -18,7 +16,7 @@ public enum EnemyState
     Chasing,
     Attacking,
     Blocking,
-    Dead
+    NULL
 }
 
 public enum Job

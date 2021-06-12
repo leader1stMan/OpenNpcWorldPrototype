@@ -7,6 +7,7 @@ TagManager:
   - Npc
   - Enemy
   - Theodore
+  - Cube
   layers:
   - Default
   - TransparentFX

@@ -5,7 +5,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Collections;
 
-public abstract class CombatBase : MonoBehaviour, IDestructible
+public abstract class CombatBase : MonoBehaviour
 {
     [SerializeField]
     protected NavMeshAgent agent = null;
@@ -17,13 +17,13 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
             "It can still be lured out of the area by npcs and the player. " +
             "This is an optional field")]
     public Collider PatrolArea;
-    Rigidbody[] rig;
 
     #region Debugging
     public bool ShowDebugMessages;
     public bool VisualiseAgentActions;
     #endregion
 
+    public LayerMask VisionMask;
     public float VisionRange;
     public LayerMask WhatCanThisEnemyAttack;
     [TagSelector] public string[] Tags;
@@ -45,19 +45,6 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
         agent = GetComponent<NavMeshAgent>();
         stats = GetComponent<CharacterStats>();
         AttackDistance = stats.weapon.Range;
-
-        //Ragdoll effect. Currently this script and npc Ai script both has dead state stored separatly
-        rig = GetComponentsInChildren<Rigidbody>();
-        foreach (Rigidbody rigidbody in rig)
-        {
-            if (rigidbody != this.GetComponent<Rigidbody>())
-            {
-                rigidbody.GetComponent<Collider>().enabled = false;
-                rigidbody.isKinematic = true;
-            }
-        }
-
-        GetComponent<CapsuleCollider>().enabled = true;
 
         #region Editor Only
 #if UNITY_EDITOR
@@ -87,6 +74,7 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
         }
 
         ManageState();
+        ManageAnimations();
 
         #region Editor Only
 #if UNITY_EDITOR
@@ -116,6 +104,7 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
                 else
                 {
                     currentTarget = target;
+                    agent.ResetPath();
                     ChangeState(EnemyState.Chasing);
                 }
                 break;
@@ -157,6 +146,7 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
 
         //Return all attackable target colliders in sphere
         Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, WhatCanThisEnemyAttack);
+
         foreach (Collider col in cols)
         {
             if (VisualiseAgentActions)
@@ -166,10 +156,21 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
             if (col.transform == this.transform)
                 continue;
 
+            //Check if AI can see the target 
+            /*
+            if (Physics.Linecast(transform.position, col.transform.position, out RaycastHit hit, VisionMask))
+            {
+                if (hit.collider != col)
+                    continue;
+            }
+            else
+                continue;
+            */
+
             //Check if collider has attackable tag
             for (int i = 0; i < Tags.Length; i++)
             {
-                if (col.gameObject.tag == Tags[i])
+                if (col.gameObject.CompareTag(Tags[i]))
                 {
                     possibleTargets.Add(col);
                     break;
@@ -193,6 +194,28 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
             return null;
     }
 
+    protected virtual void ManageAnimations()
+    {
+        if (agent.velocity.magnitude == 0)
+        {
+            //Idle animation if npc isn't moving
+            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
+        }
+        else
+        {
+            if (agent.velocity.magnitude < 2.5f)
+            {
+                //Walk animation if npc is moving slow
+                controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
+            }
+            else
+            {
+                //Walk animation if npc is moving fast
+                controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
+            }
+        }
+    }    
+
     void Chase(Transform target)
     {
         if (currentTarget == null)
@@ -204,6 +227,7 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
         currentTarget = target;
         agent.SetDestination(target.position);
     }
+
     public abstract void Attack(GameObject target);
 
     protected virtual void ChangeState(EnemyState state)
@@ -214,16 +238,9 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
 
         CurrentState = state;
     }
+
     protected virtual void ManageStateChange(EnemyState oldState, EnemyState newState)
     {
-        switch (oldState)
-        {
-            case EnemyState.Attacking:
-                agent.isStopped = false;
-                break;
-            default:
-                break;
-        }
         switch (newState)
         {
             case EnemyState.Attacking:
@@ -261,44 +278,44 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
                     Debug.Log(name + " is blocking"); 
                 #endregion
                 break;
-            case EnemyState.Dead:
-                break;
         }
     }
 
     //Pick random spot and start moving there
     protected virtual void PatrolToAnotherSpot()
     {
+        const int IterationLimit = 25;
         Vector3 dest;
-        if (PatrolArea == null)
-        {
-            //Pick spot within X4 VisionRange 
-            dest = new Vector3(
-                Random.Range(transform.position.x - VisionRange * 2, transform.position.x + VisionRange * 2),
-                (transform.position.y),
-                Random.Range(transform.position.z - VisionRange * 2, transform.position.z + VisionRange * 2)
-                );
-        }
-        else
-        {
-            //Pick spot within Patrol Area collider
-            dest = new Vector3(
-                Random.Range(PatrolArea.bounds.min.x, PatrolArea.bounds.max.x),
-                Random.Range(PatrolArea.bounds.min.y, PatrolArea.bounds.max.y),
-                Random.Range(PatrolArea.bounds.min.z, PatrolArea.bounds.max.z)
-                );
-        }
         NavMeshHit hit;
-        if (NavMesh.SamplePosition(dest, out hit, VisionRange, agent.areaMask))
+        //iteration limit to avoid stack overflow
+        for (int i = 0; i < IterationLimit; i++)
         {
-            ChangeState(EnemyState.Patroling);
-            agent.SetDestination(hit.position);
+            if (PatrolArea == null)
+            {
+                //Pick spot within X4 VisionRange 
+                dest = new Vector3(
+                    Random.Range(transform.position.x - VisionRange * 2, transform.position.x + VisionRange * 2),
+                    (transform.position.y),
+                    Random.Range(transform.position.z - VisionRange * 2, transform.position.z + VisionRange * 2)
+                    );
+            }
+            else
+            {
+                //Pick spot within Patrol Area collider
+                dest = new Vector3(
+                    Random.Range(PatrolArea.bounds.min.x, PatrolArea.bounds.max.x),
+                    Random.Range(PatrolArea.bounds.min.y, PatrolArea.bounds.max.y),
+                    Random.Range(PatrolArea.bounds.min.z, PatrolArea.bounds.max.z)
+                    );
+            }
+            if (NavMesh.SamplePosition(dest, out hit, VisionRange, agent.areaMask))
+            {
+                ChangeState(EnemyState.Patroling);
+                agent.SetDestination(hit.position);
+                return;
+            }
         }
-        else
-        {
-            //Repeat till reachable spot is found
-            PatrolToAnotherSpot();
-        }
+        ChangeState(EnemyState.Idle);
     }
 
     protected virtual void OnDrawGizmosSelected()
@@ -322,25 +339,5 @@ public abstract class CombatBase : MonoBehaviour, IDestructible
         }
 #endif
         #endregion
-    }
-
-    public void OnDestruction(GameObject destroyer)
-    {
-        //Activate ragdoll
-        controller.enabled = false;
-        agent.isStopped = true;
-        GetComponent<CapsuleCollider>().enabled = false;
-        GetComponent<Rigidbody>().isKinematic = false;
-
-        foreach (Rigidbody rigidbody in rig)
-        {
-            if (rigidbody != this.GetComponent<Rigidbody>())
-            {
-                rigidbody.GetComponent<Collider>().enabled = true;
-                rigidbody.isKinematic = false;
-            }
-        }
-
-        ChangeState(EnemyState.Dead);
     }
 }

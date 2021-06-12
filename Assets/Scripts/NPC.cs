@@ -18,6 +18,7 @@ public class NPC : NpcData, IAttackable, IDestructible
 
     public GameObject Attacker;
     public bool isAttacked;
+    public float normalAcceleration;
     public float scaredRunningSpeed;
     public float scaredAcceleration;
     public float runningDistance;
@@ -30,37 +31,16 @@ public class NPC : NpcData, IAttackable, IDestructible
     private TMP_Text text;
     public List<string> DialoguePaths;
 
-    //Ragdoll
-    Rigidbody[] rig;
-    SkinnedMeshRenderer[] skin;
-
-    public bool combatState = false;
-
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         controller = GetComponentInChildren<AnimationController>();
         text = GetComponentInChildren<TMP_Text>();
-        skin = GetComponentsInChildren<SkinnedMeshRenderer>();
-        rig = GetComponentsInChildren<Rigidbody>();
 
         FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork; //Connects with the day and night controller
         FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome; //On a certain time these functions are called so npcs can execute life cycles  
-
-        foreach (SkinnedMeshRenderer skinned in skin) 
-        {
-            skinned.updateWhenOffscreen = false; //has to be enabled when ragdoll is in. Otherwise the character sometimes does not render
-        }
-
-        foreach (Rigidbody rigidbody in rig)
-        {
-            rigidbody.GetComponent<Collider>().enabled = false; //Make sure colliders for the ragdoll are disabled while npc is still alive
-            rigidbody.isKinematic = true;
-        }
-        
-        GetComponent<CapsuleCollider>().enabled = true; //Main collider for when the npc is alive
-                                                        //We might not need it anymore(?) since the ragdoll colliders might work as well(Dunno)
     }
+
     void Update()
     {
         //Decrease run time after hit
@@ -69,35 +49,25 @@ public class NPC : NpcData, IAttackable, IDestructible
             runTimeLeft -= Time.deltaTime;
         }
 
-        if (combatState) 
-            ChangeState(NpcStates.Combat);
+        WatchEnvironment();
 
-        if (currentState != NpcStates.Combat)
-            WatchEnvironment();
-    }
-
-    void FixedUpdate()
-    {
         //Manage animations
-        if (currentState != NpcStates.Combat)
+        if (agent.velocity.magnitude == 0)
         {
-            if (agent.velocity.magnitude == 0)
+            //Idle animation if npc isn't moving
+            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
+        }
+        else
+        {
+            if (agent.velocity.magnitude < 2.5f)
             {
-                //Idle animation if npc isn't moving
-                controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL); 
+                //Walk animation if npc is moving slow
+                controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
             }
             else
             {
-                if (agent.velocity.magnitude < 2.5f)
-                {
-                    //Walk animation if npc is moving slow
-                    controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
-                }
-                else
-                {
-                    //Walk animation if npc is moving fast
-                    controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
-                }
+                //Walk animation if npc is moving fast
+                controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
             }
         }
     }
@@ -147,25 +117,7 @@ public class NPC : NpcData, IAttackable, IDestructible
 
     private void OnStateChanged(NpcStates PrevState, NpcStates NewState)
     {
-       switch (PrevState)
-        {
-            case NpcStates.GoingHome:
-                StopGoingHome();
-                break;
-            case NpcStates.GoingToWork:
-                StopGoingToWork();
-                break;
-            case NpcStates.Working:
-                break;
-            case NpcStates.Talking:
-                EndConversation();
-                break;
-            case NpcStates.Combat:
-                GetComponent<CombatBase>().enabled = false; //Combat has it's own script unlike other states
-                break;
-            default:
-                break;
-        }
+        TurnOffBehaviour(PrevState);
         switch (NewState)
         {
             case NpcStates.Scared:
@@ -188,38 +140,34 @@ public class NPC : NpcData, IAttackable, IDestructible
                     GoHome();
                 }
                 break;
-            case NpcStates.InteractingWithPlayer:
-                break;
             case NpcStates.Talking:
                 agent.isStopped = true;
                 break;
             case NpcStates.Working:
                 SetMoveTarget(work);
                 break;
-            case NpcStates.Combat:
-                GetComponent<CombatBase>().enabled = true;
-                break;
-            case NpcStates.Dead: //Enables ragdoll
-                foreach (SkinnedMeshRenderer skinned in skin)
-                {
-                    skinned.updateWhenOffscreen = true; //Stops character from disrendering
-                }
-
-                controller.enabled = false; //Have to turn it off before executing ragdoll
-                agent.enabled = false;
-                GetComponent<CapsuleCollider>().enabled = false;
-                GetComponent<Rigidbody>().isKinematic = false;
-
-                foreach (Rigidbody rigidbody in rig)
-                {
-                    if (rigidbody != this.GetComponent<Rigidbody>())
-                    {
-                        rigidbody.GetComponent<Collider>().enabled = true;
-                        rigidbody.isKinematic = false;
-                    }
-                }
-                break;
             default: break;
+        }
+    }
+
+    void TurnOffBehaviour(NpcStates PrevState)
+    {
+        switch (PrevState)
+        {
+            case NpcStates.Scared:
+                StopRunning();
+                break;
+            case NpcStates.GoingHome:
+                StopGoingHome();
+                break;
+            case NpcStates.GoingToWork:
+                StopGoingToWork();
+                break;
+            case NpcStates.Talking:
+                EndConversation();
+                break;
+            default:
+                break;
         }
     }
 
@@ -232,7 +180,7 @@ public class NPC : NpcData, IAttackable, IDestructible
     void GoToWork()
     {
         //States that are more prioritized than 'GoingToWork' state
-        if (currentState == NpcStates.GoingToWork || currentState == NpcStates.Working || currentState == NpcStates.Talking || currentState == NpcStates.Scared || currentState == NpcStates.Combat)
+        if (currentState == NpcStates.GoingToWork || currentState == NpcStates.Working || currentState == NpcStates.Talking || currentState == NpcStates.Scared)
             return;
         StartCoroutine("GoToWorkCoroutine");
     }
@@ -251,21 +199,23 @@ public class NPC : NpcData, IAttackable, IDestructible
 
     void StopGoingToWork()
     {
-        agent.ResetPath();
+        if (agent.isActiveAndEnabled)
+            agent.ResetPath();
         StopCoroutine("GoToWorkCoroutine");
     }
 
     void GoHome()
     {
         //States that are more prioritized than 'GoingHome' state
-        if (currentState == NpcStates.GoingHome || currentState == NpcStates.Talking || currentState == NpcStates.Scared || currentState == NpcStates.Combat)
+        if (currentState == NpcStates.GoingHome || currentState == NpcStates.Talking || currentState == NpcStates.Scared)
             return;
         StartCoroutine("GoHomeCoroutine");
     }
 
     void StopGoingHome()
     {
-        agent.ResetPath();
+        if (agent.isActiveAndEnabled)
+            agent.ResetPath();
         StopCoroutine("GoHomeCoroutine");
     }
 
@@ -381,7 +331,7 @@ public class NPC : NpcData, IAttackable, IDestructible
     void OnTriggerStay(Collider other) 
     {
         // States that are more prioritized
-        if (currentState == NpcStates.Scared || currentState == NpcStates.Talking || currentState == NpcStates.Combat)
+        if (currentState == NpcStates.Scared || currentState == NpcStates.Talking)
             return;
 
         if (!other.CompareTag("Npc"))
@@ -390,7 +340,7 @@ public class NPC : NpcData, IAttackable, IDestructible
         NPC NPCscript = other.GetComponentInParent<NPC>();
 
         //Checks if the talker's state does not have a higher priority
-        if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking || NPCscript.currentState == NpcStates.Combat)
+        if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking)
             return;
         if (UnityEngine.Random.Range(0, 1000) <= 0) //At a chance starts a conversation
         {
@@ -422,7 +372,6 @@ public class NPC : NpcData, IAttackable, IDestructible
     //Run from "attacker" in opposite direction
     IEnumerator Run(GameObject attacker)
     {
-        float currentAcceleration = agent.acceleration;
         agent.speed = scaredRunningSpeed;
         runTimeLeft = runningTime;
         agent.ResetPath();
@@ -485,10 +434,15 @@ public class NPC : NpcData, IAttackable, IDestructible
 
             //Return to the default acceleration
             if (runTimeLeft < 2f)
-                agent.acceleration = currentAcceleration;
+                agent.acceleration = normalAcceleration;
         }
-        agent.acceleration = currentAcceleration;
         ChangeState(NpcStates.Idle);
+    }
+
+    void StopRunning()
+    {
+        StopCoroutine("Run");
+        agent.acceleration = normalAcceleration;
     }
 
     //Rotate to the target
@@ -504,8 +458,13 @@ public class NPC : NpcData, IAttackable, IDestructible
         } while (currentState == NpcStates.Talking);
     }
 
+    void OnDisable()
+    {
+        TurnOffBehaviour(currentState);
+    }
+
     public void OnDestruction(GameObject destroyer)
     {
-        ChangeState(NpcStates.Dead);
+        this.enabled = false;
     }
 }

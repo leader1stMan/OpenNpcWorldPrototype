@@ -12,8 +12,11 @@ public class CharacterStats : MonoBehaviour, IDestructible
     public AttackDefinition defaultAttack;
     public Weapon weapon;
     public Shield shield;
-    public bool isBlocking;
+
+    public bool isBlocking = false;
+
     public float attackCooldown;
+    public float shieldCooldown;
 
     public bool isDead;
 
@@ -27,7 +30,10 @@ public class CharacterStats : MonoBehaviour, IDestructible
 
     void Update()
     {
-        attackCooldown -= Time.deltaTime;
+        if (attackCooldown > 0)
+            attackCooldown -= Time.deltaTime;
+        if (shieldCooldown > 0)
+            shieldCooldown -= Time.deltaTime;
     }
 
     public void TakeDamage(GameObject attacker, float damage)
