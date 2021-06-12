@@ -16,21 +16,25 @@ public class TreasonQuest : Quest
     private SentenceGoal resumeNobelPower;
     private SentenceGoal startRiotGoal;
     private SentenceGoal executedNobleGoal;
+    private SentenceGoal riotWithNobleGoal;
 
     //List of sentences that changes the path of the dialogue
     public List<Sentence> againstNoble;
     public List<Sentence> withNoble;
     public List<Sentence> endTheodoreSequence;
     public List<Sentence> executedNobleFinal;
+    public List<Sentence> endNobleSequence;
 
     //Start sentences of each section
     public Sentence goAwaySentence;
     public Sentence againstNobleSentence;
+    public Sentence withNobleSentance;
     public Sentence theodoreStart;
     public Sentence executedNoble;
 
     public TextAsset speachAtCenter;
     public TextAsset executeNoble;
+    public TextAsset nobleSpeach;
 
     private DialogueManager dialogue;
     public string path = null;
@@ -68,6 +72,9 @@ public class TreasonQuest : Quest
 
         executedNobleGoal = new SentenceGoal(executedNobleFinal);
         executedNobleGoal.AddHandler(EndQuest);
+
+        riotWithNobleGoal = new SentenceGoal(endNobleSequence);
+        riotWithNobleGoal.AddHandler(StartRiotWithNoble);
     }
 
     private void Start()
@@ -108,6 +115,7 @@ public class TreasonQuest : Quest
         if (state == QuestState.ResumeNoblePower && GetComponent<CharacterStats>().isDead)
         {
             state = QuestState.GotoNoble;
+            Noble.GetComponent<DialogueManager>().currentSentence = withNobleSentance;
         }
     }
 
@@ -153,6 +161,18 @@ public class TreasonQuest : Quest
         GetComponent<NavMeshAgent>().SetDestination(CenterofTown.position);
         target = CenterofTown.gameObject;
         StartCoroutine(ReachedCenter());
+    }
+
+    void StartRiotWithNoble()
+    {
+        StartCoroutine(ForStartRiotWithNoble());
+    }
+
+    IEnumerator ForStartRiotWithNoble()
+    {
+        yield return new WaitForSeconds(2f);
+
+        StartCoroutine(Noble.GetComponent<NPC>().Conversation(null, AssetDatabase.GetAssetPath(nobleSpeach), this));
     }
 
     IEnumerator ReachedCenter()

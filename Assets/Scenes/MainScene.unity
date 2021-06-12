@@ -11194,6 +11194,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1138132413 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 622297471873179660, guid: 343aaf64225e76d4cab4f5940af40065,
+    type: 3}
+  m_PrefabInstance: {fileID: 5994655866932344509}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &1138132414
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138132413}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.01, y: 1, z: 0.01}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &1143476112
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11325,6 +11347,22 @@ MonoBehaviour:
   path: 
   isFirst: 0
   rioteerLeader: {fileID: 0}
+--- !u!208 &1170737969
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170737955}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.01, y: 1, z: 0.01}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1175622010
 GameObject:
   m_ObjectHideFlags: 0
@@ -12982,7 +13020,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 5994655866932344509}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1138132413}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 096c17a238bc7e946806a109840208bb, type: 3}
@@ -13515,13 +13553,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b8fc3d221b0455b4cb5a96d37e804e48, type: 2}
   executedNobleFinal:
   - {fileID: 11400000, guid: 8290c43e643cd5c4ca55ff404820758d, type: 2}
+  endNobleSequence:
+  - {fileID: 11400000, guid: 8f0aef1207487af4db346760c9aec597, type: 2}
   goAwaySentence: {fileID: 11400000, guid: b19f52f0f220d7441a1080e213661ee4, type: 2}
   againstNobleSentence: {fileID: 11400000, guid: bde8a1b5dc3ff7943b11da7871fbd60f,
     type: 2}
+  withNobleSentance: {fileID: 11400000, guid: de7cdd8e56e9ad7438f789b6c4f04de8, type: 2}
   theodoreStart: {fileID: 11400000, guid: 2e0cbee6f521f754c9fa6a58e38e5fec, type: 2}
   executedNoble: {fileID: 11400000, guid: 3b09b0353e4cbee4bbb44216388ef4ef, type: 2}
   speachAtCenter: {fileID: 4900000, guid: 52833aeba6db2bd4c888227b4df41569, type: 3}
   executeNoble: {fileID: 4900000, guid: fd16225f443c08446b270d5083834369, type: 3}
+  nobleSpeach: {fileID: 4900000, guid: c121662f666cdd348987c3f33756b6dc, type: 3}
   path: 
   Theodore: {fileID: 1405135086}
   Noble: {fileID: 1170737955}

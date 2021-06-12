@@ -322,7 +322,6 @@ public class NPC : NpcData, IAttackable, IDestructible
             StreamReader reader;
             string line;
             List<string> lines = new List<string>();
-
             path = converPath;
 
             reader = new StreamReader(path);

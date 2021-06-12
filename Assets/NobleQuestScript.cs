@@ -7,11 +7,6 @@ using TMPro;
 
 public class NobleQuestScript : MonoBehaviour
 {
-    public List<string> DialoguePaths;
-    public string path = null;
-    private TMP_Text text;
-    public bool isFirst;
-
     public GameObject rioteerLeader;
     
     private bool nobleDead = false;
@@ -34,8 +29,6 @@ public class NobleQuestScript : MonoBehaviour
             skinnedMeshRenderer.updateWhenOffscreen = false;
         }
         GetComponent<CapsuleCollider>().enabled = true;
-
-        text = GetComponentInChildren<TMP_Text>();
     }
 
     private void Update()

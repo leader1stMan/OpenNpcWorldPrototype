@@ -54,7 +54,7 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        npc.agent.isStopped = true;
+        npc.GetComponent<NavMeshAgent>().isStopped = true;
         npc.GetComponentInChildren<Animator>().enabled = false;
         
         npc.enabled = false;

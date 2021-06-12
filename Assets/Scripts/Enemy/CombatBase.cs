@@ -442,7 +442,7 @@ public abstract class CombatBase : MonoBehaviour
     public IEnumerator EnablenNavmeshAgain()
     {
         yield return 2;
-        agent.enabled = true;
-        agent.isStopped = false;
+        GetComponent<NavMeshAgent>().enabled = true;
+        GetComponent<NavMeshAgent>().isStopped = false;
     }
 }
