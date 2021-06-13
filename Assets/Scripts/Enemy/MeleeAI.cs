@@ -17,6 +17,9 @@ public class MeleeAI : CombatBase
     protected override void Update()
     {
         base.Update();
+        
+        if (CurrentState == EnemyState.Attacking)
+            RotateTo(currentTarget.gameObject);
     }
 
     public override void Attack(GameObject target)

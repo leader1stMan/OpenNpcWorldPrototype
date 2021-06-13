@@ -45,7 +45,7 @@ public class ArcherAI : MeleeAI
             if (hit.distance > rayHit.distance)
             hit = rayHit;
         }
-
+        Debug.Log(hit.transform.gameObject);
         if (hits.Length > 0 && hit.transform.gameObject == target)
         {
             if (attackCooldown <= 0)
@@ -115,7 +115,7 @@ public class ArcherAI : MeleeAI
         float rotationAngle = Mathf.Acos(localPosition.normalized.y);
 
         Vector3 axisVector = Vector3.Cross(Vector3.up, localPosition).normalized;
-        if (RotateVector(Vector3.up, axisVector, rotationAngle) != localPosition)
+        if (RotateVector(Vector3.up, axisVector, rotationAngle) == localPosition)
         {
             rotationAngle = Mathf.PI * 2.0f - rotationAngle;
         }
@@ -151,6 +151,7 @@ public class ArcherAI : MeleeAI
                 }
                 else
                 {
+                    Debug.Log(true);
                     possiblePositions.Add(direction);
                 }
                 count++;

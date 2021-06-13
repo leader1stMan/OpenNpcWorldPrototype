@@ -39,12 +39,31 @@ public abstract class CombatBase : MonoBehaviour
 #endif
     #endregion
 
+    SkinnedMeshRenderer[] skin;
+    Rigidbody[] rig;
+
     protected virtual void Start()
     {
         controller = GetComponentInChildren<AnimationController>();
         agent = GetComponent<NavMeshAgent>();
         stats = GetComponent<CharacterStats>();
         AttackDistance = stats.weapon.Range;
+
+        skin = GetComponentsInChildren<SkinnedMeshRenderer>();
+        rig = GetComponentsInChildren<Rigidbody>();
+
+        foreach (SkinnedMeshRenderer skinned in skin)
+        {
+            skinned.updateWhenOffscreen = false; //has to be enabled when ragdoll is in. Otherwise the character sometimes does not render
+        }
+
+        foreach (Rigidbody rigidbody in rig)
+        {
+            rigidbody.GetComponent<Collider>().enabled = false; //Make sure colliders for the ragdoll are disabled while npc is still alive
+            rigidbody.isKinematic = true;
+        }
+
+        GetComponent<CapsuleCollider>().enabled = true;
 
         #region Editor Only
 #if UNITY_EDITOR
