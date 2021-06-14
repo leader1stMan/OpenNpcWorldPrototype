@@ -144,8 +144,9 @@ public abstract class CombatBase : MonoBehaviour
                 {
                     currentTarget = target;
                     ChangeState(EnemyState.Chasing);
+                    return;
                 }
-
+                Debug.Log(true);
                 if (agent.remainingDistance == 0)
                 {
                     ChangeState(EnemyState.Idle);

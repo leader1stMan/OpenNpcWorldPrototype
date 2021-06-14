@@ -10536,7 +10536,7 @@ PrefabInstance:
     - target: {fileID: 622297471873179662, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 622297471873179662, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
@@ -10568,7 +10568,7 @@ PrefabInstance:
     - target: {fileID: 2954997807301128260, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2954997807301128260, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
@@ -11341,11 +11341,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec8834a3ce7a4fb498812c770fc0b313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DialoguePaths:
-  - Assets/NPC dialogues/Treason quest/vsNoble.txt
-  - Assets/NPC dialogues/Treason quest/Vs.txt
-  path: 
-  isFirst: 0
   rioteerLeader: {fileID: 0}
 --- !u!208 &1170737969
 NavMeshObstacle:
@@ -20287,7 +20282,7 @@ PrefabInstance:
     - target: {fileID: 338504425366044328, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.17
+      value: -2.66
       objectReference: {fileID: 0}
     - target: {fileID: 338504425366044328, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
