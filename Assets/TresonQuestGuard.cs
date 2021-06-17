@@ -53,16 +53,23 @@ public class TresonQuestGuard : MonoBehaviour
 
         switch (state)
         {
-            case TreasonQuest.QuestState.AttackingNobleHouse:
-                questState = TreasonQuest.QuestState.AttackingNobleHouse;
+            case TreasonQuest.QuestState.AttackNoble:
+                questState = TreasonQuest.QuestState.AttackNoble;
                 GetComponent<CombatBase>().attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().CenterofTown;
                 GetComponent<CombatBase>().EnableCombat();
                 break;
+
             case TreasonQuest.QuestState.GuardBossFight:
                 GetComponent<CombatBase>().enabled = false;
 
                 if (GetComponent<NavMeshAgent>().enabled)
                     GetComponent<NavMeshAgent>().isStopped = true;
+                break;
+
+            case TreasonQuest.QuestState.AttackRiot:
+                questState = TreasonQuest.QuestState.AttackNoble;
+                GetComponent<CombatBase>().attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().CenterofTown;
+                GetComponent<CombatBase>().EnableCombat();
                 break;
         }
     }

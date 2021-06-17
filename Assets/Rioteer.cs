@@ -30,7 +30,12 @@ public class Rioteer : MonoBehaviour
         }
         GetComponent<CapsuleCollider>().enabled = true;
 
-        StartCoroutine(LookAtNpc());
+        treasonQuestNpc = GameObject.FindObjectOfType<TreasonQuest>().gameObject;
+
+        if (treasonQuestNpc.GetComponent<TreasonQuest>().state == TreasonQuest.QuestState.WithGaunavin)
+        {
+            StartCoroutine(LookAtNpc());
+        }
     }
 
     private void Update()
@@ -54,7 +59,7 @@ public class Rioteer : MonoBehaviour
             lookRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime / (Quaternion.Angle(transform.rotation, lookRotation) / GetComponent<NavMeshAgent>().angularSpeed));
             yield return new WaitForEndOfFrame();
-        } while (treasonQuestNpc.GetComponent<TreasonQuest>().state != TreasonQuest.QuestState.AttackingNobleHouse);
+        } while (treasonQuestNpc.GetComponent<TreasonQuest>().state != TreasonQuest.QuestState.AttackNoble);
 
         CombatBase combat = GetComponent<CombatBase>().EnableCombat();
         combat.attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().nobleHouse;
@@ -66,6 +71,7 @@ public class Rioteer : MonoBehaviour
         if (state == questState)
             return;
 
+        int random = Random.Range(0, 999);
         switch (state)
         {
             case TreasonQuest.QuestState.GuardBossFight:
@@ -74,7 +80,20 @@ public class Rioteer : MonoBehaviour
                 if (GetComponent<NavMeshAgent>().enabled)
                     GetComponent<NavMeshAgent>().isStopped = true;
 
-                int random = Random.Range(0, 999);
+                if (random == 0)
+                {
+                    if (!isSpeaking)
+                    {
+                        isSpeaking = true;
+                        StartCoroutine(Speak());
+                    }
+                }
+                break;
+
+            case TreasonQuest.QuestState.AttackRiot:
+                CombatBase combat = GetComponent<CombatBase>().EnableCombat();
+                combat.attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().nobleHouse;
+
                 if (random == 0)
                 {
                     if (!isSpeaking)

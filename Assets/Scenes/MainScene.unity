@@ -10478,6 +10478,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Finished Ai prefab
       objectReference: {fileID: 0}
+    - target: {fileID: 622297471873179660, guid: 343aaf64225e76d4cab4f5940af40065,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 622297471873179661, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
       propertyPath: m_LocalPosition.x

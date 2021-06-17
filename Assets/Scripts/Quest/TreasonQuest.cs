@@ -55,7 +55,7 @@ public class TreasonQuest : Quest
     public int numberOfGuardsDead = 0;
 
     public QuestState state;
-    public enum QuestState { NotStarted, AttackingNobleHouse, ResumeNoblePower, GotoNoble, GuardBossFight, ExecuteNoble, NobleIsExecuted, Complete };
+    public enum QuestState { NotStarted, WithGaunavin, AttackNoble, ResumeNoblePower, AttackRiot, GuardBossFight, ExecuteNoble, NobleExecuted, Complete };
 
     void Awake()
     {
@@ -85,6 +85,8 @@ public class TreasonQuest : Quest
         Noble.GetComponent<NobleQuestScript>().rioteerLeader = gameObject;
     }
 
+    bool calledWithNoble = false;
+
     private void Update()
     {
         //Manage animations
@@ -112,9 +114,9 @@ public class TreasonQuest : Quest
             RotateTo(target);
         }
 
-        if (state == QuestState.ResumeNoblePower && GetComponent<CharacterStats>().isDead)
+        if (state == QuestState.ResumeNoblePower && GetComponent<CharacterStats>().isDead && calledWithNoble == false)
         {
-            state = QuestState.GotoNoble;
+            calledWithNoble = true;
             Noble.GetComponent<DialogueManager>().currentSentence = withNobleSentance;
         }
     }
@@ -130,6 +132,7 @@ public class TreasonQuest : Quest
 
     void GotoTheodore()
     {
+        state = QuestState.WithGaunavin;
         GetComponent<CharacterStats>().isInvincible = true;
         Theodore.GetComponent<CharacterStats>().isInvincible = true;
         Noble.GetComponent<CharacterStats>().isInvincible = true;
@@ -173,6 +176,7 @@ public class TreasonQuest : Quest
         yield return new WaitForSeconds(2f);
 
         StartCoroutine(Noble.GetComponent<NPC>().Conversation(null, AssetDatabase.GetAssetPath(nobleSpeach), this));
+        SpawnSoldiers();
     }
 
     IEnumerator ReachedCenter()
@@ -188,7 +192,7 @@ public class TreasonQuest : Quest
         switch (state)
         {
             case QuestState.NotStarted:
-                state = QuestState.AttackingNobleHouse;
+                state = QuestState.AttackNoble;
                 CombatBase combatScript = GetComponent<CombatBase>().EnableCombat();
                 combatScript.attackPoint = nobleHouse;
                 break;
@@ -196,6 +200,10 @@ public class TreasonQuest : Quest
             case QuestState.GuardBossFight:
                 state = QuestState.ExecuteNoble;
                 Noble.GetComponent<CharacterStats>().isInvincible = false;
+                break;
+
+            case QuestState.ResumeNoblePower:
+                state = QuestState.AttackRiot;
                 break;
         }
     }
@@ -249,7 +257,7 @@ public class TreasonQuest : Quest
 
     public IEnumerator NobleIsExecuted()
     {
-        state = QuestState.NobleIsExecuted;
+        state = QuestState.NobleExecuted;
 
         target = FindObjectOfType<FirstPersonAIO>().gameObject;
         agent.SetDestination(target.transform.position);

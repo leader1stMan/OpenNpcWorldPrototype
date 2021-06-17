@@ -356,7 +356,6 @@ public class NPC : NpcData, IAttackable, IDestructible
             // if NPC is second, it waits till conversation is assigned to him by the first NPC
             if (isFirst)
             {
-                Debug.Log(gameObject.name + 2);
                 //Assigning the conversation to npc1, npc2
                 if (converPath == null)
                 {
@@ -377,7 +376,6 @@ public class NPC : NpcData, IAttackable, IDestructible
             }
             else
             {
-                Debug.Log(gameObject.name);
                 yield return new WaitUntil(() => path != null); //Wait till first NPC sends the conversation he chose
                 reader = new StreamReader(path);
                 while (reader.ReadLine() != "{}") ;
@@ -436,9 +434,9 @@ public class NPC : NpcData, IAttackable, IDestructible
             if (currentState == NpcStates.Talking)
                 ChangeState(NpcStates.Idle);
         }
-        else if (senderScript == GetComponent<TreasonQuest>())
+        else if (senderScript == FindObjectOfType<TreasonQuest>())
         {
-            GetComponent<TreasonQuest>().EndConversation();
+            FindObjectOfType<TreasonQuest>().EndConversation();
         }
     }
 
