@@ -43,6 +43,7 @@ public class Rioteer : MonoBehaviour
         if (GetComponent<CharacterStats>().isDead)
         {
             TreasonQuest treasonQuest = GameObject.FindObjectOfType<TreasonQuest>();
+            treasonQuest.NumberofRioteersDead();
             treasonQuest.SpawnRioteerAgain();
             this.enabled = false;
         }
@@ -102,6 +103,11 @@ public class Rioteer : MonoBehaviour
                         StartCoroutine(Speak());
                     }
                 }
+                break;
+
+            case TreasonQuest.QuestState.ReturnToNoble:
+                GetComponent<CombatBase>().enabled = false;
+                StartCoroutine(GetComponent<NPC>().Run(FindObjectOfType<TreasonQuest>().CenterofTown.gameObject));
                 break;
         }
     }

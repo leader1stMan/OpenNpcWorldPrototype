@@ -485,8 +485,9 @@ public class NPC : NpcData, IAttackable, IDestructible
     }
 
     //Run from "attacker" in opposite direction
-    IEnumerator Run(GameObject attacker)
+    public IEnumerator Run(GameObject attacker)
     {
+        agent = GetComponent<NavMeshAgent>();
         float currentAcceleration = agent.acceleration;
         agent.speed = scaredRunningSpeed;
         runTimeLeft = runningTime;

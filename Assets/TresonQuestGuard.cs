@@ -71,6 +71,13 @@ public class TresonQuestGuard : MonoBehaviour
                 GetComponent<CombatBase>().attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().CenterofTown;
                 GetComponent<CombatBase>().EnableCombat();
                 break;
+
+            case TreasonQuest.QuestState.ReturnToNoble:
+                GetComponent<CombatBase>().enabled = false;
+
+                if (GetComponent<NavMeshAgent>().enabled)
+                    GetComponent<NavMeshAgent>().isStopped = true;
+                break;
         }
     }
 }

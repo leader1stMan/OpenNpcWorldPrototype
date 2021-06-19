@@ -31,6 +31,7 @@ public class TreasonQuest : Quest
     public Sentence withNobleSentance;
     public Sentence theodoreStart;
     public Sentence executedNoble;
+    public Sentence returnToNoble;
 
     public TextAsset speachAtCenter;
     public TextAsset executeNoble;
@@ -53,9 +54,10 @@ public class TreasonQuest : Quest
     public bool siegeNobel = false;
 
     public int numberOfGuardsDead = 0;
+    public int numberOfRioteersDead = 0;
 
     public QuestState state;
-    public enum QuestState { NotStarted, WithGaunavin, AttackNoble, ResumeNoblePower, AttackRiot, GuardBossFight, ExecuteNoble, NobleExecuted, Complete };
+    public enum QuestState { NotStarted, WithGaunavin, AttackNoble, ResumeNoblePower, AttackRiot, GuardBossFight, ExecuteNoble, NobleExecuted, ReturnToNoble, Complete };
 
     void Awake()
     {
@@ -240,6 +242,16 @@ public class TreasonQuest : Quest
             GetComponent<ShieldMeleeAI>().enabled = false;
 
             StartCoroutine(StartNobleExecution());
+        }
+    }
+
+    public void NumberofRioteersDead()
+    {
+        numberOfRioteersDead++;
+        if (numberOfRioteersDead > 0)
+        {
+            state = QuestState.ReturnToNoble;
+            Noble.GetComponent<DialogueManager>().currentSentence = returnToNoble;
         }
     }
 
