@@ -13555,12 +13555,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8290c43e643cd5c4ca55ff404820758d, type: 2}
   endNobleSequence:
   - {fileID: 11400000, guid: 8f0aef1207487af4db346760c9aec597, type: 2}
+  endQuestWithNoble:
+  - {fileID: 11400000, guid: 86dfb005f14129545965f15282013ab4, type: 2}
   goAwaySentence: {fileID: 11400000, guid: b19f52f0f220d7441a1080e213661ee4, type: 2}
   againstNobleSentence: {fileID: 11400000, guid: bde8a1b5dc3ff7943b11da7871fbd60f,
     type: 2}
   withNobleSentance: {fileID: 11400000, guid: de7cdd8e56e9ad7438f789b6c4f04de8, type: 2}
   theodoreStart: {fileID: 11400000, guid: 2e0cbee6f521f754c9fa6a58e38e5fec, type: 2}
   executedNoble: {fileID: 11400000, guid: 3b09b0353e4cbee4bbb44216388ef4ef, type: 2}
+  returnToNoble: {fileID: 11400000, guid: 6a2e35225545ac54a8655fed65a41c88, type: 2}
   speachAtCenter: {fileID: 4900000, guid: 52833aeba6db2bd4c888227b4df41569, type: 3}
   executeNoble: {fileID: 4900000, guid: fd16225f443c08446b270d5083834369, type: 3}
   nobleSpeach: {fileID: 4900000, guid: c121662f666cdd348987c3f33756b6dc, type: 3}
@@ -13573,6 +13576,7 @@ MonoBehaviour:
   guard: {fileID: 4900418921806764621, guid: 3e9ce49859cda63449e55d434cddde5c, type: 3}
   siegeNobel: 0
   numberOfGuardsDead: 0
+  numberOfRioteersDead: 0
   state: 0
 --- !u!114 &1474046187
 MonoBehaviour:

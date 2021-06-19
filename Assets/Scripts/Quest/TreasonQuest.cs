@@ -17,6 +17,7 @@ public class TreasonQuest : Quest
     private SentenceGoal startRiotGoal;
     private SentenceGoal executedNobleGoal;
     private SentenceGoal riotWithNobleGoal;
+    private SentenceGoal getRewardNoble;
 
     //List of sentences that changes the path of the dialogue
     public List<Sentence> againstNoble;
@@ -24,6 +25,7 @@ public class TreasonQuest : Quest
     public List<Sentence> endTheodoreSequence;
     public List<Sentence> executedNobleFinal;
     public List<Sentence> endNobleSequence;
+    public List<Sentence> endQuestWithNoble;
 
     //Start sentences of each section
     public Sentence goAwaySentence;
@@ -63,7 +65,7 @@ public class TreasonQuest : Quest
     {
         dialogue = GetComponent<DialogueManager>(); //DialogueManager executes the dialogue system
 
-        stopNoblePower = new SentenceGoal(againstNoble); //stopNoblePower is the goal, againstNoble is the sentance
+        stopNoblePower = new SentenceGoal(againstNoble); //stopNoblePower is the goal, againstNoble is the sentances
         stopNoblePower.AddHandler(GotoTheodore);
         
         resumeNobelPower = new SentenceGoal(withNoble);
@@ -77,6 +79,9 @@ public class TreasonQuest : Quest
 
         riotWithNobleGoal = new SentenceGoal(endNobleSequence);
         riotWithNobleGoal.AddHandler(StartRiotWithNoble);
+
+        getRewardNoble = new SentenceGoal(endQuestWithNoble);
+        getRewardNoble.AddHandler(getRewardFromNoble);
     }
 
     private void Start()
@@ -281,6 +286,11 @@ public class TreasonQuest : Quest
         target.GetComponent<PlayerActions>().ReceiveInteraction(gameObject);
 
         this.enabled = false;
+    }
+
+    void getRewardFromNoble()
+    {
+        Debug.Log("quest finished!");
     }
 
     void EndQuest()
