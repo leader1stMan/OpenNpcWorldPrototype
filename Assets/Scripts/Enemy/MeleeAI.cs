@@ -47,10 +47,8 @@ public class MeleeAI : CombatBase
 
     protected void RotateTo(GameObject target)
     {
-        Quaternion lookRotation;
-
         Vector3 direction = (target.transform.position - transform.position).normalized;
-        lookRotation = Quaternion.LookRotation(direction);
+        Quaternion lookRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime / (Quaternion.Angle(transform.rotation, lookRotation) / agent.angularSpeed));
     }
 

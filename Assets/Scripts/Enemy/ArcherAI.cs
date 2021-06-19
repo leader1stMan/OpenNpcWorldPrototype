@@ -103,9 +103,6 @@ public class ArcherAI : MeleeAI
 
     void PickBetterPosition(GameObject target)
     {
-        var watch = new System.Diagnostics.Stopwatch();
-        watch.Start();
-
         if (transform.position == target.transform.position)
             return;
 
@@ -154,8 +151,6 @@ public class ArcherAI : MeleeAI
                     if (length == radius)
                     {
                         agent.SetDestination(position);
-                        watch.Stop();
-                        print(watch.ElapsedMilliseconds);
                         PickingPosition = false;
                         return;
                     }
@@ -167,6 +162,8 @@ public class ArcherAI : MeleeAI
                 else
                 {
                     float length = CheckDirection(hit.distance, direction, out Vector3 position);
+                    if (length > radius)
+                        continue;
                     infos.Add(new DirectionInfo(direction, length, position));
                 }
             }
@@ -179,17 +176,13 @@ public class ArcherAI : MeleeAI
             float raysLength = radius * Mathf.Cos(angleBetween);
             if (info.distance > raysLength)
             {
-                Debug.DrawLine(target.transform.position, info.hitPosition, Color.blue, 5f);
                 agent.SetDestination(info.hitPosition);
                 PickingPosition = false;
-                watch.Stop();
-                print(watch.ElapsedMilliseconds);
                 return;
             }
         }
 
         PickingPosition = false;
-        print("not found");
     }
 
     struct DirectionInfo
