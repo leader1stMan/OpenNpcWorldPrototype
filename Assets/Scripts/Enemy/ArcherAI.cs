@@ -60,8 +60,12 @@ public class ArcherAI : MeleeAI
         }
         else
         {
+            Debug.Log("called");
             if (!PickingPosition)
+            {
                 PickBetterPosition(target);
+                
+            }
         }
     }
             

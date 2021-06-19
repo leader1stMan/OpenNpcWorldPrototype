@@ -1403,6 +1403,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2239603181506555215, guid: 3fa2eba890cbf074cb59527220b8a5c1,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 25.9
+      objectReference: {fileID: 0}
     - target: {fileID: 2479157534005943945, guid: 3fa2eba890cbf074cb59527220b8a5c1,
         type: 3}
       propertyPath: m_ConnectedAnchor.x
@@ -1928,7 +1933,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 462597201}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.19, y: 0.83, z: 0.11}
+  m_LocalPosition: {x: -4.1, y: 0.83, z: -1.65}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children: []
   m_Father: {fileID: 0}
@@ -7377,7 +7382,7 @@ MonoBehaviour:
   MinShootingRange: 0
   layersToIgnore:
     serializedVersion: 2
-    m_Bits: 15414
+    m_Bits: 15415
 --- !u!195 &1712565933
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -7490,7 +7495,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1712565931}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.65, y: 0.99, z: -0.98}
+  m_LocalPosition: {x: -16.44, y: 0.99, z: -1.21}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1310260343}
