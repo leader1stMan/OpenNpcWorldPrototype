@@ -17,9 +17,6 @@ public class MeleeAI : CombatBase
     protected override void Update()
     {
         base.Update();
-        
-        if (CurrentState == EnemyState.Attacking)
-            RotateTo(currentTarget.gameObject);
     }
 
     public override void Attack(GameObject target)
@@ -27,7 +24,7 @@ public class MeleeAI : CombatBase
         if (target == null || changingState)
             return;
 
-        //RotateTo(target);
+        RotateTo(target);
 
         if (attackCooldown <= 0)
         {
@@ -48,7 +45,7 @@ public class MeleeAI : CombatBase
         changingState = false;
     }
 
-    void RotateTo(GameObject target)
+    protected void RotateTo(GameObject target)
     {
         Quaternion lookRotation;
 

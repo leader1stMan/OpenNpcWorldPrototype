@@ -10,6 +10,7 @@ public class ArcherAI : MeleeAI
     public float MinShootingRange;
     public LayerMask layersToIgnore;
     float LaunchHeight = 1f;
+    public float CalculatingStep;
     bool PickingPosition = false;
 
     protected override void Start()
@@ -20,7 +21,6 @@ public class ArcherAI : MeleeAI
     protected override void Update()
     {
         base.Update();
-        Debug.DrawLine(transform.position, agent.destination, Color.red);
     }
 
     public override void Attack(GameObject target)
@@ -29,7 +29,7 @@ public class ArcherAI : MeleeAI
             return;
         Vector3 launchPosition = transform.position + new Vector3(0, LaunchHeight);
         var hits = Physics.SphereCastAll(launchPosition, 0.1f, target.transform.position - transform.position - new Vector3(0, LaunchHeight), VisionRange, VisionMask);
-        Debug.DrawRay(transform.position + new Vector3(0, LaunchHeight), target.transform.position - transform.position - new Vector3(0, LaunchHeight), Color.green, 1f);
+        Debug.DrawRay(transform.position + new Vector3(0, LaunchHeight), target.transform.position - transform.position - new Vector3(0, LaunchHeight), Color.green);
 
         if (hits.Length == 0)
             return;
@@ -45,9 +45,15 @@ public class ArcherAI : MeleeAI
             if (hit.distance > rayHit.distance)
             hit = rayHit;
         }
-        Debug.Log(hit.transform.gameObject);
+
         if (hits.Length > 0 && hit.transform.gameObject == target)
         {
+            RotateTo(target);
+
+            Transform temp = transform;
+            temp.LookAt(target.transform);
+            if (temp != transform)
+                return;
             if (attackCooldown <= 0)
             {
                 stats.GetWeapon().ExecuteAttack(gameObject,
@@ -97,29 +103,30 @@ public class ArcherAI : MeleeAI
 
     void PickBetterPosition(GameObject target)
     {
-        var watch = System.Diagnostics.Stopwatch.StartNew();
+        var watch = new System.Diagnostics.Stopwatch();
+        watch.Start();
 
         if (transform.position == target.transform.position)
             return;
 
         PickingPosition = true;
-
-        List<Vector3> possiblePositions = new List<Vector3>();
         Vector3 direction;
         float radius = CombatRange;
-        Vector3 localPosition = target.transform.position - gameObject.transform.position;
+        Vector3 localPosition = transform.position - target.transform.position;
 
         float angleX = 0;
         float angleY = 0;
+        float angleBetween = 0;
         float startAngleY = 0;
         float rotationAngle = Mathf.Acos(localPosition.normalized.y);
 
         Vector3 axisVector = Vector3.Cross(Vector3.up, localPosition).normalized;
-        if (RotateVector(Vector3.up, axisVector, rotationAngle) == localPosition)
+        if (RotateVector(Vector3.up, axisVector, rotationAngle) != localPosition)
         {
             rotationAngle = Mathf.PI * 2.0f - rotationAngle;
         }
 
+        List<DirectionInfo> infos = new List<DirectionInfo>();
         int count = 0;
         int limit = (int)(Math.PI * 2.0 * radius * RaysPerMeter);
         for (int i = 0; i < limit; i++)
@@ -133,39 +140,92 @@ public class ArcherAI : MeleeAI
 
             for (int index = 0; index < iterations; index++)
             {
-                angleX += index * Mathf.Pow(-1.0f, index) * 2.0f * Mathf.PI / iterations;
+                count++;
 
                 Vector3 SphereDirection = new Vector3(Mathf.Cos(angleX) * Mathf.Sin(angleY), Mathf.Cos(angleY), Mathf.Sin(angleX) * Mathf.Sin(angleY));
                 direction = RotateVector(SphereDirection, axisVector, rotationAngle);
-                if (!Physics.SphereCast(target.transform.position, 0.1f, direction, out RaycastHit hit, radius, layersToIgnore))
+
+                angleBetween = Vector3.AngleBetween(direction, localPosition);
+
+                angleX += index * Mathf.Pow(-1.0f, index) * 2.0f * Mathf.PI / iterations;
+                if (!Physics.SphereCast(target.transform.position, 0.1f, direction, out RaycastHit hit, radius, ~layersToIgnore))
                 {
-                    Vector3 destination = target.transform.position + direction * radius + new Vector3(0, -(agent.height - LaunchHeight));
-                    if (NavMesh.SamplePosition(destination, out NavMeshHit navHit, 0.1f, agent.areaMask))
+                    float length = CheckDirection(radius, direction, out Vector3 position);
+                    if (length == radius)
                     {
-                        Debug.DrawLine(destination, navHit.position, Color.blue, 10f);
-                        agent.SetDestination(navHit.position);
+                        agent.SetDestination(position);
                         watch.Stop();
-                        PickingPosition = true;
+                        print(watch.ElapsedMilliseconds);
+                        PickingPosition = false;
                         return;
                     }
+                    else if (length > radius)
+                        continue;
+                    else
+                        infos.Add(new DirectionInfo(direction, length, position));
                 }
                 else
                 {
-                    Debug.Log(true);
-                    possiblePositions.Add(direction);
+                    float length = CheckDirection(hit.distance, direction, out Vector3 position);
+                    infos.Add(new DirectionInfo(direction, length, position));
                 }
-                count++;
             }
             angleY += Mathf.PI / limit;
         }
-        PickingPosition = false;
 
-        watch.Stop();
-        //print(watch.Elapsed + "     " + count);
+        for (int ind = 0; ind < infos.Count; ind++)
+        {
+            var info = infos[ind];
+            float raysLength = radius * Mathf.Cos(angleBetween);
+            if (info.distance > raysLength)
+            {
+                Debug.DrawLine(target.transform.position, info.hitPosition, Color.blue, 5f);
+                agent.SetDestination(info.hitPosition);
+                PickingPosition = false;
+                watch.Stop();
+                print(watch.ElapsedMilliseconds);
+                return;
+            }
+        }
+
+        PickingPosition = false;
+        print("not found");
+    }
+
+    struct DirectionInfo
+    {
+        public Vector3 direction;
+        public float distance;
+        public Vector3 hitPosition;
+
+        public DirectionInfo(Vector3 direction, float distance, Vector3 hitPosition)
+        {
+            this.direction = direction;
+            this.distance = distance;
+            this.hitPosition = hitPosition;
+        }
     }
 
     Vector3 RotateVector(Vector3 vectorToRotate, Vector3 axis, float angle)
     {
         return vectorToRotate * Mathf.Cos(angle) + Vector3.Cross(vectorToRotate, axis) * Mathf.Sin(angle) + Vector3.Dot(vectorToRotate, axis) * axis * (1 - Mathf.Cos(angle));
+    }
+
+    float CheckDirection(float radius, Vector3 direction, out Vector3 hitPosition)
+    {
+        float rayLength = radius;
+        Vector3 destination;
+        while (rayLength > MinShootingRange)
+        {
+            destination = currentTarget.transform.position + direction * rayLength + new Vector3(0, -(agent.height - LaunchHeight));
+            if (NavMesh.SamplePosition(destination, out NavMeshHit navHit, 0.08f, agent.areaMask))
+            {
+                hitPosition = navHit.position;
+                return rayLength;
+            }
+            rayLength -= CalculatingStep;
+        }
+        hitPosition = new Vector3();
+        return float.MaxValue;
     }
 }
