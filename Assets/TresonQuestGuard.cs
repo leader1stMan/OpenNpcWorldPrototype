@@ -61,9 +61,10 @@ public class TresonQuestGuard : MonoBehaviour
 
             case TreasonQuest.QuestState.GuardBossFight:
                 GetComponent<CombatBase>().enabled = false;
-
                 if (GetComponent<NavMeshAgent>().enabled)
                     GetComponent<NavMeshAgent>().isStopped = true;
+
+                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
                 break;
 
             case TreasonQuest.QuestState.AttackRiot:
