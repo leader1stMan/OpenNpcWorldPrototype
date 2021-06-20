@@ -198,7 +198,7 @@ public class TreasonQuest : Quest
     {
         switch (state)
         {
-            case QuestState.NotStarted:
+            case QuestState.WithGaunavin:
                 state = QuestState.AttackNoble;
                 CombatBase combatScript = GetComponent<CombatBase>().EnableCombat();
                 combatScript.attackPoint = nobleHouse;
@@ -241,7 +241,7 @@ public class TreasonQuest : Quest
     public void NumberofGuardsDead()
     {
         numberOfGuardsDead++;
-        if (numberOfGuardsDead > 9)
+        if (numberOfGuardsDead > 0)
         {
             state = QuestState.GuardBossFight;
             GetComponent<ShieldMeleeAI>().enabled = false;
