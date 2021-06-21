@@ -82,22 +82,23 @@ public abstract class CombatBase : MonoBehaviour
         {
             if (currentTarget.gameObject.layer == 8)
             {
-                if (currentTarget.GetComponent<NPC>().currentState == NpcStates.Dead)
-                    currentTarget = null;
+
             }
         }
         ManageState();
         MoveAnimaton();
 
-        if (agent.enabled)
+        if (this != GetComponent<ArcherAI>())
         {
-            if (agent.isStopped == true)
+            if (agent.enabled)
             {
-                agent.enabled = false;
-                GetComponent<NavMeshObstacle>().enabled = true;
+                if (agent.isStopped == true)
+                {
+                    agent.enabled = false;
+                    GetComponent<NavMeshObstacle>().enabled = true;
+                }
             }
         }
-
 
         #region Editor Only
 #if UNITY_EDITOR
@@ -177,12 +178,11 @@ public abstract class CombatBase : MonoBehaviour
                 }
                 else if ((currentTarget.position - transform.position).magnitude <= AttackDistance)
                 {
-                    agent.isStopped = true;
                     ChangeState(EnemyState.Attacking);
                 }
                 else
                 {
-                    Chase(currentTarget);
+                        Chase(currentTarget);
                 }
                 break;
 
@@ -322,8 +322,11 @@ public abstract class CombatBase : MonoBehaviour
                 if (GetComponent<CharacterStats>().isBlocking)
                     GetComponent<CharacterStats>().isBlocking = false;
 
-                GetComponent<NavMeshObstacle>().enabled = false;
-                StartCoroutine(EnablenNavmeshAgain());
+                if (this != GetComponent<ArcherAI>())
+                {
+                    GetComponent<NavMeshObstacle>().enabled = false;
+                    StartCoroutine(EnablenNavmeshAgain());
+                }
                 break;
             default:
                 break;

@@ -35,7 +35,7 @@ public class MeleeAI : CombatBase
         return;
     }
 
-    void RotateTo(GameObject target)
+    protected void RotateTo(GameObject target)
     {
         Vector3 targetTransform = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
         transform.LookAt(targetTransform);
