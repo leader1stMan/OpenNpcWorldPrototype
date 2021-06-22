@@ -82,9 +82,11 @@ public abstract class CombatBase : MonoBehaviour
         {
             if (currentTarget.gameObject.layer == 8)
             {
-
+                if (currentTarget.GetComponent<CharacterStats>().isDead)
+                    currentTarget = null;
             }
         }
+
         ManageState();
         MoveAnimaton();
 
@@ -178,11 +180,13 @@ public abstract class CombatBase : MonoBehaviour
                 }
                 else if ((currentTarget.position - transform.position).magnitude <= AttackDistance)
                 {
+                    if (this != GetComponent<ArcherAI>())
+                        agent.isStopped = true;
                     ChangeState(EnemyState.Attacking);
                 }
                 else
                 {
-                        Chase(currentTarget);
+                    Chase(currentTarget);
                 }
                 break;
 

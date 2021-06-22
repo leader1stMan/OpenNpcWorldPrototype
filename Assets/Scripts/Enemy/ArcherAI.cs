@@ -13,6 +13,7 @@ public class ArcherAI : MeleeAI
     float LaunchHeight = 1f;
     public float CalculatingStep;
     bool PickingPosition = false;
+    public bool enableCalculation = true;
 
     protected override void Start()
     {
@@ -67,11 +68,24 @@ public class ArcherAI : MeleeAI
         }
         else
         {
-            if (!PickingPosition)
-                PickBetterPosition(target);
+            if (agent.remainingDistance < 1)
+                enableCalculation = true;
+
+            if (enableCalculation)
+            {
+                enableCalculation = false;
+                if (!PickingPosition)
+                    PickBetterPosition(target);
+            }
         }
     }
 
+    IEnumerator EnableCalculation()
+    {
+        yield return new WaitForSeconds(1f);
+
+        enableCalculation = true;
+    }
 
     Quaternion TakeAim()
     {

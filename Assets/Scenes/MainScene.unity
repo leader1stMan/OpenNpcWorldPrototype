@@ -1011,6 +1011,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   CalculatingStep: 0
+  enableCalculation: 1
 --- !u!195 &102010725
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5198,6 +5199,7 @@ GameObject:
   - component: {fileID: 549229021}
   - component: {fileID: 549229020}
   - component: {fileID: 549229019}
+  - component: {fileID: 549229023}
   m_Layer: 8
   m_Name: Cube
   m_TagString: Npc
@@ -5275,12 +5277,37 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 549229018}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.705, y: 1.39, z: -4.9813004}
+  m_LocalPosition: {x: -1.71, y: 1.39, z: -6.61}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &549229023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549229018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba1b2f47cc009ce4c981786935dde50e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth:
+    BaseValue: 0
+  Damage:
+    BaseValue: 0
+  Armor:
+    BaseValue: 0
+  defaultAttack: {fileID: 0}
+  weapon: {fileID: 0}
+  shield: {fileID: 0}
+  isBlocking: 0
+  attackCooldown: 0
+  isInvincible: 0
+  isDead: 0
 --- !u!1 &570592552
 GameObject:
   m_ObjectHideFlags: 0
@@ -10147,6 +10174,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Noble
       objectReference: {fileID: 0}
+    - target: {fileID: 622297471873179660, guid: 343aaf64225e76d4cab4f5940af40065,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 622297471873179661, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10717,12 +10749,12 @@ PrefabInstance:
     - target: {fileID: 2954997807301128260, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
       propertyPath: RaysPerMeter
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2954997807301128260, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
       propertyPath: CalculatingStep
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3068411973094343915, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
@@ -13742,6 +13774,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   CalculatingStep: 0
+  enableCalculation: 1
 --- !u!114 &1474046188
 MonoBehaviour:
   m_ObjectHideFlags: 0
