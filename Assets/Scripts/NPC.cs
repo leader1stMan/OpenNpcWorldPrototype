@@ -97,23 +97,28 @@ public class NPC : NpcData, IAttackable, IDestructible
 
     void FixedUpdate()
     {
+        RunWalkAnim();
+    }
+
+    public void RunWalkAnim()
+    {
         //Manage animations
-        if (agent.velocity.magnitude == 0)
+        if (GetComponent<NavMeshAgent>().velocity.magnitude == 0)
         {
             //Idle animation if npc isn't moving
-            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
+            GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
         }
         else
         {
-            if (agent.velocity.magnitude < 2.5f)
+            if (GetComponent<NavMeshAgent>().velocity.magnitude < 2.5f)
             {
                 //Walk animation if npc is moving slow
-                controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
+                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
             }
             else
             {
                 //Walk animation if npc is moving fast
-                controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
+                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
             }
         }
     }

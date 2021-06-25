@@ -3179,6 +3179,7 @@ MonoBehaviour:
   scaredAcceleration: 10
   runningDistance: 2
   runningTime: 35
+  isFirst: 0
   DialoguePaths:
   - Assets/NPC dialogues/npc-npc dialogues/Dialogue1.txt
   - Assets/NPC dialogues/npc-npc dialogues/Dialogue2.txt
@@ -3230,6 +3231,7 @@ MonoBehaviour:
   shield: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96, type: 2}
   isBlocking: 0
   attackCooldown: 0
+  isInvincible: 0
   isDead: 0
 --- !u!114 &5441650148958061769
 MonoBehaviour:
@@ -3314,6 +3316,7 @@ MonoBehaviour:
   currentTarget: {fileID: 0}
   CombatRange: 1
   blockTime: 0
+  changingState: 0
 --- !u!114 &7323226356404652549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3342,6 +3345,16 @@ MonoBehaviour:
   - Npc
   currentTarget: {fileID: 0}
   CombatRange: 0
+  RaysPerMeter: 1
+  MinShootingRange: 0
+  layersToIgnore:
+    serializedVersion: 2
+    m_Bits: 0
+  VisionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  CalculatingStep: 0
+  enableCalculation: 0
 --- !u!114 &-2282623461212416802
 MonoBehaviour:
   m_ObjectHideFlags: 0

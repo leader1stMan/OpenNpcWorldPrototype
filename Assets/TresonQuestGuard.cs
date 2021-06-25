@@ -64,7 +64,8 @@ public class TresonQuestGuard : MonoBehaviour
                 if (GetComponent<NavMeshAgent>().enabled)
                     GetComponent<NavMeshAgent>().isStopped = true;
 
-                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
+                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
+                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.DOWN);
                 break;
 
             case TreasonQuest.QuestState.AttackRiot:
@@ -75,9 +76,11 @@ public class TresonQuestGuard : MonoBehaviour
 
             case TreasonQuest.QuestState.ReturnToNoble:
                 GetComponent<CombatBase>().enabled = false;
-
                 if (GetComponent<NavMeshAgent>().enabled)
                     GetComponent<NavMeshAgent>().isStopped = true;
+
+                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
+                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.DOWN);
                 break;
         }
     }

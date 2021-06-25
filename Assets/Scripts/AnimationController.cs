@@ -70,6 +70,7 @@ public class AnimationController : MonoBehaviour
         {
             int chosenLayer = (int)layer;
             string animation = LayerPrefixs[chosenLayer] + newAnimation;
+            Debug.Log(animation);
 
             if (animator.GetCurrentAnimatorStateInfo(0).IsName(animation))
                 return;

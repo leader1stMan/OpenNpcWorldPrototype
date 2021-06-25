@@ -47,6 +47,7 @@ public class TreasonQuest : Quest
 
     public Transform CenterofTown;
     public Transform nobleHouse;
+    public Transform runAwayArea;
 
     private GameObject target;
 

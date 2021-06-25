@@ -9,7 +9,7 @@ public class Rioteer : MonoBehaviour
     private GameObject treasonQuestNpc;
     private TreasonQuest.QuestState questState;
     private bool isSpeaking = false;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +48,11 @@ public class Rioteer : MonoBehaviour
             this.enabled = false;
         }
         OnQuestState();
+    }
+
+    private void FixedUpdate()
+    {
+        GetComponent<NPC>().RunWalkAnim();
     }
 
     IEnumerator LookAtNpc()
@@ -108,7 +113,7 @@ public class Rioteer : MonoBehaviour
 
             case TreasonQuest.QuestState.ReturnToNoble:
                 GetComponent<CombatBase>().enabled = false;
-                StartCoroutine(GetComponent<NPC>().Run(FindObjectOfType<TreasonQuest>().CenterofTown.gameObject));
+                GetComponent<NavMeshAgent>().SetDestination(treasonQuestNpc.GetComponent<TreasonQuest>().runAwayArea.position);
                 break;
         }
     }
