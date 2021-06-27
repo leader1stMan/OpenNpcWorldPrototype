@@ -4,11 +4,18 @@ using UnityEngine;
 
 public class SpawnFXDuringAnimation : StateMachineBehaviour
 {
-    BloodFX bloodFX;
+    public BloodFX bloodFX;
+
+    //minFrame is the minimum frame for hit registry divided by the total number of animation frames
+    //maxFrame is the maximum frame for hit registry divided by the total number of animation frames     
+
+    //both set in the inspector
+    public float minFrame, maxFrame;
+
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     //{
-    //    
+    //
     //}
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -16,13 +23,20 @@ public class SpawnFXDuringAnimation : StateMachineBehaviour
     {
         bloodFX = animator.gameObject.GetComponentInChildren<BloodFX>();
 
-        if(bloodFX == null)
+        if (bloodFX == null)
         {
-            Debug.Log(33);
+            Debug.LogError("Add a BloodFX component to your object being animated");
             return;
         }
+            else if (stateInfo.normalizedTime < minFrame || stateInfo.normalizedTime > maxFrame)
+            {
+                Debug.LogError("Failed to spawn blood");
 
-        else
+                return;
+            }
+
+
+        else if (stateInfo.normalizedTime >= minFrame && stateInfo.normalizedTime <= maxFrame)
         {
             bloodFX.SpawnBlood(2000);
         }

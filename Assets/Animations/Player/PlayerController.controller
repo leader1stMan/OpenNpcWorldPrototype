@@ -515,6 +515,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d750e8b3076d83242b002e51970c561a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bloodFX: {fileID: 0}
+  minFrame: 0.016129032
+  maxFrame: 0.048387095
 --- !u!1102 &7492914629576767506
 AnimatorState:
   serializedVersion: 5
