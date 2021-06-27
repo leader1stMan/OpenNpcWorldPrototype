@@ -12,6 +12,8 @@ public class Weapon : AttackDefinition
     public Projectile ProjectileToFire;
     public float ProjectileSpeed;
 
+    public BloodFX bloodFX;
+
     public void ExecuteAttack(GameObject attacker, Vector3 startSpot, Quaternion target, int layer)
     {
         Projectile projectile = Instantiate(ProjectileToFire, startSpot, target);
@@ -56,8 +58,7 @@ public class Weapon : AttackDefinition
         if (Vector3.Distance(attacker.transform.position, defender.transform.position) > Range)
         {
             return;
-        }
-      
+        }      
         /*
         if (!attacker.transform.IsFacingTarget(defender.transform))
             return;

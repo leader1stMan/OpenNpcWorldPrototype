@@ -19,10 +19,14 @@ public class BloodFX : MonoBehaviour
 
     public void SpawnBlood(float rayRange)
     {
+        ray.origin = transform.position;
+        ray.direction = transform.forward;
+
         if(Physics.Raycast(ray, out hit, rayRange))
         {
             if(hit.transform.tag =="Enemy")
             {
+                Debug.Log("HitEnemy");
                 Instantiate(blood, hit.point, Quaternion.identity);
             }
         }
