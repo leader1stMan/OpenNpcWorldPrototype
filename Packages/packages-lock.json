@@ -62,6 +62,15 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.probuilder": {
+      "version": "4.2.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.settings-manager": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.purchasing": {
       "version": "2.1.1",
       "depth": 0,
@@ -69,6 +78,13 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.settings-manager": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
