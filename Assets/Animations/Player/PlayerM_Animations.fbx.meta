@@ -60,7 +60,537 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Unarmed.R_Attack_0
+      takeName: Unarmed.R_Attack_0
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 62
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: PlayeMale_FP
+        weight: 1
+      - path: PlayeMale_TP
+        weight: 1
+      - path: RigPlayerM
+        weight: 1
+      - path: RigPlayerM/Control_Point
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFIfth_0.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFIfth_0.L/ToeFifth_1.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFIfth_0.L/ToeFifth_1.L/ToeFifth_2.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFirst_0.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFirst_0.L/ToeFirst_1.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFourth_0.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFourth_0.L/ToeFourth_1.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeFourth_0.L/ToeFourth_1.L/ToeFourth_2.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/Toes.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeSecond_0.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeSecond_0.L/ToeSecond_1.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeSecond_0.L/ToeSecond_1.L/ToeSecond_2.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeThird_0.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeThird_0.L/ToeThird_1.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.L/Leg_Lower.L/Foot.L/ToeThird_0.L/ToeThird_1.L/ToeThird_2.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFIfth_0.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFIfth_0.R/ToeFifth_1.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFIfth_0.R/ToeFifth_1.R/ToeFifth_2.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFirst_0.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFirst_0.R/ToeFirst_1.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFourth_0.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFourth_0.R/ToeFourth_1.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeFourth_0.R/ToeFourth_1.R/ToeFourth_2.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/Toes.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeSecond_0.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeSecond_0.R/ToeSecond_1.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeSecond_0.R/ToeSecond_1.R/ToeSecond_2.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeThird_0.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeThird_0.R/ToeThird_1.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Leg_Upper.R/Leg_Lower.R/Foot.R/ToeThird_0.R/ToeThird_1.R/ToeThird_2.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eye.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eye.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Lower_0.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Lower_0.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Lower_1.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Lower_1.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Lower_2.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Lower_2.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Upper_0.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Upper_0.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Upper_1.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Upper_1.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Upper_2.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Eyelid_Upper_2.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Hair_0
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipLower_0.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipLower_0.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipLower_1.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipLower_1.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipLower_Mid
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipUpper_0.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipUpper_0.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipUpper_1.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipUpper_1.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Lips/LipUpper_Mid
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Tongue_0
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Tongue_0/Tongue_1
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Jaw/Tongue_0/Tongue_1/Tongue_2
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Neck/Skull/Nose
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Fix_Arm_Lower.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerIndex_0.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerIndex_0.L/FingerIndex_1.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerIndex_0.L/FingerIndex_1.L/FingerIndex_2.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerMiddle_0.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerMiddle_0.L/FingerMiddle_1.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerMiddle_0.L/FingerMiddle_1.L/FingerMiddle_2.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerPinky_0.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerPinky_0.L/FingerPinky_1.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerPinky_0.L/FingerPinky_1.L/FingerPinky_2.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerRing_0.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerRing_0.L/FingerRing_1.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerRing_0.L/FingerRing_1.L/FingerRing_2.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerThumb_0.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerThumb_0.L/FingerThumb_1.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.L/ArmUpper.L/Arm_Lower.L/Hand.L/FingerThumb_0.L/FingerThumb_1.L/FingerThumb_2.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Fix_Arm_Lower.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerIndex_0.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerIndex_0.R/FingerIndex_1.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerIndex_0.R/FingerIndex_1.R/FingerIndex_2.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerMiddle_0.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerMiddle_0.R/FingerMiddle_1.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerMiddle_0.R/FingerMiddle_1.R/FingerMiddle_2.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerPinky_0.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerPinky_0.R/FingerPinky_1.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerPinky_0.R/FingerPinky_1.R/FingerPinky_2.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerRing_0.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerRing_0.R/FingerRing_1.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerRing_0.R/FingerRing_1.R/FingerRing_2.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerThumb_0.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerThumb_0.R/FingerThumb_1.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Pelvis/Spine_0/Spine_1/Ribcage/Shoulder.R/ArmUpper.R/Arm_Lower.R/Hand.R/FingerThumb_0.R/FingerThumb_1.R/FingerThumb_2.R
+        weight: 1
+      - path: RigPlayerM/Control_Point/Weapon.L
+        weight: 1
+      - path: RigPlayerM/Control_Point/Weapon.R
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Sword_0M.R_Attack_0
+      takeName: Sword_0M.R_Attack_0
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Sword_0M.R_Equip_0
+      takeName: Sword_0M.R_Equip_0
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 80
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: PlayerM_Jump_2_0
+      takeName: PlayerM_Jump_2_0
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 24
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: PlayerM_Jump_1_0
+      takeName: PlayerM_Jump_1_0
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 48
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: PlayerM_Jump_0_0
+      takeName: PlayerM_Jump_0_0
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 25
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: PlayerM_Run_0
+      takeName: PlayerM_Run_0
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 33
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: PlayerM_Walk_0
+      takeName: PlayerM_Walk_0
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 48
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: PlayerM_Idle_0
+      takeName: PlayerM_Idle_0
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 62
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: PlayerM_Static
+      takeName: PlayerM_Static
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []

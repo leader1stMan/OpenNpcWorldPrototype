@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemId: 7
   ItemName: TestWeapon
+  ItemValue: 0
   Description: This is a weapon
   bCanTake: 1
   bCanDrop: 1
   Weight: 0
-  ItemMesh: {fileID: 4300000, guid: 8048c1f5000214742a1e0a457b039d11, type: 3}
+  ItemMesh: {fileID: 4300000, guid: 21ca816de6f3abd4cbee2c0462c8a186, type: 3}
   ItemMaterial: {fileID: 2100000, guid: d7d5e72666737d040ba68a6bfc9d685a, type: 2}
   ItemImage: {fileID: 0}
   EquipType: 3
@@ -26,3 +27,4 @@ MonoBehaviour:
   armorModifier: 0
   healthModifier: 0
   weapon: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9, type: 2}
+  shield: {fileID: 0}

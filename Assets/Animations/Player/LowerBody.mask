@@ -248,4 +248,4 @@ AvatarMask:
   - m_Path: RigPlayerM/Control_Point/Weapon.L
     m_Weight: 1
   - m_Path: RigPlayerM/Control_Point/Weapon.R
-    m_Weight: 1
+    m_Weight: 0
