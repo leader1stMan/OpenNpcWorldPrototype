@@ -7,9 +7,6 @@
     InteractingWithPlayer,
     Talking,
     Scared,
-    Petrified,
-    Attacking,
-    Defending,
     Dead
 }
 

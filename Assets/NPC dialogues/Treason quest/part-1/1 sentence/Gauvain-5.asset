@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb67e22c87943d842b22e74f76b976e4, type: 3}
+  m_Name: Gauvain-5
+  m_EditorClassIdentifier: 
+  text: 
+  answer: What is your opinion on this?
+  goal:
+    trackedSentences: []
+    selectedSentence: {fileID: 11400000}
+  nextSentence: {fileID: 0}
+  choices:
+  - {fileID: 11400000, guid: dcf8a4d64f0b7344798dc6cc0dc01879, type: 2}
+  - {fileID: 11400000, guid: 5a2146184aeb4c44cab44d848a916c40, type: 2}
+  questParameter: 
+  CallShop: 0

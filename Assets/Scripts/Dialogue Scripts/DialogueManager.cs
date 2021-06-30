@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.AI;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using TMPro;
@@ -18,6 +19,7 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
     public bool _isdialogue = false;
     private FirstPersonAIO player;
     private PlayerActions _playeractions;
+    private CharacterStats stats;
     public bool displayingdialogue = false;
     private GameObject _dialogue;
     private Dialogue dialogueScript;
@@ -25,10 +27,12 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
     public Sentence defaultSentence;
     private MerchantInventory shop;
     NPC npc;
+
     private void Start() 
     {
         player = GameObject.FindWithTag("Player").GetComponent<FirstPersonAIO>();
         _playeractions = GameObject.FindWithTag("Player").GetComponent<PlayerActions>();
+        stats = GameObject.FindWithTag("Player").GetComponent<CharacterStats>();
         _dialogue = _playeractions.dialogue_gameobject;
         dialogueScript = _dialogue.GetComponent<Dialogue>();
     }
@@ -50,7 +54,7 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        npc.agent.isStopped = true;
+        npc.GetComponent<NavMeshAgent>().isStopped = true;
         npc.GetComponentInChildren<Animator>().enabled = false;
         
         npc.enabled = false;
@@ -66,11 +70,16 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
 
     public void EndDialogue()
     {
-        player.attackCooldown = 3f;
+        stats.attackCooldown = 3f;
         DialogueSystem.instance.Detach();
         npc.GetComponentInChildren<Animator>().enabled = true;
-        npc.enabled = true;
-        npc.agent.isStopped = false;
+
+        if (!npc.GetComponent<ShieldMeleeAI>().enabled && !npc.GetComponent<ArcherAI>().enabled)
+            npc.enabled = true;
+
+        npc.GetComponent<NavMeshObstacle>().enabled = false;
+        StartCoroutine(npc.GetComponent<ShieldMeleeAI>().EnablenNavmeshAgain()); //change
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _isdialogue = false;

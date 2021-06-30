@@ -29,7 +29,7 @@ public class SentenceGoal
         }
     }
 
-    public void completeSentence(Sentence sentence)
+    public void completeSentence(Sentence sentence) 
     {
         selectedSentence = sentence;
         goalHandlers?.Invoke();

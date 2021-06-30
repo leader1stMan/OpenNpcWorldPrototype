@@ -1,187 +1,301 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEditor;
+using System.IO;
+using TMPro;
 
 public class TreasonQuest : Quest
 {
-    private SentenceGoal goal1;
-    private SentenceGoal redGoal;
-    private SentenceGoal pinkGoal;
-    private SentenceGoal greenGoal;
-    private SentenceGoal AlchemistGoal;
-    private SentenceGoal questionEndGoal;
-    private SentenceGoal FromNeutralToAgainst;
-    private SentenceGoal AgainstEndingComplete;
+    private AnimationController controller;
+    public NavMeshAgent agent { get; private set; }
 
-    public List<Sentence> trackedSentences1;
-    public List<Sentence> redSentences;
-    public List<Sentence> pinkSentences;
-    public List<Sentence> greenSentences;
-    public List<Sentence> AlchemistsSentences;
-    private List<Sentence> BetweenNeutralAndAgainst;
-    public List<Sentence> TheodoreQuestComplete;
+    //Handlers are added to goals and are executed when a goal is complete
+    private SentenceGoal stopNoblePower;
+    private SentenceGoal resumeNobelPower;
+    private SentenceGoal startRiotGoal;
+    private SentenceGoal executedNobleGoal;
+    private SentenceGoal riotWithNobleGoal;
+    private SentenceGoal getRewardNoble;
 
+    //List of sentences that changes the path of the dialogue
+    public List<Sentence> againstNoble;
+    public List<Sentence> withNoble;
+    public List<Sentence> endTheodoreSequence;
+    public List<Sentence> executedNobleFinal;
+    public List<Sentence> endNobleSequence;
+    public List<Sentence> endQuestWithNoble;
+
+    //Start sentences of each section
     public Sentence goAwaySentence;
-    public Sentence againstKingSentence;
-    public Sentence neutralEnding;
-    public Sentence questionCompleteQuestion;
-    public Sentence GauvainWithPotion;
-    public Sentence GauvainWithoutPotion;
-    public Sentence redEnding;
-    public Sentence orangeEnding;
-    public Sentence kingEnding;
-    public Sentence TheodoreStartSentence;
-    public Sentence AlchemistStartSentence;
+    public Sentence againstNobleSentence;
+    public Sentence withNobleSentance;
+    public Sentence theodoreStart;
+    public Sentence executedNoble;
+    public Sentence returnToNoble;
 
-    public DayAndNightControl control;
+    public TextAsset speachAtCenter;
+    public TextAsset executeNoble;
+    public TextAsset nobleSpeach;
+
     private DialogueManager dialogue;
-
-    private int redQuestions = 0;
-    private int pinkQuestions = 0;
-    private int greenQuestions = 0;
+    public string path = null;
 
     public NPC Theodore;
-    private DialogueManager TheodoreDialogue;
-    public NPC Alchemist;
-    private DialogueManager AlchemistDialogue;
+    public GameObject Noble;
 
-    private bool withPotion;
+    public Transform CenterofTown;
+    public Transform nobleHouse;
+    public Transform runAwayArea;
 
-    // Start is called before the first frame update
+    private GameObject target;
+
+    public GameObject rioteer;
+    public GameObject guard;
+
+    public bool siegeNobel = false;
+
+    public int numberOfGuardsDead = 0;
+    public int numberOfRioteersDead = 0;
+
+    public QuestState state;
+    public enum QuestState { NotStarted, WithGaunavin, AttackNoble, ResumeNoblePower, AttackRiot, GuardBossFight, ExecuteNoble, NobleExecuted, ReturnToNoble, Complete };
+
     void Awake()
     {
-        goal1 = new SentenceGoal(trackedSentences1);
-        goal1.AddHandler(CompleteFirstGoal);
-        dialogue = GetComponent<DialogueManager>();
+        dialogue = GetComponent<DialogueManager>(); //DialogueManager executes the dialogue system
 
-        redGoal = new SentenceGoal(redSentences);
-        redGoal.AddHandler(RedSentenceCalled);
+        stopNoblePower = new SentenceGoal(againstNoble); //stopNoblePower is the goal, againstNoble is the sentances
+        stopNoblePower.AddHandler(GotoTheodore);
+        
+        resumeNobelPower = new SentenceGoal(withNoble);
+        resumeNobelPower.AddHandler(GotoNoble);
 
-        pinkGoal = new SentenceGoal(pinkSentences);
-        pinkGoal.AddHandler(PinkSentenceCalled);
+        startRiotGoal = new SentenceGoal(endTheodoreSequence);
+        startRiotGoal.AddHandler(StartRiotFunction);
 
-        greenGoal = new SentenceGoal(greenSentences);
-        greenGoal.AddHandler(GreenSentenceCalled);
+        executedNobleGoal = new SentenceGoal(executedNobleFinal);
+        executedNobleGoal.AddHandler(EndQuest);
 
-        questionEndGoal = new SentenceGoal(questionCompleteQuestion);
-        questionEndGoal.AddHandler(CompleteQuestionPart);
+        riotWithNobleGoal = new SentenceGoal(endNobleSequence);
+        riotWithNobleGoal.AddHandler(StartRiotWithNoble);
 
-        AlchemistGoal = new SentenceGoal(AlchemistsSentences);
-        AlchemistGoal.AddHandler(AlchemistCompleted);
-
-        BetweenNeutralAndAgainst = new List<Sentence>();
-        BetweenNeutralAndAgainst.Add(GauvainWithoutPotion);
-        BetweenNeutralAndAgainst.Add(GauvainWithPotion);
-        FromNeutralToAgainst = new SentenceGoal(BetweenNeutralAndAgainst);
-        FromNeutralToAgainst.AddHandler(EnableAgainstFromNeutral);
-
-        AgainstEndingComplete = new SentenceGoal(TheodoreQuestComplete);
-        AgainstEndingComplete.AddHandler(AgainstEndingCompleted);
+        getRewardNoble = new SentenceGoal(endQuestWithNoble);
+        getRewardNoble.AddHandler(getRewardFromNoble);
     }
 
-    void CompleteFirstGoal()
+    private void Start()
     {
-        StartCoroutine("Day");
-        goal1.RemoveHandler(CompleteFirstGoal);
-        dialogue.currentSentence = goAwaySentence;
+        agent = GetComponent<NavMeshAgent>();
+        controller = GetComponentInChildren<AnimationController>();
+
+        Noble.GetComponent<NobleQuestScript>().rioteerLeader = gameObject;
     }
 
-    IEnumerator Day()
+    bool calledWithNoble = false;
+
+    private void Update()
     {
-        yield return new WaitForSeconds(control.SecondsInAFullDay);
-        if (goal1.selectedSentence.questParameter == "red")
+        //Manage animations
+        if (agent.velocity.magnitude == 0)
         {
-            dialogue.currentSentence = redEnding;
-        }
-        if (goal1.selectedSentence.questParameter == "orange")
-        {
-            dialogue.currentSentence = orangeEnding;
-        }
-    }
-
-    void GreenSentenceCalled()
-    {
-        greenQuestions++;
-    }
-
-    void PinkSentenceCalled()
-    {
-        pinkQuestions++;
-    }
-
-    void RedSentenceCalled()
-    {
-        redQuestions++;
-    }
-
-    void CompleteQuestionPart()
-    {
-        int result = greenQuestions - redQuestions;
-        if (result < 0)
-        {
-            AgainstEnding();
-        }
-        if (result == 0)
-        {
-            NeutralEnding();
-        }
-        if (result > 0)
-        {
-            KingEnding();
-        }
-    }
-
-    void KingEnding()
-    {
-        dialogue.currentSentence.nextSentence = kingEnding;
-        //complete king
-    }
-
-    void NeutralEnding()
-    {
-        dialogue.currentSentence.nextSentence = neutralEnding;
-        AlchemistDialogue = Alchemist.GetComponent<DialogueManager>();
-        AlchemistDialogue.currentSentence = AlchemistStartSentence;
-    }
-
-    void AgainstEnding()
-    {
-        dialogue.currentSentence.nextSentence = againstKingSentence;
-        TheodoreDialogue = Theodore.GetComponent<DialogueManager>();
-        TheodoreDialogue.currentSentence = TheodoreStartSentence;
-    }
-
-    void EnableAgainstFromNeutral()
-    {
-        if (withPotion)
-        {
-            TheodoreDialogue = Theodore.GetComponent<DialogueManager>();
-            TheodoreDialogue.currentSentence = TheodoreStartSentence;
+            //Idle animation if npc isn't moving
+            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
         }
         else
         {
-            //complete quest;
-            Debug.Log("Complete neutral");
+            if (agent.velocity.magnitude < 2.5f)
+            {
+                //Walk animation if npc is moving slow
+                controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
+            }
+            else
+            {
+                //Walk animation if npc is moving fast
+                controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
+            }
+        }
+
+        if (target != null)
+        {
+            RotateTo(target);
+        }
+
+        if (state == QuestState.ResumeNoblePower && GetComponent<CharacterStats>().isDead && calledWithNoble == false)
+        {
+            calledWithNoble = true;
+            Noble.GetComponent<DialogueManager>().currentSentence = withNobleSentance;
         }
     }
 
-    void AlchemistCompleted()
+    void RotateTo(GameObject target)
     {
-        if (AlchemistGoal.selectedSentence.questParameter == "with potion")
+        Quaternion lookRotation;
+
+        Vector3 direction = (target.transform.position - transform.position).normalized;
+        lookRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime / (Quaternion.Angle(transform.rotation, lookRotation) / agent.angularSpeed));
+    }
+
+    void GotoTheodore()
+    {
+        state = QuestState.WithGaunavin;
+        GetComponent<CharacterStats>().isInvincible = true;
+        Theodore.GetComponent<CharacterStats>().isInvincible = true;
+        Noble.GetComponent<CharacterStats>().isInvincible = true;
+
+        dialogue.currentSentence = againstNobleSentence; 
+        Theodore.GetComponent<DialogueManager>().currentSentence = theodoreStart;
+    }
+
+    void GotoNoble()
+    {
+        state = QuestState.ResumeNoblePower;
+        dialogue.currentSentence = goAwaySentence;
+
+        GetComponent<NPC>().enabled = false;
+        CombatBase combatBaseScript = GetComponent<CombatBase>().EnableCombat();
+        combatBaseScript.Tags.Add("Player");
+    }
+
+    void StartRiotFunction()
+    {
+        GetComponent<NPC>().enabled = false;
+        CombatBase[] combatBases = GetComponents<CombatBase>();
+        foreach (CombatBase combatBase in combatBases)
         {
-            dialogue.currentSentence = GauvainWithPotion;
-            withPotion = true;
+            combatBase.enabled = false;
         }
-        if (AlchemistGoal.selectedSentence.questParameter == "without potion")
+
+        GetComponent<NavMeshAgent>().isStopped = false;
+        GetComponent<NavMeshAgent>().SetDestination(CenterofTown.position);
+        target = CenterofTown.gameObject;
+        StartCoroutine(ReachedCenter());
+    }
+
+    void StartRiotWithNoble()
+    {
+        StartCoroutine(ForStartRiotWithNoble());
+    }
+
+    IEnumerator ForStartRiotWithNoble()
+    {
+        yield return new WaitForSeconds(2f);
+
+        StartCoroutine(Noble.GetComponent<NPC>().Conversation(null, AssetDatabase.GetAssetPath(nobleSpeach), this));
+        SpawnSoldiers();
+    }
+
+    IEnumerator ReachedCenter()
+    {
+        SpawnSoldiers();
+        yield return new WaitUntil(() => GetComponent<NavMeshAgent>().remainingDistance == 0);
+        target = null;
+        StartCoroutine(GetComponent<NPC>().Conversation(null, AssetDatabase.GetAssetPath(speachAtCenter), this));
+    }
+
+    public void EndConversation()
+    {
+        switch (state)
         {
-            dialogue.currentSentence = GauvainWithoutPotion;
-            withPotion = false;
+            case QuestState.WithGaunavin:
+                state = QuestState.AttackNoble;
+                CombatBase combatScript = GetComponent<CombatBase>().EnableCombat();
+                combatScript.attackPoint = nobleHouse;
+                break;
+
+            case QuestState.GuardBossFight:
+                state = QuestState.ExecuteNoble;
+                Noble.GetComponent<CharacterStats>().isInvincible = false;
+                break;
+
+            case QuestState.ResumeNoblePower:
+                state = QuestState.AttackRiot;
+                break;
         }
     }
 
-    void AgainstEndingCompleted()
+    void SpawnSoldiers()
     {
-        //complete quest 
-        Debug.Log("Complete against");
+        for(int i = 0; i < 5; i++)
+        {
+            Vector3 position = new Vector3(CenterofTown.position.x + Random.Range(-10.0F, 10.0F), CenterofTown.position.y, CenterofTown.position.z + Random.Range(-10.0F, 10.0F));
+            Instantiate(rioteer, position, Quaternion.identity);
+            Vector3 position1 = new Vector3(nobleHouse.position.x + Random.Range(-10.0F, 10.0F), nobleHouse.position.y, nobleHouse.position.z + Random.Range(-10.0F, 10.0F));
+            Instantiate(guard, position1, Quaternion.identity);
+        }
+    }
+
+    public void SpawnRioteerAgain()
+    {
+        Vector3 position = new Vector3(CenterofTown.position.x + Random.Range(-10.0F, 10.0F), CenterofTown.position.y, CenterofTown.position.z + Random.Range(-10.0F, 10.0F));
+        Instantiate(rioteer, position, Quaternion.identity);
+    }
+
+    public void SpawnGuardAgain()
+    {
+        Vector3 position1 = new Vector3(nobleHouse.position.x + Random.Range(-10.0F, 10.0F), nobleHouse.position.y, nobleHouse.position.z + Random.Range(-10.0F, 10.0F));
+        Instantiate(guard, position1, Quaternion.identity);
+    }
+
+    public void NumberofGuardsDead()
+    {
+        numberOfGuardsDead++;
+        if (numberOfGuardsDead > 0)
+        {
+            state = QuestState.GuardBossFight;
+            GetComponent<ShieldMeleeAI>().enabled = false;
+
+            StartCoroutine(StartNobleExecution());
+        }
+    }
+
+    public void NumberofRioteersDead()
+    {
+        numberOfRioteersDead++;
+        if (numberOfRioteersDead > 0)
+        {
+            state = QuestState.ReturnToNoble;
+            Noble.GetComponent<DialogueManager>().currentSentence = returnToNoble;
+        }
+    }
+
+    IEnumerator StartNobleExecution()
+    {
+        GetComponent<NavMeshObstacle>().enabled = false;
+        agent.enabled = true;
+        agent.SetDestination(Noble.transform.position);
+        yield return new WaitUntil(() => (Noble.transform.position - transform.position).magnitude <= 2);
+        
+        GetComponent<NPC>().isFirst = true;
+        StartCoroutine(GetComponent<NPC>().Conversation(Noble, AssetDatabase.GetAssetPath(executeNoble), this));
+        StartCoroutine(Noble.GetComponent<NPC>().Conversation(this.gameObject, null, null));
+    }
+
+    public IEnumerator NobleIsExecuted()
+    {
+        state = QuestState.NobleExecuted;
+
+        target = FindObjectOfType<FirstPersonAIO>().gameObject;
+        agent.SetDestination(target.transform.position);
+        yield return new WaitUntil(() => GetComponent<NavMeshAgent>().remainingDistance <= 2);
+
+        agent.SetDestination(transform.position);
+
+        GetComponent<DialogueManager>().currentSentence = executedNoble;
+        target.GetComponent<PlayerActions>().ReceiveInteraction(gameObject);
+
+        this.enabled = false;
+    }
+
+    void getRewardFromNoble()
+    {
+        Debug.Log("quest finished!");
+    }
+
+    void EndQuest()
+    {
+        state = QuestState.Complete;
     }
 }

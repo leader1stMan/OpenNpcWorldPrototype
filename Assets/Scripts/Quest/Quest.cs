@@ -10,8 +10,6 @@ public class Quest : MonoBehaviour
     public List<Item> itemRewards;
     public int coinsReward;
 
-    public QuestState state;
-
     public static Quest instance;
 
     private void Awake()
@@ -20,4 +18,3 @@ public class Quest : MonoBehaviour
     }
 }
 
-public enum QuestState { Unknown, Ongoing, Complete};

@@ -6,89 +6,131 @@ using UnityEngine.AI;
 using System.IO;
 using TMPro;
 
-public class NPC : NpcData, IAttackable
+public class NPC : NpcData, IAttackable, IDestructible
 {
     public bool ShowDebugMessages;
     
+    private AnimationController controller;
+
+    //Navigation
     public NavMeshAgent agent { get; private set; }
-    private Animator animator;
-    private string currentAnimation;
+    public float movementSpeed;
 
     public GameObject Attacker;
     public bool isAttacked;
-    public float movementSpeed;
     public float scaredRunningSpeed;
     public float scaredAcceleration;
     public float runningDistance;
     public float runningTime;
-    private float timeToRun;
-    [SerializeField] private float speedAnimDevider = 1;
-    [SerializeField] private float stopDistance;
-    [SerializeField] private float stopDistanceRandomAdjustment;
+    private float runTimeLeft;
 
-    private bool isFirst;
-    private int Dialogue;
-    private bool isStarted;
-    private int called;
-    protected GameObject conversatingWith;
-    protected NPC NPCscript;
-
+    //NPC-NPC interaction
+    public bool isFirst;
+    string path = null;
     private TMP_Text text;
+    public List<string> DialoguePaths;
 
-    private AnimationController controller;
+    //Ragdoll
+    Rigidbody[] rig;
+    SkinnedMeshRenderer[] skin;
+
+    public bool combatState = false;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        animator = GetComponentInChildren<Animator>();
         controller = GetComponentInChildren<AnimationController>();
-
-        /*____________________Might need to change this as this is called every frame, interfering with the code______________________*/
-        FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork;
-        FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome;
-
-        agent.stoppingDistance = stopDistance;
-
-        GoHome();
-
         text = GetComponentInChildren<TMP_Text>();
+
+        FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork; //Connects with the day and night controller
+        FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome; //On a certain time these functions are called so npcs can execute life cycles  
+
+        DisableRagdoll();
+    }
+
+    public void DisableRagdoll()
+    {
+        skin = GetComponentsInChildren<SkinnedMeshRenderer>();
+        rig = GetComponentsInChildren<Rigidbody>();
+
+        foreach (SkinnedMeshRenderer skinned in skin)
+        {
+            skinned.updateWhenOffscreen = false; //has to be enabled when ragdoll is in. Otherwise the character sometimes does not render
+        }
+
+        foreach (Rigidbody rigidbody in rig)
+        {
+            rigidbody.GetComponent<Collider>().enabled = false; //Make sure colliders for the ragdoll are disabled while npc is still alive
+            rigidbody.isKinematic = true;
+        }
+
+        GetComponent<CapsuleCollider>().enabled = true;
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
 
     void Update()
     {
-        if (timeToRun > 0)
+        //Decrease run time after hit
+        if (runTimeLeft > 0)
         {
-            timeToRun -= Time.deltaTime;
+            runTimeLeft -= Time.deltaTime;
         }
 
+        if (combatState)
+        {
+            this.enabled = false;
+            if (GetComponent<CharacterStats>().weapon.type == WeaponType.LowRange)
+            {
+                GetComponent<ShieldMeleeAI>().enabled = true;
+            }
+            else
+            {
+                GetComponent<ArcherAI>().enabled = true;
+            }
+        }
         WatchEnvironment();
     }
 
     void FixedUpdate()
     {
-        if (agent.velocity.magnitude == 0)
+        RunWalkAnim();
+    }
+
+    public void RunWalkAnim()
+    {
+        //Manage animations
+        if (GetComponent<NavMeshAgent>().velocity.magnitude == 0)
         {
-            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
+            //Idle animation if npc isn't moving
+            GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
         }
         else
         {
-            if (agent.velocity.magnitude < 2.5f)
+            if (GetComponent<NavMeshAgent>().velocity.magnitude < 2.5f)
             {
-                controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
+                //Walk animation if npc is moving slow
+                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
             }
             else
             {
-                controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
+                //Walk animation if npc is moving fast
+                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
             }
         }
     }
+
+    //Check environment to run if another npc is attacking or being attacked
     private void WatchEnvironment()
     {
         Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, VisionLayers);
 
         foreach (Collider col in cols)
         {
-            // If the NPC is looking at another NPC attacking or defending, run
+            // If the NPC is looking at another attacked NPC, run
             if (col.gameObject.GetComponent<NPC>())
             {
                 NPC npc = col.gameObject.GetComponent<NPC>();
@@ -98,12 +140,12 @@ public class NPC : NpcData, IAttackable
                     ChangeState(NpcStates.Scared);
                 }
             }
-            // If the NPC is looking at an enemy Attacking or defending, run
-            else if (col.gameObject.GetComponent<EnemyBase>())
+            // If the NPC is looking at an enemy Attacking, run
+            else if (col.gameObject.GetComponent<CombatBase>())
             {
-                EnemyBase enemy = col.gameObject.GetComponent<EnemyBase>();
-                EnemyState state = enemy.CurrentState;
-                if (state == EnemyState.Attacking)
+                CombatBase enemy = col.gameObject.GetComponent<CombatBase>();
+
+                if (enemy.CurrentState == EnemyState.Attacking)
                 {
                     Attacker = col.gameObject;
                     ChangeState(NpcStates.Scared);
@@ -112,27 +154,31 @@ public class NPC : NpcData, IAttackable
         }
     }
 
+    //Change NPC's state
     private void ChangeState(NpcStates NewState)
     {
         if (currentState == NewState)
             return;
 
-        NpcStates PrevState = currentState;
+        NpcStates PrevState = currentState; 
 
-        currentState = NewState;
+        currentState = NewState; 
         OnStateChanged(PrevState, NewState);
-        Debug.Log(gameObject.name + " " + PrevState + " " + NewState + " " + (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name);
     }
 
     private void OnStateChanged(NpcStates PrevState, NpcStates NewState)
     {
-        switch(PrevState)
+       switch (PrevState)
         {
+            case NpcStates.GoingHome:
+                StopGoingHome();
+                break;
+            case NpcStates.GoingToWork:
+                StopGoingToWork();
+                break;
             case NpcStates.Working:
                 break;
             case NpcStates.Talking:
-                agent.isStopped = false;
-                StopCoroutine("Conversation");
                 EndConversation();
                 break;
             default:
@@ -151,7 +197,7 @@ public class NPC : NpcData, IAttackable
                 break;
             case NpcStates.Idle:
                 float time = FindObjectOfType<DayAndNightControl>().currentTime;
-                if (time > .2f && time < .8f)
+                if (time > .3f && time < .7f)
                 {
                     GoToWork();
                 }
@@ -163,10 +209,34 @@ public class NPC : NpcData, IAttackable
             case NpcStates.InteractingWithPlayer:
                 break;
             case NpcStates.Talking:
-                agent.isStopped = true;
+                GetComponent<NavMeshAgent>().isStopped = true;
                 break;
             case NpcStates.Working:
                 SetMoveTarget(work);
+                break;
+            case NpcStates.Dead: //Enables ragdoll
+                GetComponent<ShieldMeleeAI>().enabled = false;
+                GetComponent<ArcherAI>().enabled = false;
+                GetComponent<CharacterStats>().isDead = true;
+                foreach (SkinnedMeshRenderer skinned in GetComponentsInChildren<SkinnedMeshRenderer>())
+                {
+                    skinned.updateWhenOffscreen = true; //Stops character from disrendering
+                }
+
+                GetComponentInChildren<AnimationController>().enabled = false; //Have to turn it off before executing ragdoll
+                GetComponentInChildren<AnimationController>().animator.enabled = false;
+                GetComponent<NavMeshAgent>().enabled = false;
+                GetComponent<CapsuleCollider>().enabled = false;
+                GetComponent<Rigidbody>().isKinematic = false;
+
+                foreach (Rigidbody rigidbody in GetComponentsInChildren<Rigidbody>())
+                {
+                    if (rigidbody != this.GetComponent<Rigidbody>())
+                    {
+                        rigidbody.GetComponent<Collider>().enabled = true;
+                        rigidbody.isKinematic = false;
+                    }
+                }
                 break;
             default: break;
         }
@@ -180,44 +250,58 @@ public class NPC : NpcData, IAttackable
 
     void GoToWork()
     {
+        if (this.enabled == false)
+            return;
+
+        //States that are more prioritized than 'GoingToWork' state
         if (currentState == NpcStates.GoingToWork || currentState == NpcStates.Working || currentState == NpcStates.Talking || currentState == NpcStates.Scared)
             return;
         StartCoroutine("GoToWorkCoroutine");
     }
-    IEnumerator GoToWorkCoroutine()
+
+    //Set agent destination to work position, and change state to "Working" as it is reached
+    IEnumerator GoToWorkCoroutine() 
     {
         agent.speed = movementSpeed;
-        currentState = NpcStates.GoingToWork;
+        ChangeState(NpcStates.GoingToWork);
         SetMoveTarget(work);
+        yield return new WaitUntil(() => agent.remainingDistance <= 0.1f && !agent.pathPending);
 
-        yield return new WaitUntil(() => Vector3.Distance(agent.destination, transform.position) <= 5f);
+        if (currentState != NpcStates.Working)
+        ChangeState(NpcStates.Working);
+    }
 
-        if (currentState == NpcStates.Talking || currentState == NpcStates.Scared)
-        {
-            Debug.Log("true");
-        }
-        else
-        {
-            if (currentState != NpcStates.Working)
-                ChangeState(NpcStates.Working);
-        }
+    void StopGoingToWork()
+    {
+        agent.ResetPath();
+        StopCoroutine("GoToWorkCoroutine");
     }
 
     void GoHome()
     {
+        if (this.enabled == false)
+            return;
+        //States that are more prioritized than 'GoingHome' state
         if (currentState == NpcStates.GoingHome || currentState == NpcStates.Talking || currentState == NpcStates.Scared)
             return;
         StartCoroutine("GoHomeCoroutine");
     }
 
+    void StopGoingHome()
+    {
+        agent.ResetPath();
+        StopCoroutine("GoHomeCoroutine");
+    }
+
+    //Set agent destination to home position, and change state to "Idle" as it is reached
     IEnumerator GoHomeCoroutine()
     {
         agent.speed = movementSpeed;
-        currentState = NpcStates.GoingHome;
+        ChangeState(NpcStates.GoingHome);
 
         SetMoveTarget(home);
 
-        yield return new WaitUntil(() => Vector3.Distance(agent.destination, transform.position) <= 0.05f);
+        yield return new WaitUntil(() => agent.remainingDistance <= 0.1f && !agent.pathPending);
         if (currentState == NpcStates.GoingHome)
             ChangeState(NpcStates.Idle);
     }
@@ -236,184 +320,249 @@ public class NPC : NpcData, IAttackable
         }
     }
 
-    IEnumerator Conversation(GameObject talker)
+    public IEnumerator Conversation(GameObject talker = null, string converPath = null, Component senderScript = null)
     {
-        ChangeState(NpcStates.Talking);
-        StartCoroutine("RotateTo", talker);
-        string path;
-
-        switch (UnityEngine.Random.Range(1, 2))
+        if (talker == null)
         {
-            case 1:
-                if (isFirst)
-                {
-                    path = "Assets/NPC dialogues/Dialogue 1a.txt";
-                }
-                else
-                {
-                    path = "Assets/NPC dialogues/Dialogue 1b.txt";
-                }
-                break;
-            case 2:
-                if (isFirst)
-                {
-                    path = "Assets/NPC dialogues/Dialogue 2a.txt";
-                }
-                else
-                {
-                    path = "Assets/NPC dialogues/Dialogue 2b.txt";
-                }
-                break;
-            default:
-                path = null;
-                break;
-        }
+            StreamReader reader;
+            string line;
+            List<string> lines = new List<string>();
+            path = converPath;
 
-        if (!isFirst)
-        {
-            text.text = null;
-            yield return new WaitForSeconds(4);
-        }
-
-        string line;
-        StreamReader reader = new StreamReader(path);
-        while ((line = reader.ReadLine()) != null)
-        {
-            text.text = line;
-            yield return new WaitForSeconds(4);
-            text.text = null;
-            yield return new WaitForSeconds(4);
-        }
-
-        if (isFirst)
-        {
-            yield return new WaitForSeconds(4);
-        }
-
-        ChangeState(NpcStates.Idle);
-        EndConversation();
-    }
-
-    public void EndConversation()
-    {
-        StopCoroutine("RotateTo");
-        isFirst = false;
-        text.text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
-    }
-
-    void OnTriggerStay(Collider other)
-    {
-        if (currentState == NpcStates.Scared || currentState == NpcStates.Talking)
-            return;
-        if (!other.CompareTag("Npc"))
-            return;
-        NPC NPCscript = other.GetComponentInParent<NPC>();
-        if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking)
-            return;
-
-        if (UnityEngine.Random.Range(0, 10) == 1)
-        {
-            Debug.Log(gameObject.name + " " + other.gameObject.name);
-            if (NPCscript.currentState == NpcStates.Talking)
+            reader = new StreamReader(path);
+            //Converstion is sotred in .txt file. "{}" separates first and second NPC's part 
+            while ((line = reader.ReadLine()) != "{}")
             {
-                if (GetInstanceID() > NPCscript.GetInstanceID())
+                lines.Add(line); //Storing the conversation by each line
+            }
+
+            text.text = null; //Ui for showing text
+            for (int i = 0; i < lines.Count; i++)
+            {
+                if (!lines[i].StartsWith(" ")) //Displays sentece for 4 secs
                 {
-                    isFirst = true;
+                    text.text = lines[i];
+                    yield return new WaitForSeconds(4);
+                    text.text = null;
+                }
+            }
+        }
+        else
+        {
+            ChangeState(NpcStates.Talking);
+            StartCoroutine("RotateTo", talker); //Look at talker
 
-                    NPCscript.OnTriggerStay(gameObject.GetComponentInChildren<CapsuleCollider>());
-                    StartCoroutine("Conversation", other.gameObject);
+            StreamReader reader;
+            NPC npc = talker.GetComponent<NPC>();
+            string line;
+            List<string> lines = new List<string>();
 
-                    NPCscript.isFirst = false;
-                    NPCscript.StartCoroutine("Conversation", this.gameObject);
+            // if NPC is first, it randomly chooses conversation and assigns it to the second NPC
+            // if NPC is second, it waits till conversation is assigned to him by the first NPC
+            if (isFirst)
+            {
+                //Assigning the conversation to npc1, npc2
+                if (converPath == null)
+                {
+                    path = AssignPath();
                 }
                 else
                 {
-                    return;
+                    path = converPath;
+                }
+                npc.path = path;
+
+                reader = new StreamReader(path);
+                //Converstion is sotred in .txt file. "{}" separates first and second NPC's part 
+                while ((line = reader.ReadLine()) != "{}")
+                {
+                    lines.Add(line); //Storing the conversation by each line
                 }
             }
             else
             {
-                if (GetInstanceID() > NPCscript.GetInstanceID())
+                yield return new WaitUntil(() => path != null); //Wait till first NPC sends the conversation he chose
+                reader = new StreamReader(path);
+                while (reader.ReadLine() != "{}") ;
+                while ((line = reader.ReadLine()) != null)
                 {
-                    isFirst = true;
-
-                    NPCscript.OnTriggerStay(gameObject.GetComponentInChildren<CapsuleCollider>());
-                    StartCoroutine("Conversation", other.gameObject);
-
-                    NPCscript.isFirst = false;
-                    NPCscript.StartCoroutine("Conversation", this.gameObject);
+                    lines.Add(line);
                 }
+            }
+
+            GetComponentInChildren<TMP_Text>().text = null; //Ui for showing text
+            yield return new WaitUntil(() => isFirst); //We now don't need 'isFirst' to tell who started the conversation
+            for (int i = 0; i < lines.Count; i++)
+            {
+                if (!lines[i].StartsWith(" ")) //Displays sentece for 4 secs
+                {
+                    GetComponentInChildren<TMP_Text>().text = lines[i];
+                    yield return new WaitForSeconds(4);
+                    GetComponentInChildren<TMP_Text>().text = null;
+                }
+                isFirst = false; //Turns 'isFirst' to false while pturning on it for the talker
+                npc.isFirst = true; //Indicating that it's talker's time to speak
+                yield return new WaitUntil(() => isFirst);
+            }
+            npc.isFirst = true;
+        }
+
+        EndConversation(senderScript);
+    }
+
+    //Randomly choose a path from DialoguePaths 
+    string AssignPath()
+    {
+        if (DialoguePaths.Count > 0)
+            return DialoguePaths[UnityEngine.Random.Range(0, DialoguePaths.Count - 1)];
+        else                                                                           
+            return null;
+    }
+
+    public void StartConversation(GameObject talker)
+    {
+        StartCoroutine("Conversation", talker); 
+    }
+
+    //Stops talking state and removes all behaviours from it
+    public void EndConversation(Component senderScript = null) 
+    {
+        GetComponent<NavMeshAgent>().isStopped = false;
+        StopCoroutine("Conversation");
+        StopCoroutine("RotateTo");
+        path = null;
+        isFirst = false;
+        GetComponentInChildren<TMP_Text>().text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
+
+        if (senderScript == null)
+        {
+            if (currentState == NpcStates.Talking)
+                ChangeState(NpcStates.Idle);
+        }
+        else if (senderScript == FindObjectOfType<TreasonQuest>())
+        {
+            FindObjectOfType<TreasonQuest>().EndConversation();
+        }
+    }
+
+    //Start NPC-NPC interaction with nearby NPCs with 
+    void OnTriggerStay(Collider other) 
+    {
+        if (this.enabled == false)
+            return;
+        // States that are more prioritized
+        if (currentState == NpcStates.Scared || currentState == NpcStates.Talking)
+            return;
+
+        if (!other.CompareTag("Npc"))
+            return;
+
+        NPC NPCscript = other.GetComponentInParent<NPC>();
+
+        //Checks if the talker's state does not have a higher priority
+        if (NPCscript.currentState == NpcStates.Scared || NPCscript.currentState == NpcStates.Talking)
+            return;
+        if (UnityEngine.Random.Range(0, 1000) <= 0) //At a chance starts a conversation
+        {
+            if (GetInstanceID() > NPCscript.GetInstanceID()) //Each script has it's own ID. We can use these so one of the npc scripts is more prioritized
+            {                                                //Can stop bug for when both scripts decide to have a conversation at the same time                                                                                                     
+                isFirst = true;
+                NPCscript.isFirst = false;
+                StartConversation(other.gameObject);
+                NPCscript.StartConversation(gameObject);
             }
         }
     }    
 
+    //Called when NPC is attacked
     public void OnAttack(GameObject attacker, Attack attack)
     {
         Attacker = attacker;
-        ChangeState(NpcStates.Scared);
         StartCoroutine("Attacked");
     }
 
-    IEnumerator Attacked()
+    //Method WatchEnvironment() uses "IsAttacked" boolean to check if NPC is attacked
+    IEnumerator Attacked() 
     {
         isAttacked = true;
         yield return new WaitForSeconds(1f);
         isAttacked = false;
     }
 
-    IEnumerator Run(GameObject attacker)
+    //Run from "attacker" in opposite direction
+    public IEnumerator Run(GameObject attacker)
     {
+        agent = GetComponent<NavMeshAgent>();
         float currentAcceleration = agent.acceleration;
         agent.speed = scaredRunningSpeed;
-        timeToRun = runningTime;
-        int interaction = 0;
+        runTimeLeft = runningTime;
         agent.ResetPath();
-        while (timeToRun > 0)
+
+        //Agent gets running acceleration at the first iteration
+        int iteration = 0;
+        while (runTimeLeft > 0)
         {
-            interaction++;
+            Vector3 goal;
+            NavMeshHit hit;
+            bool isPathValid;
+            NavMeshPath path = new NavMeshPath();
+
+            //Get the angle between "attacker" and NPC
             Vector3 distanceIn3D = attacker.transform.position - transform.position;
             float magnitude = new Vector2(distanceIn3D.x, distanceIn3D.z).magnitude;
             Vector2 distance = new Vector2(distanceIn3D.x / magnitude, distanceIn3D.z / magnitude);
-            //Debug.DrawLine(transform.position, new Vector3(transform.position.x + distance.x * runningDistance, transform.position.y, transform.position.z + distance.y * runningDistance), Color.blue, 20f);
-            Vector3 goal;
-            NavMeshHit hit;
-            int index = 0;
             double angleX = Math.Acos(distance.x);
             double angleY = Math.Asin(distance.y);
-            bool isPathValid;
-            NavMeshPath path = new NavMeshPath();
+
+            //Loop has iteration limit to avoid errors
+            int index = 0;
+            const int limit = 13;
+
+            //Loop tries to find further point from "attacker" in boundaries of a circle of "runningDistance" radius
             do
             {
+                //Rotate point in the circle by (PI / 6 * index)
                 angleX += index * Math.Pow(-1.0f, index) * Math.PI / 6.0f;
                 angleY -= index * Math.Pow(-1.0f, index) * Math.PI / 6.0f;
                 distance = new Vector2((float)Math.Cos(angleX), (float)Math.Sin(angleY));
-                index++;
                 goal = new Vector3(transform.position.x - distance.x * runningDistance, transform.position.y, transform.position.z - distance.y * runningDistance);
-                bool samplePosition;
-                samplePosition = NavMesh.SamplePosition(goal, out hit, runningDistance / 5, agent.areaMask);
+
+                //Check if NPC can reach this point
+                bool samplePosition = NavMesh.SamplePosition(goal, out hit, runningDistance / 5, agent.areaMask);
+                //Calculate path if the point is reachable
                 if (samplePosition)
                 {
                     agent.CalculatePath(hit.position, path);
                     yield return new WaitUntil(() => path.status != NavMeshPathStatus.PathInvalid);
                     agent.path = path;
                 }
-                isPathValid = (samplePosition && path.status != NavMeshPathStatus.PathPartial && agent.remainingDistance <= runningDistance);
-                if (index > 13)
+
+                isPathValid = (samplePosition && 
+                               path.status != NavMeshPathStatus.PathPartial && 
+                               agent.remainingDistance <= runningDistance);
+                
+                //Stop loop if it is impossible to find way after "limit" iterations
+                if (++index > limit)
                 { 
                     ChangeState(NpcStates.Idle);
                     break;
                 }
             } while (!isPathValid);
-            if (timeToRun < 2f)
-                agent.acceleration = currentAcceleration;
+
             yield return new WaitUntil(() => Vector3.Distance(agent.destination, transform.position) <= runningDistance / 1.2);
-            if (interaction == 1)
+            
+            if (++iteration == 1)
                 agent.acceleration = scaredAcceleration;
+
+            //Return to the default acceleration
+            if (runTimeLeft < 2f)
+                agent.acceleration = currentAcceleration;
         }
         agent.acceleration = currentAcceleration;
         ChangeState(NpcStates.Idle);
     }
 
+    //Rotate to the target
     IEnumerator RotateTo(GameObject target)
     {
         Quaternion lookRotation;
@@ -421,8 +570,13 @@ public class NPC : NpcData, IAttackable
         {
             Vector3 direction = (target.transform.position - transform.position).normalized;
             lookRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime / (Quaternion.Angle(transform.rotation, lookRotation) / agent.angularSpeed));
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime / (Quaternion.Angle(transform.rotation, lookRotation) / GetComponent<NavMeshAgent>().angularSpeed));
             yield return new WaitForEndOfFrame();
         } while (currentState == NpcStates.Talking);
+    }
+
+    public void OnDestruction(GameObject destroyer)
+    {
+        ChangeState(NpcStates.Dead);
     }
 }

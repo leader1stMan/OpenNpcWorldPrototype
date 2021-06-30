@@ -22,6 +22,14 @@ public class AnimationController : MonoBehaviour
 
     public static readonly string SWORD_EQUIP = "Sword_Equip";
 
+    public static readonly string SHIELD_READY = "Shield_0M_L_Ready_0";
+
+    public static readonly string SHIELD_IDLE = "Shield_0M_L_Idle_0";
+
+    public static readonly string SHIELD_HIT = "Shield_0M_L_Hit_0_L";
+
+    public static readonly string SHILD_UNEQUIP = "Shield_Unequip";
+
     string[] LayerPrefixs;
 
     string[] Layers;
@@ -30,6 +38,7 @@ public class AnimationController : MonoBehaviour
     const int layersNumber = 3;
 
     public Animator animator;
+    public GameObject target;
 
     public AnimationController(Animator anim)
     {
@@ -44,6 +53,12 @@ public class AnimationController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
+    /// <summary>
+    /// Changes animation. 
+    /// </summary>
+    /// <param name="newAnimation">New animation.</param>
+    /// <param name="layer">Animation layer (Upper, Down or All).</param>
+    /// <param name="block">If true, blocks chosen layer, so animation can't be changed, before current animation executes</param>
     public void ChangeAnimation(string newAnimation, AnimatorLayers layer, bool block = false)
     {
         bool AllLayers = layer == AnimatorLayers.ALL;
@@ -54,16 +69,25 @@ public class AnimationController : MonoBehaviour
         while (true)
         {
             int chosenLayer = (int)layer;
-
             string animation = LayerPrefixs[chosenLayer] + newAnimation;
+            Debug.Log(animation);
+
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName(animation))
+                return;
 
             if (Layers[chosenLayer] != animation && !Block[chosenLayer])
             {
-                animator.Play(animation);
+                animator.CrossFade(animation, 0.5f);
                 Layers[chosenLayer] = animation;
-
                 if (block)
                     StartCoroutine(BlockAnimator(layer, animator.GetCurrentAnimatorStateInfo(chosenLayer).length));
+            }
+            else
+            {
+                if (newAnimation == AnimationController.SHIELD_READY)
+                {
+                    Debug.Log(false);
+                }
             }
             if (AllLayers)
             {
@@ -75,11 +99,37 @@ public class AnimationController : MonoBehaviour
         }
     }
 
+    public float GetAnimationLength(AnimatorLayers layer)
+    {
+        return animator.GetCurrentAnimatorClipInfo((int)layer).Length;
+    }
+
     IEnumerator BlockAnimator(AnimatorLayers layer, float time)
     {
         Block[(int)layer] = true;
         yield return new WaitForSeconds(time);
         Block[(int)layer] = false;
+    }
+
+    void AttackEvent() //Called from animation event
+    {
+        GetComponentInParent<CharacterStats>().GetWeapon().ExecuteAttack(transform.parent.gameObject, target);
+        target = null;
+        ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
+    }
+
+    void BlockEvent() //Same as up
+    {
+        ShieldMeleeAI shieldMeleeAI = GetComponentInParent<ShieldMeleeAI>();
+        shieldMeleeAI.changingState = true;
+        shieldMeleeAI.stats.isBlocking = true;
+    }
+
+    IEnumerator ForBlockEvent()
+    {
+        ShieldMeleeAI shieldMeleeAI = GetComponentInParent<ShieldMeleeAI>();
+        yield return new WaitForSeconds(shieldMeleeAI.controller.GetAnimationLength(AnimatorLayers.UP));
+        shieldMeleeAI.changingState = false;
     }
 }
 

@@ -30,13 +30,13 @@ public class NpcData : MonoBehaviour
     private NpcStates _currentState;
 
 
-    protected NpcStates currentState
+    public NpcStates currentState
     {
         get
         {
             return _currentState;
         }
-        set
+        protected set
         {
             _currentState = value;
         }
