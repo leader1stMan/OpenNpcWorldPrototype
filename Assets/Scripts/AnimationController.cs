@@ -70,17 +70,26 @@ public class AnimationController : MonoBehaviour
         {
             int chosenLayer = (int)layer;
             string animation = LayerPrefixs[chosenLayer] + newAnimation;
-            Debug.Log(animation);
 
             if (animator.GetCurrentAnimatorStateInfo(0).IsName(animation))
                 return;
 
             if (Layers[chosenLayer] != animation && !Block[chosenLayer])
             {
-                animator.CrossFade(animation, 0.5f);
-                Layers[chosenLayer] = animation;
-                if (block)
-                    StartCoroutine(BlockAnimator(layer, animator.GetCurrentAnimatorStateInfo(chosenLayer).length));
+                if (layer != AnimatorLayers.WEAPON)
+                {
+                    animator.CrossFade(animation, 0.5f);
+                    Layers[chosenLayer] = animation;
+                    if (block)
+                        StartCoroutine(BlockAnimator(layer, animator.GetCurrentAnimatorStateInfo(chosenLayer).length));
+                }
+                else
+                {
+                    animator.Play(animation);
+                    Layers[chosenLayer] = animation;
+                    if (block)
+                        StartCoroutine(BlockAnimator(layer, animator.GetCurrentAnimatorStateInfo(chosenLayer).length));
+                }
             }
             else
             {

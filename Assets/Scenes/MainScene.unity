@@ -1220,6 +1220,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Item_Pickup (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 20195434853711456, guid: 4fcb1c05815bce44e874a5f9df534ea5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,
         type: 3}
       propertyPath: m_RootOrder
@@ -1784,6 +1789,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Item_Pickup
+      objectReference: {fileID: 0}
+    - target: {fileID: 20195434853711456, guid: 4fcb1c05815bce44e874a5f9df534ea5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,
         type: 3}
@@ -4804,6 +4814,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Item_Pickup (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 20195434853711456, guid: 4fcb1c05815bce44e874a5f9df534ea5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,
         type: 3}
       propertyPath: m_RootOrder
@@ -5485,6 +5500,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Item_Pickup (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 20195434853711456, guid: 4fcb1c05815bce44e874a5f9df534ea5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,
         type: 3}
@@ -6396,6 +6416,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Item_Pickup
       objectReference: {fileID: 0}
+    - target: {fileID: 20195434853711456, guid: 4fcb1c05815bce44e874a5f9df534ea5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,
         type: 3}
       propertyPath: m_RootOrder
@@ -6744,6 +6769,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Item_Pickup
+      objectReference: {fileID: 0}
+    - target: {fileID: 20195434853711456, guid: 4fcb1c05815bce44e874a5f9df534ea5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,
         type: 3}
@@ -10491,6 +10521,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Item_Pickup (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 20195434853711456, guid: 4fcb1c05815bce44e874a5f9df534ea5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,
         type: 3}
       propertyPath: m_RootOrder
@@ -10617,7 +10652,7 @@ PrefabInstance:
     - target: {fileID: 622297471873179660, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 622297471873179661, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
@@ -11394,6 +11429,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Item_Pickup (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 20195434853711456, guid: 4fcb1c05815bce44e874a5f9df534ea5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,
         type: 3}
       propertyPath: m_RootOrder
@@ -11601,6 +11641,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Item_Pickup (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 20195434853711456, guid: 4fcb1c05815bce44e874a5f9df534ea5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,
         type: 3}
       propertyPath: m_RootOrder
@@ -11675,6 +11720,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Item_Pickup (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 20195434853711456, guid: 4fcb1c05815bce44e874a5f9df534ea5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,
         type: 3}
@@ -14958,6 +15008,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Item_Spoon
       objectReference: {fileID: 0}
+    - target: {fileID: 20195434853711456, guid: 4fcb1c05815bce44e874a5f9df534ea5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,
         type: 3}
       propertyPath: m_RootOrder
@@ -16233,7 +16288,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1743253467
 Transform:
   m_ObjectHideFlags: 0
@@ -20217,6 +20272,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Item_Pickup (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 20195434853711456, guid: 4fcb1c05815bce44e874a5f9df534ea5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 20195434853933632, guid: 4fcb1c05815bce44e874a5f9df534ea5,
         type: 3}
