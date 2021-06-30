@@ -749,6 +749,7 @@ public class FirstPersonAIO : MonoBehaviour {
                 else
                 {
                     controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.UP, true);
+                    controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.WEAPON, true);
                     attackCooldown = anim.GetCurrentAnimatorStateInfo((int)AnimatorLayers.UP).length;
 
                     yield return new WaitForSeconds(attackCooldown / 2);

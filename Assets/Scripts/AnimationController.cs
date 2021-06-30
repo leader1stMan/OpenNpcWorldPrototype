@@ -27,7 +27,7 @@ public class AnimationController : MonoBehaviour
     string[] Layers;
     bool[] Block;
 
-    const int layersNumber = 2;
+    const int layersNumber = 3;
 
     public Animator animator;
 
@@ -40,7 +40,7 @@ public class AnimationController : MonoBehaviour
     {
         Layers = new string[layersNumber];
         Block = new bool[layersNumber];
-        LayerPrefixs = new string[] { "LowerBody.", "UpperBody." };
+        LayerPrefixs = new string[] { "LowerBody.", "UpperBody.", "Weapon." };
         animator = GetComponent<Animator>();
     }
 
@@ -83,4 +83,4 @@ public class AnimationController : MonoBehaviour
     }
 }
 
-public enum AnimatorLayers { DOWN, UP, ALL }
+public enum AnimatorLayers { DOWN, UP, WEAPON, ALL }
