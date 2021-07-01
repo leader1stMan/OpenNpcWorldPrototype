@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class PlayerStats : CharacterStats
 {
-    public Transform WeaponBoneL;
-    public Transform WeaponBoneR;
-
     void Start()
     {
         EquipmentController.instance.onEquipmentChanged += OnEquipmentChanged;
@@ -30,7 +27,7 @@ public class PlayerStats : CharacterStats
             Damage.AddModifier(newItem.damageModifier);
 
             if (newItem.weapon != null)
-                weapon = newItem.weapon;
+                weapon = newItem;
             if (newItem.shield != null)
                 shield = newItem.shield;
         }

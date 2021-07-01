@@ -48,7 +48,7 @@ public abstract class CombatBase : MonoBehaviour
         controller = GetComponentInChildren<AnimationController>();
         agent = GetComponent<NavMeshAgent>();
         stats = GetComponent<CharacterStats>();
-        AttackDistance = stats.weapon.Range;
+        AttackDistance = stats.weapon.weapon.Range;
 
         GetComponent<NPC>().DisableRagdoll();
         #region Editor Only
@@ -435,7 +435,7 @@ public abstract class CombatBase : MonoBehaviour
 
     public CombatBase EnableCombat()
     {
-        if (GetComponent<CharacterStats>().weapon.type == WeaponType.LowRange)
+        if (GetComponent<CharacterStats>().weapon.weapon.type == WeaponType.LowRange)
         {
             GetComponent<ShieldMeleeAI>().enabled = true;
             return GetComponent<ShieldMeleeAI>();

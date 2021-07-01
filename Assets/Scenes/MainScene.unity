@@ -928,12 +928,14 @@ MonoBehaviour:
   Armor:
     BaseValue: 30
   defaultAttack: {fileID: 0}
-  weapon: {fileID: 11400000, guid: 2b9b62229886429419972221f33b1c3b, type: 2}
+  weapon: {fileID: 0}
   shield: {fileID: 0}
   isBlocking: 0
   attackCooldown: 0
   isInvincible: 0
   isDead: 0
+  WeaponBoneL: {fileID: 0}
+  WeaponBoneR: {fileID: 0}
 --- !u!114 &102010721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3027,12 +3029,14 @@ MonoBehaviour:
   Armor:
     BaseValue: 30
   defaultAttack: {fileID: 0}
-  weapon: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9, type: 2}
+  weapon: {fileID: 0}
   shield: {fileID: 0}
   isBlocking: 0
   attackCooldown: 0
   isInvincible: 0
   isDead: 0
+  WeaponBoneL: {fileID: 0}
+  WeaponBoneR: {fileID: 0}
 --- !u!114 &371236411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4259,12 +4263,14 @@ MonoBehaviour:
   Armor:
     BaseValue: 30
   defaultAttack: {fileID: 0}
-  weapon: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9, type: 2}
+  weapon: {fileID: 0}
   shield: {fileID: 0}
   isBlocking: 0
   attackCooldown: 0
   isInvincible: 0
   isDead: 0
+  WeaponBoneL: {fileID: 0}
+  WeaponBoneR: {fileID: 0}
 --- !u!114 &465457737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5323,6 +5329,8 @@ MonoBehaviour:
   attackCooldown: 0
   isInvincible: 0
   isDead: 0
+  WeaponBoneL: {fileID: 0}
+  WeaponBoneR: {fileID: 0}
 --- !u!1 &570592552
 GameObject:
   m_ObjectHideFlags: 0
@@ -7169,6 +7177,12 @@ Transform:
   m_Father: {fileID: 637553724}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 15.514902, y: -35.84344, z: -170.91402}
+--- !u!4 &769828760 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5309043377704405439, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+    type: 3}
+  m_PrefabInstance: {fileID: 910410754143012180}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &776861086
 GameObject:
   m_ObjectHideFlags: 0
@@ -10652,7 +10666,7 @@ PrefabInstance:
     - target: {fileID: 622297471873179660, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 622297471873179661, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
@@ -10729,8 +10743,7 @@ PrefabInstance:
         type: 3}
       propertyPath: weapon
       value: 
-      objectReference: {fileID: 11400000, guid: 2b9b62229886429419972221f33b1c3b,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 1375264054326251850, guid: 343aaf64225e76d4cab4f5940af40065,
         type: 3}
       propertyPath: shield
@@ -12445,6 +12458,12 @@ Transform:
   m_Father: {fileID: 1792992963}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -13.604477, y: 13.41975, z: -44.045082}
+--- !u!4 &1312967351 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2040224216247032809, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+    type: 3}
+  m_PrefabInstance: {fileID: 910410754143012180}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1316756111
 GameObject:
   m_ObjectHideFlags: 0
@@ -16579,12 +16598,14 @@ MonoBehaviour:
   Armor:
     BaseValue: 30
   defaultAttack: {fileID: 0}
-  weapon: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9, type: 2}
+  weapon: {fileID: 0}
   shield: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96, type: 2}
   isBlocking: 0
   attackCooldown: 0
   isInvincible: 0
   isDead: 0
+  WeaponBoneL: {fileID: 0}
+  WeaponBoneR: {fileID: 0}
 --- !u!114 &1781499113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17201,12 +17222,14 @@ MonoBehaviour:
   Armor:
     BaseValue: 30
   defaultAttack: {fileID: 0}
-  weapon: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9, type: 2}
+  weapon: {fileID: 0}
   shield: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96, type: 2}
   isBlocking: 0
   attackCooldown: 0
   isInvincible: 0
   isDead: 0
+  WeaponBoneL: {fileID: 0}
+  WeaponBoneR: {fileID: 0}
 --- !u!114 &1861797423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20666,7 +20689,7 @@ PrefabInstance:
         type: 3}
       propertyPath: weapon
       value: 
-      objectReference: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9,
+      objectReference: {fileID: 11400000, guid: c5e96915f567d694999fbc0afee6bfd9,
         type: 2}
     - target: {fileID: 4242600388388332656, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
@@ -20828,7 +20851,7 @@ PrefabInstance:
         type: 3}
       propertyPath: weapon
       value: 
-      objectReference: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9,
+      objectReference: {fileID: 11400000, guid: 2fd5594a5d44cf043a42d26e3ef62e41,
         type: 2}
     - target: {fileID: 4364848039031525940, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
@@ -20842,6 +20865,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9,
         type: 2}
+    - target: {fileID: 4364848039031525940, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: WeaponBoneR
+      value: 
+      objectReference: {fileID: 769828760}
+    - target: {fileID: 4364848039031525940, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: WeaponBoneL
+      value: 
+      objectReference: {fileID: 1312967351}
     - target: {fileID: 4842082879910106037, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
       propertyPath: m_ConnectedAnchor.x

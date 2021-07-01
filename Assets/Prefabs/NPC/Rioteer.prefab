@@ -2178,6 +2178,7 @@ MonoBehaviour:
   scaredAcceleration: 10
   runningDistance: 2
   runningTime: 35
+  isFirst: 0
   DialoguePaths:
   - Assets/NPC dialogues/npc-npc dialogues/Dialogue1.txt
   - Assets/NPC dialogues/npc-npc dialogues/Dialogue2.txt
@@ -2239,11 +2240,14 @@ MonoBehaviour:
   Armor:
     BaseValue: 0
   defaultAttack: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9, type: 2}
-  weapon: {fileID: 11400000, guid: 6b7a1b511b51a39459835067d72647f9, type: 2}
+  weapon: {fileID: 11400000, guid: 2fd5594a5d44cf043a42d26e3ef62e41, type: 2}
   shield: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96, type: 2}
   isBlocking: 0
   attackCooldown: 0
+  isInvincible: 0
   isDead: 0
+  WeaponBoneL: {fileID: 0}
+  WeaponBoneR: {fileID: 0}
 --- !u!114 &4045277460876034219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2327,6 +2331,7 @@ MonoBehaviour:
   currentTarget: {fileID: 0}
   CombatRange: 1
   blockTime: 0
+  changingState: 0
 --- !u!114 &1587090069560675943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2355,6 +2360,16 @@ MonoBehaviour:
   - Npc
   currentTarget: {fileID: 0}
   CombatRange: 0
+  RaysPerMeter: 1
+  MinShootingRange: 0
+  layersToIgnore:
+    serializedVersion: 2
+    m_Bits: 0
+  VisionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  CalculatingStep: 0
+  enableCalculation: 1
 --- !u!114 &5884745981065655631
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -83,7 +83,7 @@ public class NPC : NpcData, IAttackable, IDestructible
         if (combatState)
         {
             this.enabled = false;
-            if (GetComponent<CharacterStats>().weapon.type == WeaponType.LowRange)
+            if (GetComponent<CharacterStats>().weapon.weapon.type == WeaponType.LowRange)
             {
                 GetComponent<ShieldMeleeAI>().enabled = true;
             }

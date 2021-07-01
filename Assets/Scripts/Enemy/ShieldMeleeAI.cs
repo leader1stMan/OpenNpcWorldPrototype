@@ -80,7 +80,7 @@ public class ShieldMeleeAI : MeleeAI
     bool CanHit(GameObject attacker, Transform target)
     {
         CharacterStats characterStats = attacker.GetComponent<CharacterStats>();
-        Weapon weapon = characterStats.weapon;
+        Weapon weapon = characterStats.weapon.weapon;
 
         if (weapon == null)
         {

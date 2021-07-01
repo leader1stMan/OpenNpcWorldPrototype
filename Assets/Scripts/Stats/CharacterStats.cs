@@ -10,7 +10,7 @@ public class CharacterStats : MonoBehaviour, IDestructible
     public Stat Armor;
 
     public AttackDefinition defaultAttack;
-    public Weapon weapon;
+    public EquipableItem weapon;
     public Shield shield;
     public bool isBlocking = false;
     public float attackCooldown;
@@ -20,10 +20,15 @@ public class CharacterStats : MonoBehaviour, IDestructible
 
     public event Action OnHealthValueChanged;
 
+    public Transform WeaponBoneL;
+    public Transform WeaponBoneR;
+
     protected virtual void Start()
     {
         currentHealth = new Stat();
         currentHealth.SetValue(maxHealth.GetValue());
+
+        weapon.OnItemEquipped(gameObject);
     }
 
     void Update()
@@ -61,8 +66,8 @@ public class CharacterStats : MonoBehaviour, IDestructible
     }
     public Weapon GetWeapon()
     {
-        if (weapon != null)
-            return weapon;
+        if (weapon.weapon != null)
+            return weapon.weapon;
         else
             return null;
     }

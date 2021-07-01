@@ -71,9 +71,6 @@ public class AnimationController : MonoBehaviour
             int chosenLayer = (int)layer;
             string animation = LayerPrefixs[chosenLayer] + newAnimation;
 
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName(animation))
-                return;
-
             if (Layers[chosenLayer] != animation && !Block[chosenLayer])
             {
                 if (layer != AnimatorLayers.WEAPON)

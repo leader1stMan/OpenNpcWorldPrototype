@@ -81,59 +81,85 @@ public class Rioteer : MonoBehaviour
         switch (state)
         {
             case TreasonQuest.QuestState.GuardBossFight:
-                GetComponent<CombatBase>().enabled = false;
-                if (GetComponent<NavMeshAgent>().enabled)
-                    GetComponent<NavMeshAgent>().isStopped = true;
-
-                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
-
-                if (random == 0)
+                if (!GetComponent<CharacterStats>().isDead)
                 {
-                    if (!isSpeaking)
+                    GetComponent<CombatBase>().enabled = false;
+                    if (GetComponent<NavMeshAgent>().enabled)
+                        GetComponent<NavMeshAgent>().isStopped = true;
+
+                    GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
+                    GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.DOWN);
+
+                    if (random == 0)
                     {
-                        isSpeaking = true;
-                        StartCoroutine(Speak());
+                        if (!isSpeaking)
+                        {
+                            isSpeaking = true;
+                            StartCoroutine(Speak());
+                        }
                     }
                 }
                 break;
 
             case TreasonQuest.QuestState.AttackRiot:
-                CombatBase combat = GetComponent<CombatBase>().EnableCombat();
-                combat.attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().nobleHouse;
-
-                if (random == 0)
-                {
-                    if (!isSpeaking)
-                    {
-                        isSpeaking = true;
-                        StartCoroutine(Speak());
-                    }
-                }
+                    CombatBase combat = GetComponent<CombatBase>().EnableCombat();
+                    combat.attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().nobleHouse;
                 break;
 
             case TreasonQuest.QuestState.ReturnToNoble:
-                GetComponent<CombatBase>().enabled = false;
-                GetComponent<NavMeshAgent>().SetDestination(treasonQuestNpc.GetComponent<TreasonQuest>().runAwayArea.position);
+                if (!GetComponent<CharacterStats>().isDead)
+                {
+                    GetComponent<CombatBase>().enabled = false;
+                    GetComponent<NavMeshAgent>().SetDestination(treasonQuestNpc.GetComponent<TreasonQuest>().runAwayArea.position);
+
+                    if (random == 0)
+                    {
+                        if (!isSpeaking)
+                        {
+                            isSpeaking = true;
+                            StartCoroutine(Speak(1));
+                        }
+                    }
+                }
                 break;
         }
     }
 
-    IEnumerator Speak()
+    IEnumerator Speak(int state = 0)
     {
         TMP_Text tMP_Text = GetComponentInChildren<TMP_Text>();
         tMP_Text.text = null; //Ui for showing text
 
         int random = Random.Range(0, 2);
-        switch (random)
+        switch (state)
         {
             case 0:
-                tMP_Text.text = "Hooray!";
+                switch (random)
+                {
+                    case 0:
+                        tMP_Text.text = "Hooray!";
+                        break;
+                    case 1:
+                        tMP_Text.text = "Kill the nobel!";
+                        break;
+                    case 2:
+                        tMP_Text.text = "Freedom!";
+                        break;
+                }
                 break;
             case 1:
-                tMP_Text.text = "Kill the nobel!";
-                break;
-            case 2:
-                tMP_Text.text = "Freedom!";
+                switch (random)
+                {
+                    case 0:
+                        tMP_Text.text = "Run!";
+                        break;
+                    case 1:
+                        tMP_Text.text = "The battle is lost!";
+                        break;
+                    case 2:
+                        tMP_Text.text = "Freedom!";
+                        break;
+                }
                 break;
         }
         yield return new WaitForSeconds(4);
