@@ -20754,6 +20754,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2820446562284331888, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
+      propertyPath: interactions.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2820446562284331888, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: DialoguePaths.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2820446562284331888, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
       propertyPath: home
       value: 
       objectReference: {fileID: 661354748}
@@ -20767,6 +20777,21 @@ PrefabInstance:
       propertyPath: stopDistance
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 2820446562284331888, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: interactions.Array.data[0]
+      value: 
+      objectReference: {fileID: 4900000, guid: e5d8693115703fd4398791084d82d5df, type: 3}
+    - target: {fileID: 2820446562284331888, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: interactions.Array.data[1]
+      value: 
+      objectReference: {fileID: 4900000, guid: d91255d2951a7e642b6685fdc1ec7ca1, type: 3}
+    - target: {fileID: 2820446562284331888, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: interactions.Array.data[2]
+      value: 
+      objectReference: {fileID: 4900000, guid: c0adaf5557641b249bf19f41c642924b, type: 3}
     - target: {fileID: 2820446562284331889, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
       propertyPath: m_Radius
@@ -25873,6 +25898,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6598780603943041310, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
+      propertyPath: interactions.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598780603943041310, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+        type: 3}
+      propertyPath: DialoguePaths.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598780603943041310, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+        type: 3}
       propertyPath: home
       value: 
       objectReference: {fileID: 661354748}
@@ -25896,6 +25931,21 @@ PrefabInstance:
       propertyPath: stopDistance
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 6598780603943041310, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+        type: 3}
+      propertyPath: interactions.Array.data[0]
+      value: 
+      objectReference: {fileID: 4900000, guid: e5d8693115703fd4398791084d82d5df, type: 3}
+    - target: {fileID: 6598780603943041310, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+        type: 3}
+      propertyPath: interactions.Array.data[1]
+      value: 
+      objectReference: {fileID: 4900000, guid: d91255d2951a7e642b6685fdc1ec7ca1, type: 3}
+    - target: {fileID: 6598780603943041310, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+        type: 3}
+      propertyPath: interactions.Array.data[2]
+      value: 
+      objectReference: {fileID: 4900000, guid: c0adaf5557641b249bf19f41c642924b, type: 3}
     - target: {fileID: 6598780603943041311, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}
       propertyPath: m_Radius

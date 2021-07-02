@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.IO;
 using TMPro;
+using UnityEditor;
 
 public class NPC : NpcData, IAttackable, IDestructible
 {
@@ -28,6 +29,7 @@ public class NPC : NpcData, IAttackable, IDestructible
     public bool isFirst;
     string path = null;
     private TMP_Text text;
+    public List<TextAsset> interactions;
     public List<string> DialoguePaths;
 
     //Ragdoll
@@ -46,6 +48,11 @@ public class NPC : NpcData, IAttackable, IDestructible
         FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome; //On a certain time these functions are called so npcs can execute life cycles  
 
         DisableRagdoll();
+
+        foreach (TextAsset interaction in interactions)
+        {
+           DialoguePaths.Add(AssetDatabase.GetAssetPath(interaction));
+        }
     }
 
     public void DisableRagdoll()
@@ -421,7 +428,7 @@ public class NPC : NpcData, IAttackable, IDestructible
 
     public void StartConversation(GameObject talker)
     {
-        StartCoroutine("Conversation", talker); 
+        StartCoroutine(Conversation(talker)); 
     }
 
     //Stops talking state and removes all behaviours from it
