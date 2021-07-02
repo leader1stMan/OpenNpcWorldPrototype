@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using TMPro;
 
 public class TresonQuestGuard : MonoBehaviour
 {
     private GameObject treasonQuestNpc;
     private TreasonQuest.QuestState questState;
+
+    private bool isSpeaking = false;
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +54,7 @@ public class TresonQuestGuard : MonoBehaviour
         if (state == questState)
             return;
 
+        int random = Random.Range(0, 999);
         switch (state)
         {
             case TreasonQuest.QuestState.AttackNoble:
@@ -60,12 +64,24 @@ public class TresonQuestGuard : MonoBehaviour
                 break;
 
             case TreasonQuest.QuestState.GuardBossFight:
-                GetComponent<CombatBase>().enabled = false;
-                if (GetComponent<NavMeshAgent>().enabled)
-                    GetComponent<NavMeshAgent>().isStopped = true;
+                if (!GetComponent<CharacterStats>().isDead)
+                {
+                    GetComponent<CombatBase>().enabled = false;
+                    if (GetComponent<NavMeshAgent>().enabled)
+                        GetComponent<NavMeshAgent>().isStopped = true;
 
-                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
-                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.DOWN);
+                    GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
+                    GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.DOWN);
+
+                    if (random == 0)
+                    {
+                        if (!isSpeaking)
+                        {
+                            isSpeaking = true;
+                            StartCoroutine(Speak());
+                        }
+                    }
+                }
                 break;
 
             case TreasonQuest.QuestState.AttackRiot:
@@ -75,13 +91,68 @@ public class TresonQuestGuard : MonoBehaviour
                 break;
 
             case TreasonQuest.QuestState.ReturnToNoble:
-                GetComponent<CombatBase>().enabled = false;
-                if (GetComponent<NavMeshAgent>().enabled)
-                    GetComponent<NavMeshAgent>().isStopped = true;
+                if (!GetComponent<CharacterStats>().isDead)
+                {
+                    GetComponent<CombatBase>().enabled = false;
+                    if (GetComponent<NavMeshAgent>().enabled)
+                        GetComponent<NavMeshAgent>().isStopped = true;
 
-                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
-                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.DOWN);
+                    GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
+                    GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.DOWN);
+
+                    if (random == 0)
+                    {
+                        if (!isSpeaking)
+                        {
+                            isSpeaking = true;
+                            StartCoroutine(Speak(1));
+                        }
+                    }
+                }
                 break;
         }
+    }
+
+    IEnumerator Speak(int state = 0)
+    {
+        TMP_Text tMP_Text = GetComponentInChildren<TMP_Text>();
+        tMP_Text.text = null; //Ui for showing text
+
+        int random = Random.Range(0, 2);
+        switch (state)
+        {
+            case 0:
+                switch (random)
+                {
+                    case 0:
+                        tMP_Text.text = "Please have mercy!";
+                        break;
+                    case 1:
+                        tMP_Text.text = "I didn't want to do this either!";
+                        break;
+                    case 2:
+                        tMP_Text.text = "It is my wish that you treat me with honor.";
+                        break;
+                }
+                break;
+            case 1:
+                switch (random)
+                {
+                    case 0:
+                        tMP_Text.text = "Runaway you scumbags!";
+                        break;
+                    case 1:
+                        tMP_Text.text = "The battle is lost!";
+                        break;
+                    case 2:
+                        tMP_Text.text = "Freedom!";
+                        break;
+                }
+                break;
+        }
+        yield return new WaitForSeconds(4);
+
+        isSpeaking = false;
+        tMP_Text.text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
     }
 }

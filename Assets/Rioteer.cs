@@ -8,6 +8,7 @@ public class Rioteer : MonoBehaviour
 {
     private GameObject treasonQuestNpc;
     private TreasonQuest.QuestState questState;
+
     private bool isSpeaking = false;
     
     // Start is called before the first frame update
