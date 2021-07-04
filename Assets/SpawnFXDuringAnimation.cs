@@ -12,6 +12,8 @@ public class SpawnFXDuringAnimation : StateMachineBehaviour
     //both set in the inspector
     public float minFrame, maxFrame;
 
+    private bool spawned = true;
+
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     //{
@@ -22,31 +24,18 @@ public class SpawnFXDuringAnimation : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         bloodFX = animator.gameObject.GetComponentInChildren<BloodFX>();
-
-        if (bloodFX == null)
-        {
-            Debug.LogError("Add a BloodFX component to your object being animated");
-            return;
-        }
-            else if (stateInfo.normalizedTime < minFrame || stateInfo.normalizedTime > maxFrame)
-            {
-                Debug.LogError("Failed to spawn blood");
-
-                return;
-            }
-
-
-        else if (stateInfo.normalizedTime >= minFrame && stateInfo.normalizedTime <= maxFrame)
+        if (spawned)
         {
             bloodFX.SpawnBlood(2000);
+            spawned = false;
         }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        spawned = true;
+    }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
     //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

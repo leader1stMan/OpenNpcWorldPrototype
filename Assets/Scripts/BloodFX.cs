@@ -24,7 +24,7 @@ public class BloodFX : MonoBehaviour
 
         if(Physics.Raycast(ray, out hit, rayRange))
         {
-            if(hit.transform.tag =="Enemy")
+            if(hit.transform.tag == "Npc")
             {
                 Debug.Log("HitEnemy");
                 Instantiate(blood, hit.point, Quaternion.identity);
