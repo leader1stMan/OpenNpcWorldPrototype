@@ -6,16 +6,9 @@ public class BloodFX : MonoBehaviour
 {
     Ray ray;
     RaycastHit hit;
-    public GameObject blood;
-    void Start()
-    {
-        
-    }
 
-    void Update()
-    {
-        
-    }
+    public GameObject blood;
+    public GameObject decalBlood;
 
     public void SpawnBlood(float rayRange)
     {
@@ -26,9 +19,15 @@ public class BloodFX : MonoBehaviour
         {
             if(hit.transform.tag == "Npc")
             {
-                Debug.Log("HitEnemy");
                 Instantiate(blood, hit.point, Quaternion.identity);
             }
+        }
+
+        if (Physics.Raycast(transform.position, -transform.up, out hit))
+        {
+            Vector3 vector3 = hit.point;
+            vector3.y = hit.point.y + 0.5f;
+            Instantiate(decalBlood, vector3, Quaternion.Euler(90, 0, 0));
         }
     }
 }
