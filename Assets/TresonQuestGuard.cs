@@ -60,7 +60,7 @@ public class TresonQuestGuard : MonoBehaviour
             case TreasonQuest.QuestState.AttackNoble:
                 questState = TreasonQuest.QuestState.AttackNoble;
                 GetComponent<CombatBase>().attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().CenterofTown;
-                GetComponent<CombatBase>().EnableCombat();
+                //GetComponent<CombatBase>().EnableCombat();
                 break;
 
             case TreasonQuest.QuestState.GuardBossFight:
@@ -87,7 +87,7 @@ public class TresonQuestGuard : MonoBehaviour
             case TreasonQuest.QuestState.AttackRiot:
                 questState = TreasonQuest.QuestState.AttackNoble;
                 GetComponent<CombatBase>().attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().CenterofTown;
-                GetComponent<CombatBase>().EnableCombat();
+                //GetComponent<CombatBase>().EnableCombat();
                 break;
 
             case TreasonQuest.QuestState.ReturnToNoble:

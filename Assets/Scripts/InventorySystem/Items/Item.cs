@@ -45,7 +45,7 @@ public class Item : ScriptableObject
     }
 
     // Implement custom behaviour when the item is equipped
-    virtual public void OnItemEquipped(GameObject owner)
+    virtual public void OnItemEquipped(AnimationController controller)
     {
 
     }

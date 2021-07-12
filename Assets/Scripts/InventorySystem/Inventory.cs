@@ -177,9 +177,7 @@ public abstract class Inventory : MonoBehaviour
         {
             EquippedList[EquipIndex] = Itemdata;
             InventoryList[FindItemSlot(Itemdata.Item)] = EmptyItemData;
-            Itemdata.Item.OnItemEquipped(gameObject);
-
-            GetComponent<AnimationController>().ChangeAnimation(AnimationController.SWORD_EQUIP, AnimatorLayers.UP, true);
+            Itemdata.Item.OnItemEquipped(GetComponent<AnimationController>());
 
             RefreshInventoryUI();
         }

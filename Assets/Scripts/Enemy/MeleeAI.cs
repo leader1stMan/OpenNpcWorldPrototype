@@ -3,9 +3,13 @@ using System.Collections;
 
 public class MeleeAI : CombatBase
 {
+    protected bool changingState;
+
     protected override void Start()
     {
         base.Start();
+
+        StartCoroutine(ConnectWeapon());
     }
 
     protected override void Update()
@@ -17,27 +21,40 @@ public class MeleeAI : CombatBase
 
     public override void Attack(GameObject target)
     {
-        attack = true;
-        if (target == null)
-        {
-            attack = false;
+        if (target == null || changingState)
             return;
-        }
+
+        RotateTo(target);
 
         if (attackCooldown <= 0)
         {
-            GetComponentInChildren<AnimationController>().target = target;
-            controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.UP);
-            attackCooldown = stats.GetWeapon().Cooldown;
+            StartCoroutine(AttackState(target));
         }
+    }
 
-        attack = false;
-        return;
+    IEnumerator AttackState(GameObject target)
+    {
+        changingState = true;
+
+        controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.UP, true);
+        stats.GetWeapon().ExecuteAttack(gameObject, target);
+        attackCooldown = controller.GetAnimationLength(AnimatorLayers.UP);
+
+        yield return new WaitForSeconds(attackCooldown);
+
+        changingState = false;
     }
 
     protected void RotateTo(GameObject target)
     {
-        Vector3 targetTransform = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
-        transform.LookAt(targetTransform);
+        Vector3 direction = (target.transform.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime / (Quaternion.Angle(transform.rotation, lookRotation) / agent.angularSpeed));
+    }
+
+    IEnumerator ConnectWeapon()
+    {
+        yield return new WaitUntil(() => controller.animator != null);
+        controller.ChangeAnimation(AnimationController.SWORD_EQUIP, AnimatorLayers.UP, true);
     }
 }

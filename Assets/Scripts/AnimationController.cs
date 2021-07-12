@@ -38,7 +38,6 @@ public class AnimationController : MonoBehaviour
     const int layersNumber = 3;
 
     public Animator animator;
-    public GameObject target;
 
     public AnimationController(Animator anim)
     {
@@ -76,24 +75,15 @@ public class AnimationController : MonoBehaviour
                 if (layer != AnimatorLayers.WEAPON)
                 {
                     animator.CrossFade(animation, 0.5f);
-                    Layers[chosenLayer] = animation;
-                    if (block)
-                        StartCoroutine(BlockAnimator(layer, animator.GetCurrentAnimatorStateInfo(chosenLayer).length));
                 }
                 else
                 {
                     animator.Play(animation);
-                    Layers[chosenLayer] = animation;
-                    if (block)
-                        StartCoroutine(BlockAnimator(layer, animator.GetCurrentAnimatorStateInfo(chosenLayer).length));
                 }
-            }
-            else
-            {
-                if (newAnimation == AnimationController.SHIELD_READY)
-                {
-                    Debug.Log(false);
-                }
+
+                Layers[chosenLayer] = animation;
+                if (block)
+                    StartCoroutine(BlockAnimator(layer, animator.GetCurrentAnimatorStateInfo(chosenLayer).length));
             }
             if (AllLayers)
             {
@@ -115,27 +105,6 @@ public class AnimationController : MonoBehaviour
         Block[(int)layer] = true;
         yield return new WaitForSeconds(time);
         Block[(int)layer] = false;
-    }
-
-    void AttackEvent() //Called from animation event
-    {
-        GetComponentInParent<CharacterStats>().GetWeapon().ExecuteAttack(transform.parent.gameObject, target);
-        target = null;
-        ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
-    }
-
-    void BlockEvent() //Same as up
-    {
-        ShieldMeleeAI shieldMeleeAI = GetComponentInParent<ShieldMeleeAI>();
-        shieldMeleeAI.changingState = true;
-        shieldMeleeAI.stats.isBlocking = true;
-    }
-
-    IEnumerator ForBlockEvent()
-    {
-        ShieldMeleeAI shieldMeleeAI = GetComponentInParent<ShieldMeleeAI>();
-        yield return new WaitForSeconds(shieldMeleeAI.controller.GetAnimationLength(AnimatorLayers.UP));
-        shieldMeleeAI.changingState = false;
     }
 }
 

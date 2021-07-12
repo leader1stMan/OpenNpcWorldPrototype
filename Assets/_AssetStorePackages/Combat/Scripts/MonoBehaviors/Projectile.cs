@@ -29,13 +29,13 @@ public class Projectile : MonoBehaviour
     void Update()
     {
         if (isFlying)
-            fly();
+            Fly();
         else
             if (attachedObject == null)
             Destroy(gameObject);
     }
 
-    private void fly()
+    private void Fly()
     {
         /*float distanceToTravel = horizontalSpeed * Time.deltaTime;
 
@@ -53,7 +53,6 @@ public class Projectile : MonoBehaviour
         }*/
 
         // Move the arrow in x and y
-        Vector3 PrevPosition = transform.position;
         float dx = horizontalSpeed * Mathf.Cos(Direction.x) * Time.deltaTime;
         Vector3 XAxis = Vector3.forward;
         Vector3 YAxis = Vector3.up;
@@ -80,10 +79,8 @@ public class Projectile : MonoBehaviour
             return;
         }
 
-        if (ProjectileCollided != null)
-        {
-            ProjectileCollided(Caster, other.gameObject);
-        }
+        ProjectileCollided?.Invoke(Caster, other.gameObject);
+
         FixedJoint fj = gameObject.AddComponent(typeof(FixedJoint)) as FixedJoint;
         fj.connectedBody = other.gameObject.GetComponent<Rigidbody>();
         isFlying = false;

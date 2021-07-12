@@ -25,6 +25,7 @@ public abstract class CombatBase : MonoBehaviour
     public bool VisualiseAgentActions;
     #endregion
 
+    public LayerMask VisionMask;
     public float VisionRange;
     public LayerMask WhatCanThisEnemyAttack;
     [TagSelector] public List<string> Tags;
@@ -34,8 +35,6 @@ public abstract class CombatBase : MonoBehaviour
     public float CombatRange;
     protected float attackCooldown;
     protected float AttackDistance;
-
-    protected bool attack = false;
     #region Editor Only
 
 #if UNITY_EDITOR
@@ -49,8 +48,6 @@ public abstract class CombatBase : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         stats = GetComponent<CharacterStats>();
         AttackDistance = stats.weapon.weapon.Range;
-
-        GetComponent<NPC>().DisableRagdoll();
         #region Editor Only
 #if UNITY_EDITOR
         if (VisualiseAgentActions)
@@ -90,15 +87,12 @@ public abstract class CombatBase : MonoBehaviour
         ManageState();
         MoveAnimaton();
 
-        if (this != GetComponent<ArcherAI>())
+        if (agent.enabled)
         {
-            if (agent.enabled)
+            if (agent.isStopped == true)
             {
-                if (agent.isStopped == true)
-                {
-                    agent.enabled = false;
-                    GetComponent<NavMeshObstacle>().enabled = true;
-                }
+                agent.enabled = false;
+                GetComponent<NavMeshObstacle>().enabled = true;
             }
         }
 
@@ -199,10 +193,7 @@ public abstract class CombatBase : MonoBehaviour
                 {
                     if ((currentTarget.position - transform.position).magnitude <= AttackDistance)
                     {
-                        if (attack == false)
-                        {
-                            Attack(currentTarget.gameObject);
-                        }
+                        Attack(currentTarget.gameObject);
                     }
                     else
                     {
@@ -211,8 +202,6 @@ public abstract class CombatBase : MonoBehaviour
                 }
                 break;
 
-            case EnemyState.Dead:
-                break;
             default:
                 break;
         }
@@ -224,6 +213,7 @@ public abstract class CombatBase : MonoBehaviour
 
         //Return all attackable target colliders in sphere
         Collider[] cols = Physics.OverlapSphere(transform.position, VisionRange, WhatCanThisEnemyAttack);
+
         foreach (Collider col in cols)
         {
             if (VisualiseAgentActions)
@@ -233,10 +223,21 @@ public abstract class CombatBase : MonoBehaviour
             if (col.transform == this.transform)
                 continue;
 
+            //Check if AI can see the target 
+            /*
+            if (Physics.Linecast(transform.position, col.transform.position, out RaycastHit hit, VisionMask))
+            {
+                if (hit.collider != col)
+                    continue;
+            }
+            else
+                continue;
+            */
+
             //Check if collider has attackable tag
             for (int i = 0; i < Tags.Capacity; i++)
             {
-                if (col.gameObject.tag == Tags[i])
+                if (col.gameObject.CompareTag(Tags[i]))
                 {
                     possibleTargets.Add(col);
                     break;
@@ -291,6 +292,28 @@ public abstract class CombatBase : MonoBehaviour
             return null;
     }
 
+    protected virtual void ManageAnimations()
+    {
+        if (agent.velocity.magnitude == 0)
+        {
+            //Idle animation if npc isn't moving
+            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
+        }
+        else
+        {
+            if (agent.velocity.magnitude < 2.5f)
+            {
+                //Walk animation if npc is moving slow
+                controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
+            }
+            else
+            {
+                //Walk animation if npc is moving fast
+                controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
+            }
+        }
+    }    
+
     void Chase(Transform target)
     {
         if (currentTarget == null)
@@ -308,6 +331,7 @@ public abstract class CombatBase : MonoBehaviour
             }
         }
     }
+
     public abstract void Attack(GameObject target);
 
     protected virtual void ChangeState(EnemyState state)
@@ -318,23 +342,9 @@ public abstract class CombatBase : MonoBehaviour
 
         CurrentState = state;
     }
+
     protected virtual void ManageStateChange(EnemyState oldState, EnemyState newState)
     {
-        switch (oldState)
-        {
-            case EnemyState.Attacking:
-                if (GetComponent<CharacterStats>().isBlocking)
-                    GetComponent<CharacterStats>().isBlocking = false;
-
-                if (this != GetComponent<ArcherAI>())
-                {
-                    GetComponent<NavMeshObstacle>().enabled = false;
-                    StartCoroutine(EnablenNavmeshAgain());
-                }
-                break;
-            default:
-                break;
-        }
         switch (newState)
         {
             case EnemyState.Attacking:
@@ -376,17 +386,17 @@ public abstract class CombatBase : MonoBehaviour
                     Debug.Log(name + " is blocking"); 
                 #endregion
                 break;
-            case EnemyState.Dead:
-                break;
         }
     }
 
     //Pick random spot and start moving there
     protected virtual void PatrolToAnotherSpot()
     {
-        if (!attackPoint)
+        const int IterationLimit = 25;
+        Vector3 dest;
+        //iteration limit to avoid stack overflow
+        for (int i = 0; i < IterationLimit; i++)
         {
-            Vector3 dest;
             if (PatrolArea == null)
             {
                 //Pick spot within X4 VisionRange 
@@ -405,23 +415,14 @@ public abstract class CombatBase : MonoBehaviour
                     Random.Range(PatrolArea.bounds.min.z, PatrolArea.bounds.max.z)
                     );
             }
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(dest, out hit, VisionRange, agent.areaMask))
+            if (NavMesh.SamplePosition(dest, out NavMeshHit hit, VisionRange, agent.areaMask))
             {
                 ChangeState(EnemyState.Patroling);
                 agent.SetDestination(hit.position);
-            }
-            else
-            {
-                //Repeat till reachable spot is found
-                PatrolToAnotherSpot();
+                return;
             }
         }
-        else
-        {
-            ChangeState(EnemyState.Patroling);
-            agent.SetDestination(attackPoint.position);
-        }
+        ChangeState(EnemyState.Idle);
     }
 
     protected virtual void OnDrawGizmosSelected()
@@ -431,26 +432,5 @@ public abstract class CombatBase : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, VisionRange);
         }
-    }
-
-    public CombatBase EnableCombat()
-    {
-        if (GetComponent<CharacterStats>().weapon.weapon.type == WeaponType.LowRange)
-        {
-            GetComponent<ShieldMeleeAI>().enabled = true;
-            return GetComponent<ShieldMeleeAI>();
-        }
-        else
-        {
-            GetComponent<ArcherAI>().enabled = true;
-            return GetComponent<ArcherAI>();
-        }
-    }
-
-    public IEnumerator EnablenNavmeshAgain()
-    {
-        yield return 2;
-        GetComponent<NavMeshAgent>().enabled = true;
-        GetComponent<NavMeshAgent>().isStopped = false;
     }
 }

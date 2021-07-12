@@ -12,12 +12,11 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
 {
     public Camera dialogueCamera;
     public GameObject[] ToDisable;
-    public UnityEvent OnStartDialogue;
     private int index;
     public float _textSpeed = 0f;
     private string sentence;
     public bool _isdialogue = false;
-    private FirstPersonAIO player;
+    private FirstPersonAIO firstPersonAIO;
     private PlayerActions _playeractions;
     private CharacterStats stats;
     public bool displayingdialogue = false;
@@ -30,26 +29,22 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
 
     private void Start() 
     {
-        player = GameObject.FindWithTag("Player").GetComponent<FirstPersonAIO>();
-        _playeractions = GameObject.FindWithTag("Player").GetComponent<PlayerActions>();
-        stats = GameObject.FindWithTag("Player").GetComponent<CharacterStats>();
+        GameObject player = GameObject.FindWithTag("Player");
+        firstPersonAIO = player.GetComponent<FirstPersonAIO>();
+        _playeractions = player.GetComponent<PlayerActions>();
+        stats = player.GetComponent<CharacterStats>();
         _dialogue = _playeractions.dialogue_gameobject;
         dialogueScript = _dialogue.GetComponent<Dialogue>();
-    }
-    private void Awake()
-    {
-        if (OnStartDialogue == null)
-            OnStartDialogue = new UnityEvent();
         npc = GetComponent<NPC>();
         shop = GetComponent<MerchantInventory>();
     }
 
     public void say(GameObject caller) 
     {
-        player.playerCanMove = false;
+        firstPersonAIO.playerCanMove = false;
         _isdialogue = true;
         dialogueScript._name.text = caller.name;
-        player.lockAndHideCursor = false;
+        firstPersonAIO.lockAndHideCursor = false;
         _playeractions.openedWindow = this;
 
         Cursor.lockState = CursorLockMode.None;
@@ -63,8 +58,6 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
             currentSentence = defaultSentence;
         DialogueSystem.instance.Attach(this);
         DisplayNextSentence();
-        
-        OnStartDialogue.Invoke();
     }
 
 
@@ -74,27 +67,25 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
         DialogueSystem.instance.Detach();
         npc.GetComponentInChildren<Animator>().enabled = true;
 
-        if (!npc.GetComponent<ShieldMeleeAI>().enabled && !npc.GetComponent<ArcherAI>().enabled)
-            npc.enabled = true;
-
-        npc.GetComponent<NavMeshObstacle>().enabled = false;
-        StartCoroutine(npc.GetComponent<ShieldMeleeAI>().EnablenNavmeshAgain()); //change
+        var combats = npc.GetComponents<CombatBase>();
+        bool enable = true;
+        foreach (var combat in combats)
+        {
+            if (combat.enabled)
+                enable = false;
+        }
+        npc.enabled = enable;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _isdialogue = false;
-        player.playerCanMove = true;
+        firstPersonAIO.playerCanMove = true;
         _playeractions.openedWindow = null;
         _playeractions._indialogue = false;
         _playeractions.isInteracting = false;
         _playeractions.dialogue_gameobject.SetActive(false);
     }
 
-
-    private void OnDestroy()
-    {
-        OnStartDialogue.RemoveAllListeners();
-    }
     public void OptionsActive()
     {
         dialogueScript.DialogueText.gameObject.SetActive(false);
@@ -160,17 +151,6 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
 
     }
 
-    IEnumerator Type()
-    {
-        displayingdialogue = true;
-        dialogueScript.DialogueText.text = "";
-        foreach(char letter in sentence)
-        {
-            dialogueScript.DialogueText.text += letter;
-            yield return new WaitForSeconds(_textSpeed*Time.deltaTime);
-        }
-        displayingdialogue = false;
-    }
     private void Choices(int index)
     {
         var options = _dialogue.GetComponentsInChildren<Button>(true);
@@ -187,6 +167,7 @@ public class DialogueManager : MonoBehaviour, IInteractWindow, IDestructible
         displayingdialogue = false;
         DisplayNextSentence();
     }
+
     private void AddButtonListener(Button a, int index)
     {
         a.onClick.AddListener(() =>

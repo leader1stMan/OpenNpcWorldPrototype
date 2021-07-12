@@ -35,14 +35,13 @@ public class PlayerActions : MonoBehaviour
             if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out hit, InteractionRange, Mask))
             {
                 _currenthit = hit;
-                Transform Target = hit.transform;
                 DialogueManager dialogue = hit.transform.GetComponentInParent<DialogueManager>();
 
                 if (dialogue == null)
                     dialogue = hit.transform.GetComponentInChildren<DialogueManager>();
                 if (dialogue == null)
                     return;
-                if (dialogue._isdialogue == false)
+                if (!dialogue._isdialogue)
                 {
                     openedWindow = dialogue;
                     isInteracting = true;
@@ -55,14 +54,17 @@ public class PlayerActions : MonoBehaviour
                 }
             }
         }
+
         if (_indialogue == true)
         {
             PressSpeakButton(_currenthit.transform.GetComponentInParent<DialogueManager>());
         }
+
         if (_NpcInDialogue == true)
         {
             PressSpeakButton(ConversationStartNpc.transform.GetComponentInParent<DialogueManager>());
         }
+
         QuestWindowToggle();
         if (isInteracting && Input.GetKeyDown(EscapeButton))
         {

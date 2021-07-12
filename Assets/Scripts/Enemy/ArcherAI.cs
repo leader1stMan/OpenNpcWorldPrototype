@@ -9,11 +9,9 @@ public class ArcherAI : MeleeAI
     public float RaysPerMeter = 1;
     public float MinShootingRange;
     public LayerMask layersToIgnore;
-    public LayerMask VisionMask;
     float LaunchHeight = 1f;
     public float CalculatingStep;
     bool PickingPosition = false;
-    public bool enableCalculation = true;
 
     protected override void Start()
     {
@@ -27,7 +25,7 @@ public class ArcherAI : MeleeAI
 
     public override void Attack(GameObject target)
     {
-        if (target == null)
+        if (target == null || changingState)
             return;
         Vector3 launchPosition = transform.position + new Vector3(0, LaunchHeight);
         var hits = Physics.SphereCastAll(launchPosition, 0.1f, target.transform.position - transform.position - new Vector3(0, LaunchHeight), VisionRange, VisionMask);
@@ -68,24 +66,11 @@ public class ArcherAI : MeleeAI
         }
         else
         {
-            if (agent.remainingDistance < 1)
-                enableCalculation = true;
-
-            if (enableCalculation)
-            {
-                enableCalculation = false;
-                if (!PickingPosition)
-                    PickBetterPosition(target);
-            }
+            if (!PickingPosition)
+                PickBetterPosition(target);
         }
     }
 
-    IEnumerator EnableCalculation()
-    {
-        yield return new WaitForSeconds(1f);
-
-        enableCalculation = true;
-    }
 
     Quaternion TakeAim()
     {

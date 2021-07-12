@@ -15,11 +15,13 @@ public class EquipmentController : MonoBehaviour
     {
         instance = this;
     }
+
     void Start()
     {
        int numberOfSlots = System.Enum.GetNames(typeof(EquipTypes)).Length;
         currentEquipment = new EquipableItem[numberOfSlots];
     }
+
     public void Equip(EquipableItem item)
     {
         int slotIndex = (int)item.EquipType;

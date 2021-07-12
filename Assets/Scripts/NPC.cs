@@ -19,6 +19,7 @@ public class NPC : NpcData, IAttackable, IDestructible
 
     public GameObject Attacker;
     public bool isAttacked;
+    public float normalAcceleration;
     public float scaredRunningSpeed;
     public float scaredAcceleration;
     public float runningDistance;
@@ -32,12 +33,6 @@ public class NPC : NpcData, IAttackable, IDestructible
     public List<TextAsset> interactions;
     public List<string> DialoguePaths;
 
-    //Ragdoll
-    Rigidbody[] rig;
-    SkinnedMeshRenderer[] skin;
-
-    public bool combatState = false;
-
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -47,36 +42,10 @@ public class NPC : NpcData, IAttackable, IDestructible
         FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork; //Connects with the day and night controller
         FindObjectOfType<DayAndNightControl>().OnEveningHandler += GoHome; //On a certain time these functions are called so npcs can execute life cycles  
 
-        DisableRagdoll();
-
         foreach (TextAsset interaction in interactions)
         {
-           DialoguePaths.Add(AssetDatabase.GetAssetPath(interaction));
+            DialoguePaths.Add(AssetDatabase.GetAssetPath(interaction));
         }
-    }
-
-    public void DisableRagdoll()
-    {
-        skin = GetComponentsInChildren<SkinnedMeshRenderer>();
-        rig = GetComponentsInChildren<Rigidbody>();
-
-        foreach (SkinnedMeshRenderer skinned in skin)
-        {
-            skinned.updateWhenOffscreen = false; //has to be enabled when ragdoll is in. Otherwise the character sometimes does not render
-        }
-
-        foreach (Rigidbody rigidbody in rig)
-        {
-            rigidbody.GetComponent<Collider>().enabled = false; //Make sure colliders for the ragdoll are disabled while npc is still alive
-            rigidbody.isKinematic = true;
-        }
-
-        GetComponent<CapsuleCollider>().enabled = true;
-    }
-
-    private void OnDisable()
-    {
-        StopAllCoroutines();
     }
 
     void Update()
@@ -87,45 +56,25 @@ public class NPC : NpcData, IAttackable, IDestructible
             runTimeLeft -= Time.deltaTime;
         }
 
-        if (combatState)
-        {
-            this.enabled = false;
-            if (GetComponent<CharacterStats>().weapon.weapon.type == WeaponType.LowRange)
-            {
-                GetComponent<ShieldMeleeAI>().enabled = true;
-            }
-            else
-            {
-                GetComponent<ArcherAI>().enabled = true;
-            }
-        }
         WatchEnvironment();
-    }
 
-    void FixedUpdate()
-    {
-        RunWalkAnim();
-    }
-
-    public void RunWalkAnim()
-    {
         //Manage animations
-        if (GetComponent<NavMeshAgent>().velocity.magnitude == 0)
+        if (agent.velocity.magnitude == 0)
         {
             //Idle animation if npc isn't moving
-            GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
+            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
         }
         else
         {
-            if (GetComponent<NavMeshAgent>().velocity.magnitude < 2.5f)
+            if (agent.velocity.magnitude < 2.5f)
             {
                 //Walk animation if npc is moving slow
-                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
+                controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
             }
             else
             {
                 //Walk animation if npc is moving fast
-                GetComponentInChildren<AnimationController>().ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
+                controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
             }
         }
     }
@@ -175,22 +124,7 @@ public class NPC : NpcData, IAttackable, IDestructible
 
     private void OnStateChanged(NpcStates PrevState, NpcStates NewState)
     {
-       switch (PrevState)
-        {
-            case NpcStates.GoingHome:
-                StopGoingHome();
-                break;
-            case NpcStates.GoingToWork:
-                StopGoingToWork();
-                break;
-            case NpcStates.Working:
-                break;
-            case NpcStates.Talking:
-                EndConversation();
-                break;
-            default:
-                break;
-        }
+        TurnOffBehaviour(PrevState);
         switch (NewState)
         {
             case NpcStates.Scared:
@@ -213,39 +147,34 @@ public class NPC : NpcData, IAttackable, IDestructible
                     GoHome();
                 }
                 break;
-            case NpcStates.InteractingWithPlayer:
-                break;
             case NpcStates.Talking:
                 GetComponent<NavMeshAgent>().isStopped = true;
                 break;
             case NpcStates.Working:
                 SetMoveTarget(work);
                 break;
-            case NpcStates.Dead: //Enables ragdoll
-                GetComponent<ShieldMeleeAI>().enabled = false;
-                GetComponent<ArcherAI>().enabled = false;
-                GetComponent<CharacterStats>().isDead = true;
-                foreach (SkinnedMeshRenderer skinned in GetComponentsInChildren<SkinnedMeshRenderer>())
-                {
-                    skinned.updateWhenOffscreen = true; //Stops character from disrendering
-                }
-
-                GetComponentInChildren<AnimationController>().enabled = false; //Have to turn it off before executing ragdoll
-                GetComponentInChildren<AnimationController>().animator.enabled = false;
-                GetComponent<NavMeshAgent>().enabled = false;
-                GetComponent<CapsuleCollider>().enabled = false;
-                GetComponent<Rigidbody>().isKinematic = false;
-
-                foreach (Rigidbody rigidbody in GetComponentsInChildren<Rigidbody>())
-                {
-                    if (rigidbody != this.GetComponent<Rigidbody>())
-                    {
-                        rigidbody.GetComponent<Collider>().enabled = true;
-                        rigidbody.isKinematic = false;
-                    }
-                }
-                break;
             default: break;
+        }
+    }
+
+    void TurnOffBehaviour(NpcStates PrevState)
+    {
+        switch (PrevState)
+        {
+            case NpcStates.Scared:
+                StopRunning();
+                break;
+            case NpcStates.GoingHome:
+                StopGoingHome();
+                break;
+            case NpcStates.GoingToWork:
+                StopGoingToWork();
+                break;
+            case NpcStates.Talking:
+                EndConversation();
+                break;
+            default:
+                break;
         }
     }
 
@@ -257,7 +186,7 @@ public class NPC : NpcData, IAttackable, IDestructible
 
     void GoToWork()
     {
-        if (this.enabled == false)
+        if (!enabled)
             return;
 
         //States that are more prioritized than 'GoingToWork' state
@@ -280,14 +209,16 @@ public class NPC : NpcData, IAttackable, IDestructible
 
     void StopGoingToWork()
     {
-        agent.ResetPath();
+        if (agent.isActiveAndEnabled)
+            agent.ResetPath();
         StopCoroutine("GoToWorkCoroutine");
     }
 
     void GoHome()
     {
-        if (this.enabled == false)
+        if (!enabled)
             return;
+
         //States that are more prioritized than 'GoingHome' state
         if (currentState == NpcStates.GoingHome || currentState == NpcStates.Talking || currentState == NpcStates.Scared)
             return;
@@ -296,7 +227,8 @@ public class NPC : NpcData, IAttackable, IDestructible
 
     void StopGoingHome()
     {
-        agent.ResetPath();
+        if (agent.isActiveAndEnabled)
+            agent.ResetPath();
         StopCoroutine("GoHomeCoroutine");
     }
 
@@ -317,8 +249,9 @@ public class NPC : NpcData, IAttackable, IDestructible
     {
         try
         {
-            FindObjectOfType<DayAndNightControl>().OnMorningHandler -= GoToWork;
-            FindObjectOfType<DayAndNightControl>().OnEveningHandler -= GoHome;
+            DayAndNightControl control = FindObjectOfType<DayAndNightControl>();
+            control.OnMorningHandler -= GoToWork;
+            control.OnEveningHandler -= GoHome;
         }
         catch
         {
@@ -441,22 +374,25 @@ public class NPC : NpcData, IAttackable, IDestructible
         isFirst = false;
         GetComponentInChildren<TMP_Text>().text = GetComponentInChildren<NpcData>().NpcName + "\nThe " + GetComponentInChildren<NpcData>().Job.ToString().ToLower();
 
+        TreasonQuest quest = FindObjectOfType<TreasonQuest>();
+
         if (senderScript == null)
         {
             if (currentState == NpcStates.Talking)
                 ChangeState(NpcStates.Idle);
         }
-        else if (senderScript == FindObjectOfType<TreasonQuest>())
+        else if (senderScript == quest)
         {
-            FindObjectOfType<TreasonQuest>().EndConversation();
+            quest.EndConversation();
         }
     }
 
     //Start NPC-NPC interaction with nearby NPCs with 
     void OnTriggerStay(Collider other) 
     {
-        if (this.enabled == false)
+        if (!enabled)
             return;
+
         // States that are more prioritized
         if (currentState == NpcStates.Scared || currentState == NpcStates.Talking)
             return;
@@ -485,7 +421,7 @@ public class NPC : NpcData, IAttackable, IDestructible
     public void OnAttack(GameObject attacker, Attack attack)
     {
         Attacker = attacker;
-        StartCoroutine("Attacked");
+        StartCoroutine(nameof(Attacked));
     }
 
     //Method WatchEnvironment() uses "IsAttacked" boolean to check if NPC is attacked
@@ -499,8 +435,6 @@ public class NPC : NpcData, IAttackable, IDestructible
     //Run from "attacker" in opposite direction
     public IEnumerator Run(GameObject attacker)
     {
-        agent = GetComponent<NavMeshAgent>();
-        float currentAcceleration = agent.acceleration;
         agent.speed = scaredRunningSpeed;
         runTimeLeft = runningTime;
         agent.ResetPath();
@@ -563,10 +497,15 @@ public class NPC : NpcData, IAttackable, IDestructible
 
             //Return to the default acceleration
             if (runTimeLeft < 2f)
-                agent.acceleration = currentAcceleration;
+                agent.acceleration = normalAcceleration;
         }
-        agent.acceleration = currentAcceleration;
         ChangeState(NpcStates.Idle);
+    }
+
+    void StopRunning()
+    {
+        StopCoroutine(nameof(Run));
+        agent.acceleration = normalAcceleration;
     }
 
     //Rotate to the target
@@ -582,8 +521,13 @@ public class NPC : NpcData, IAttackable, IDestructible
         } while (currentState == NpcStates.Talking);
     }
 
+    void OnDisable()
+    {
+        TurnOffBehaviour(currentState);
+    }
+
     public void OnDestruction(GameObject destroyer)
     {
-        ChangeState(NpcStates.Dead);
+        enabled = false;
     }
 }

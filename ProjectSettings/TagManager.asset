@@ -6,8 +6,13 @@ TagManager:
   tags:
   - Npc
   - Enemy
+<<<<<<< HEAD
   - TreasonRioteer
   - TreasonGuard
+=======
+  - Theodore
+  - Cube
+>>>>>>> archer-ai
   layers:
   - Default
   - TransparentFX
@@ -23,7 +28,7 @@ TagManager:
   - Player Projectile
   - 'NPC interaction '
   - Enemy Projectile
-  - 
+  - Enemy
   - 
   - 
   - 

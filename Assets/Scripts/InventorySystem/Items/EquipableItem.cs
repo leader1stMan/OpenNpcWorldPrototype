@@ -19,15 +19,13 @@ public class EquipableItem : Item
         
     }
 
-    override public void OnItemEquipped(GameObject owner)
+    override public void OnItemEquipped(AnimationController controller)
     {
-        if (owner.GetComponent<PlayerInventory>())
-            EquipmentController.instance.Equip(this);
-        objectInScene = ItemManager.instance.GenerateItemFromId(ItemId, new Vector3(), new Quaternion(), 1);
-        objectInScene.transform.SetParent(owner.GetComponent<CharacterStats>().WeaponBoneR);
-        objectInScene.transform.localPosition = new Vector3(0.027f, 0.01f, 0.009f);
-        objectInScene.transform.localRotation = Quaternion.Euler(-25f, -100.766f, 101.197f);
-        owner.GetComponent<AnimationController>().ChangeAnimation(AnimationController.SWORD_EQUIP, AnimatorLayers.UP, true);
+        EquipmentController.instance.Equip(this);
+        if (weapon != null && weapon.type == WeaponType.LowRange)
+        { 
+            controller.ChangeAnimation(AnimationController.SWORD_EQUIP, AnimatorLayers.UP, true);
+        }
     }
 
     override public void OnItemUnEquipped()

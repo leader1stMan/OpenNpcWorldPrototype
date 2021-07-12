@@ -7,6 +7,7 @@ public class AttackedTakeDamage : MonoBehaviour, IAttackable
 {
     private CharacterStats stats;
     public bool RagdollOnDeath = true;
+
     void Awake()
     {
         stats = GetComponent<CharacterStats>();
@@ -14,6 +15,9 @@ public class AttackedTakeDamage : MonoBehaviour, IAttackable
 
     public void OnAttack(GameObject attacker, Attack attack)
     {
+        if (stats.isBlocking || stats.isInvincible)
+            return;
+
         stats.TakeDamage(attacker, attack.Damage);
         CombatBase[] combatScripts = GetComponents<CombatBase>();
         foreach (CombatBase combatScript in combatScripts)

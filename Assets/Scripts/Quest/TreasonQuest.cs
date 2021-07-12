@@ -155,8 +155,8 @@ public class TreasonQuest : Quest
         dialogue.currentSentence = goAwaySentence;
 
         GetComponent<NPC>().enabled = false;
-        CombatBase combatBaseScript = GetComponent<CombatBase>().EnableCombat();
-        combatBaseScript.Tags.Add("Player");
+        //CombatBase combatBaseScript = GetComponent<CombatBase>().EnableCombat();
+        //combatBaseScript.Tags.Add("Player");
     }
 
     void StartRiotFunction()
@@ -201,8 +201,8 @@ public class TreasonQuest : Quest
         {
             case QuestState.WithGaunavin:
                 state = QuestState.AttackNoble;
-                CombatBase combatScript = GetComponent<CombatBase>().EnableCombat();
-                combatScript.attackPoint = nobleHouse;
+                //CombatBase combatScript = GetComponent<CombatBase>().EnableCombat();
+                //combatScript.attackPoint = nobleHouse;
                 break;
 
             case QuestState.GuardBossFight:

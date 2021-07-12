@@ -51,11 +51,6 @@ public class Rioteer : MonoBehaviour
         OnQuestState();
     }
 
-    private void FixedUpdate()
-    {
-        GetComponent<NPC>().RunWalkAnim();
-    }
-
     IEnumerator LookAtNpc()
     {
         treasonQuestNpc = GameObject.FindObjectOfType<TreasonQuest>().gameObject;
@@ -68,8 +63,8 @@ public class Rioteer : MonoBehaviour
             yield return new WaitForEndOfFrame();
         } while (treasonQuestNpc.GetComponent<TreasonQuest>().state != TreasonQuest.QuestState.AttackNoble);
 
-        CombatBase combat = GetComponent<CombatBase>().EnableCombat();
-        combat.attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().nobleHouse;
+        //CombatBase combat = GetComponent<CombatBase>().EnableCombat();
+        //combat.attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().nobleHouse;
     }
 
     void OnQuestState()
@@ -103,8 +98,8 @@ public class Rioteer : MonoBehaviour
                 break;
 
             case TreasonQuest.QuestState.AttackRiot:
-                    CombatBase combat = GetComponent<CombatBase>().EnableCombat();
-                    combat.attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().nobleHouse;
+                    //CombatBase combat = GetComponent<CombatBase>().EnableCombat();
+                    //combat.attackPoint = treasonQuestNpc.GetComponent<TreasonQuest>().nobleHouse;
                 break;
 
             case TreasonQuest.QuestState.ReturnToNoble:

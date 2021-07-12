@@ -6,78 +6,74 @@ using Random = UnityEngine.Random;
 
 public class ShieldMeleeAI : MeleeAI
 {
-    public float blockTime;
-    public bool changingState;
-
     protected override void Start()
     {
         base.Start();
         AttackDistance = CombatRange;
+
+        StartCoroutine(ConnectShield());
     }
 
     protected override void Update()
     {
         base.Update();
-
-        if (blockTime > 0)
-            blockTime -= Time.deltaTime;
-    }
-
-    protected override void MoveAnimaton()
-    {
-        if (blockTime <= 0)
-            base.MoveAnimaton();
     }
 
     public override void Attack(GameObject target)
     {
-        attack = true;
-        if (agent.enabled)
-            agent.SetDestination(target.transform.position);
+        agent.SetDestination(target.transform.position);
 
-        int chooseMove = Random.Range(1, 10);
-        if (CanHit(gameObject, target.transform) && attackCooldown <= 0 && chooseMove <= 5)
+        if (changingState)
+            return;
+
+        if (CanHit(gameObject, target.transform))
         {
-            if (!stats.isBlocking)
-            {
-                base.Attack(target);
-                return;
-            }
-        }
-        
-        if (attackCooldown <= 0)
-        {
-            if (CanHit(target, transform) && blockTime <= 0 && !stats.isBlocking && chooseMove > 5)
-            {
-                StartBlock();
-            }
-            else if (stats.isBlocking && blockTime <= 0)
+            if (stats.isBlocking)
             {
                 StartCoroutine(StopBlock());
             }
+            else
+            {
+                base.Attack(target);
+            }
+            return;
         }
 
-        attack = false;
+        if (CanHit(target, transform, 2) && stats.shieldCooldown <= 0 && !target.GetComponent<CharacterStats>().isBlocking)
+        {
+            if (!stats.isBlocking)
+            {
+                StartCoroutine(StartBlock());
+            }
+            return;
+        }
+        else if (stats.isBlocking)
+        {
+            StartCoroutine(StopBlock());
+        }
     }
 
-    void StartBlock()
+    IEnumerator StartBlock()
     {
-        blockTime = 3;
-        print("block");
-        controller.ChangeAnimation(AnimationController.SHIELD_READY, AnimatorLayers.UP, true);
-    }
-
-    IEnumerator StopBlock()
-    {
-        print("stop block");
-        controller.ChangeAnimation(AnimationController.SHILD_UNEQUIP, AnimatorLayers.UP);
         changingState = true;
-        stats.isBlocking = false;
+        stats.isBlocking = true;
+        agent.speed /= stats.shield.ShieldDeceleration;
+        controller.ChangeAnimation(AnimationController.SHIELD_READY, AnimatorLayers.UP, true);
         yield return new WaitForSeconds(controller.GetAnimationLength(AnimatorLayers.UP));
         changingState = false;
     }
 
-    bool CanHit(GameObject attacker, Transform target)
+    IEnumerator StopBlock()
+    {
+        changingState = true;
+        stats.isBlocking = false;
+        agent.speed *= stats.shield.ShieldDeceleration;
+        controller.ChangeAnimation(AnimationController.SHILD_UNEQUIP, AnimatorLayers.UP, true);
+        yield return new WaitForSeconds(controller.GetAnimationLength(AnimatorLayers.UP));
+        changingState = false;
+    }
+
+    bool CanHit(GameObject attacker, Transform target, float rangeMultiplayer = 1)
     {
         CharacterStats characterStats = attacker.GetComponent<CharacterStats>();
         Weapon weapon = characterStats.weapon.weapon;
@@ -88,7 +84,7 @@ public class ShieldMeleeAI : MeleeAI
             if (attack == null || stats.attackCooldown > 0)
                 return false;
             else
-                return Vector3.Distance(transform.position, target.position) < attack.Range;
+                return Vector3.Distance(transform.position, target.position) < attack.Range * rangeMultiplayer;
         }
         else
         {
@@ -97,7 +93,13 @@ public class ShieldMeleeAI : MeleeAI
                 return false;
             }
             else
-                return Vector3.Distance(transform.position, target.position) < weapon.Range;
+                return Vector3.Distance(transform.position, target.position) < weapon.Range * rangeMultiplayer;
         }
+    }
+
+    IEnumerator ConnectShield()
+    {
+        yield return new WaitUntil(() => controller.animator != null);
+        //controller.ChangeAnimation(AnimationController.SHIELD_EQUIP, AnimatorLayers.UP, true);
     }
 }

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemId: 6
   ItemName: TestShield
+  ItemValue: 0
   Description: This is a shield
   bCanTake: 1
   bCanDrop: 1
@@ -22,3 +23,8 @@ MonoBehaviour:
   ItemMaterial: {fileID: 2100000, guid: 0f0efd26481f4d64ba787c94cca13d4d, type: 2}
   ItemImage: {fileID: 0}
   EquipType: 2
+  damageModifier: 0
+  armorModifier: 0
+  healthModifier: 0
+  weapon: {fileID: 0}
+  shield: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96, type: 2}

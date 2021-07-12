@@ -32,13 +32,7 @@ public class Weapon : AttackDefinition
 
         if (defenderStats == null)
             return;
-
-        if (defenderStats.isBlocking)
-        {
-            Debug.Log("block defender stat");
-            return;
-        }
-
+        
         var attack = CreateAttack(attackerStats, defenderStats);
 
         var attackables = defender.GetComponentsInChildren(typeof(IAttackable));
@@ -64,13 +58,9 @@ public class Weapon : AttackDefinition
         */
         var attackerStats = attacker.GetComponent<CharacterStats>();
         var defenderStats = defender.GetComponent<CharacterStats>();
-        bool debug = defender.GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(1).IsName("Shield_0M_L_Ready_0");
-        if (defenderStats.isBlocking || defenderStats.isInvincible)
-        {
-            return;
-        }
 
         var attack = CreateAttack(attackerStats, defenderStats);
+
         var attackables = defender.GetComponentsInChildren(typeof(IAttackable));
 
         foreach (IAttackable attackable in attackables)
