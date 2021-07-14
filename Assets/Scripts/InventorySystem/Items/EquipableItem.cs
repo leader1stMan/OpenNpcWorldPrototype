@@ -14,7 +14,6 @@ public class EquipableItem : Item
     public Weapon weapon = null;
     public Shield shield = null;
 
-    GameObject objectInScene;
     override public void OnItemUsed(){
         
     }
@@ -31,8 +30,6 @@ public class EquipableItem : Item
     override public void OnItemUnEquipped()
     {
         EquipmentController.instance.UnEquip(this);
-        Debug.Log("destroy " + objectInScene);
-        Destroy(objectInScene);
     }
 }
 public enum EquipTypes

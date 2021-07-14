@@ -19,9 +19,7 @@ public class PlayerActions : MonoBehaviour
     public float InteractionRange;
 
     public bool _indialogue = false;
-    public bool _NpcInDialogue = false;
-    private RaycastHit _currenthit;
-    private GameObject ConversationStartNpc;
+    private GameObject _currentNpc;
 
     public bool isInteracting;
     public IInteractWindow openedWindow;
@@ -30,39 +28,15 @@ public class PlayerActions : MonoBehaviour
     {
         if (Input.GetKeyDown(InteractButton) && !isInteracting)
         {
-            RaycastHit hit;
-
-            if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out hit, InteractionRange, Mask))
+            if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out RaycastHit hit, InteractionRange, Mask))
             {
-                _currenthit = hit;
-                DialogueManager dialogue = hit.transform.GetComponentInParent<DialogueManager>();
-
-                if (dialogue == null)
-                    dialogue = hit.transform.GetComponentInChildren<DialogueManager>();
-                if (dialogue == null)
-                    return;
-                if (!dialogue._isdialogue)
-                {
-                    openedWindow = dialogue;
-                    isInteracting = true;
-                    dialogue_gameobject.SetActive(true);
-                    _indialogue = true;
-                    Vector3 rot = dialogue.transform.eulerAngles;
-                    dialogue.transform.LookAt(transform);
-                    dialogue.transform.eulerAngles = new Vector3(rot.x, dialogue.transform.eulerAngles.y, rot.z);
-                    dialogue.say(_currenthit.transform.gameObject);
-                }
+                StartConversation(hit.transform.gameObject);
             }
         }
 
-        if (_indialogue == true)
+        if (_indialogue)
         {
-            PressSpeakButton(_currenthit.transform.GetComponentInParent<DialogueManager>());
-        }
-
-        if (_NpcInDialogue == true)
-        {
-            PressSpeakButton(ConversationStartNpc.transform.GetComponentInParent<DialogueManager>());
+            PressSpeakButton(_currentNpc.GetComponentInParent<DialogueManager>());
         }
 
         QuestWindowToggle();
@@ -73,25 +47,25 @@ public class PlayerActions : MonoBehaviour
         }
     }
 
-    public void ReceiveInteraction(GameObject npc) //Recieve interaction from npc
+    public void StartConversation(GameObject npc)
     {
-        ConversationStartNpc = npc;
-        DialogueManager dialogue = npc.transform.GetComponentInParent<DialogueManager>();
+        _currentNpc = npc;
+        DialogueManager dialogue = npc.GetComponentInParent<DialogueManager>();
 
         if (dialogue == null)
-            dialogue = npc.transform.GetComponentInChildren<DialogueManager>();
+            dialogue = npc.GetComponentInChildren<DialogueManager>();
         if (dialogue == null)
             return;
-        if (dialogue._isdialogue == false)
+        if (!dialogue._isdialogue)
         {
             openedWindow = dialogue;
             isInteracting = true;
             dialogue_gameobject.SetActive(true);
-            _NpcInDialogue = true;
+            _indialogue = true;
             Vector3 rot = dialogue.transform.eulerAngles;
             dialogue.transform.LookAt(transform);
             dialogue.transform.eulerAngles = new Vector3(rot.x, dialogue.transform.eulerAngles.y, rot.z);
-            dialogue.say(npc.transform.gameObject);
+            dialogue.say(npc);
         }
     }
 
@@ -117,7 +91,6 @@ public class PlayerActions : MonoBehaviour
 
     private void PressSpeakButton(DialogueManager dialogue)
     {
-        var pointer = new PointerEventData(EventSystem.current);
         if (Input.GetMouseButtonDown(0))
         {
             if (dialogue.displayingdialogue)

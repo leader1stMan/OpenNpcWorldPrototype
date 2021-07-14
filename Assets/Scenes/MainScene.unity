@@ -932,6 +932,7 @@ MonoBehaviour:
   shield: {fileID: 0}
   isBlocking: 0
   attackCooldown: 0
+  shieldCooldown: 0
   isInvincible: 0
   isDead: 0
   WeaponBoneL: {fileID: 0}
@@ -997,6 +998,9 @@ MonoBehaviour:
   attackPoint: {fileID: 0}
   ShowDebugMessages: 0
   VisualiseAgentActions: 0
+  VisionMask:
+    serializedVersion: 2
+    m_Bits: 0
   VisionRange: 30
   WhatCanThisEnemyAttack:
     serializedVersion: 2
@@ -1009,11 +1013,7 @@ MonoBehaviour:
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 0
-  VisionMask:
-    serializedVersion: 2
-    m_Bits: 0
   CalculatingStep: 0
-  enableCalculation: 1
 --- !u!195 &102010725
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1196,9 +1196,6 @@ MonoBehaviour:
   dialogueCamera: {fileID: 995356969}
   ToDisable:
   - {fileID: 930136567}
-  OnStartDialogue:
-    m_PersistentCalls:
-      m_Calls: []
   _textSpeed: 0
   _isdialogue: 0
   displayingdialogue: 0
@@ -3033,6 +3030,7 @@ MonoBehaviour:
   shield: {fileID: 0}
   isBlocking: 0
   attackCooldown: 0
+  shieldCooldown: 0
   isInvincible: 0
   isDead: 0
   WeaponBoneL: {fileID: 0}
@@ -3098,6 +3096,9 @@ MonoBehaviour:
   attackPoint: {fileID: 0}
   ShowDebugMessages: 0
   VisualiseAgentActions: 0
+  VisionMask:
+    serializedVersion: 2
+    m_Bits: 0
   VisionRange: 15
   WhatCanThisEnemyAttack:
     serializedVersion: 2
@@ -4267,6 +4268,7 @@ MonoBehaviour:
   shield: {fileID: 0}
   isBlocking: 0
   attackCooldown: 0
+  shieldCooldown: 0
   isInvincible: 0
   isDead: 0
   WeaponBoneL: {fileID: 0}
@@ -4332,6 +4334,9 @@ MonoBehaviour:
   attackPoint: {fileID: 0}
   ShowDebugMessages: 0
   VisualiseAgentActions: 0
+  VisionMask:
+    serializedVersion: 2
+    m_Bits: 0
   VisionRange: 15
   WhatCanThisEnemyAttack:
     serializedVersion: 2
@@ -5327,6 +5332,7 @@ MonoBehaviour:
   shield: {fileID: 0}
   isBlocking: 0
   attackCooldown: 0
+  shieldCooldown: 0
   isInvincible: 0
   isDead: 0
   WeaponBoneL: {fileID: 0}
@@ -6765,7 +6771,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  target: {fileID: 0}
 --- !u!1001 &737805706
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11561,6 +11566,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rioteerLeader: {fileID: 0}
+--- !u!114 &1170737957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170737955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8be2294942a3d464eac4271fb8a08cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!208 &1170737969
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -13775,36 +13792,29 @@ MonoBehaviour:
   description: 
   itemRewards: []
   coinsReward: 0
-  againstNoble:
-  - {fileID: 11400000, guid: dcf8a4d64f0b7344798dc6cc0dc01879, type: 2}
-  withNoble:
-  - {fileID: 11400000, guid: 5a2146184aeb4c44cab44d848a916c40, type: 2}
-  endTheodoreSequence:
-  - {fileID: 11400000, guid: b8fc3d221b0455b4cb5a96d37e804e48, type: 2}
-  executedNobleFinal:
-  - {fileID: 11400000, guid: 8290c43e643cd5c4ca55ff404820758d, type: 2}
-  endNobleSequence:
-  - {fileID: 11400000, guid: 8f0aef1207487af4db346760c9aec597, type: 2}
-  endQuestWithNoble:
-  - {fileID: 11400000, guid: 86dfb005f14129545965f15282013ab4, type: 2}
+  againstNoble: []
+  withNoble: []
+  endTheodoreSequence: []
+  executedNobleFinal: []
+  endNobleSequence: []
+  endQuestWithNoble: []
   goAwaySentence: {fileID: 11400000, guid: b19f52f0f220d7441a1080e213661ee4, type: 2}
-  againstNobleSentence: {fileID: 11400000, guid: bde8a1b5dc3ff7943b11da7871fbd60f,
-    type: 2}
-  withNobleSentance: {fileID: 11400000, guid: de7cdd8e56e9ad7438f789b6c4f04de8, type: 2}
-  theodoreStart: {fileID: 11400000, guid: 2e0cbee6f521f754c9fa6a58e38e5fec, type: 2}
-  executedNoble: {fileID: 11400000, guid: 3b09b0353e4cbee4bbb44216388ef4ef, type: 2}
-  returnToNoble: {fileID: 11400000, guid: 6a2e35225545ac54a8655fed65a41c88, type: 2}
-  speachAtCenter: {fileID: 4900000, guid: 52833aeba6db2bd4c888227b4df41569, type: 3}
-  executeNoble: {fileID: 4900000, guid: fd16225f443c08446b270d5083834369, type: 3}
-  nobleSpeach: {fileID: 4900000, guid: c121662f666cdd348987c3f33756b6dc, type: 3}
+  againstNobleSentence: {fileID: 0}
+  withNobleSentance: {fileID: 0}
+  theodoreStart: {fileID: 0}
+  executedNoble: {fileID: 0}
+  returnToNoble: {fileID: 0}
+  speachAtCenter: {fileID: 0}
+  executeNoble: {fileID: 0}
+  nobleSpeach: {fileID: 0}
   path: 
   Theodore: {fileID: 1405135086}
-  Noble: {fileID: 1170737955}
-  CenterofTown: {fileID: 1321745951}
-  nobleHouse: {fileID: 79200151}
-  runAwayArea: {fileID: 1568246758}
-  rioteer: {fileID: 4010139478790561327, guid: 788cd0a33f957154a92a3968722fb070, type: 3}
-  guard: {fileID: 4900418921806764621, guid: 3e9ce49859cda63449e55d434cddde5c, type: 3}
+  Noble: {fileID: 0}
+  CenterofTown: {fileID: 0}
+  nobleHouse: {fileID: 0}
+  runAwayArea: {fileID: 0}
+  rioteer: {fileID: 0}
+  guard: {fileID: 0}
   siegeNobel: 0
   numberOfGuardsDead: 0
   numberOfRioteersDead: 0
@@ -13828,6 +13838,9 @@ MonoBehaviour:
   attackPoint: {fileID: 0}
   ShowDebugMessages: 0
   VisualiseAgentActions: 0
+  VisionMask:
+    serializedVersion: 2
+    m_Bits: 0
   VisionRange: 0
   WhatCanThisEnemyAttack:
     serializedVersion: 2
@@ -13840,11 +13853,7 @@ MonoBehaviour:
   layersToIgnore:
     serializedVersion: 2
     m_Bits: 0
-  VisionMask:
-    serializedVersion: 2
-    m_Bits: 0
   CalculatingStep: 0
-  enableCalculation: 1
 --- !u!114 &1474046188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13864,6 +13873,9 @@ MonoBehaviour:
   attackPoint: {fileID: 0}
   ShowDebugMessages: 0
   VisualiseAgentActions: 0
+  VisionMask:
+    serializedVersion: 2
+    m_Bits: 0
   VisionRange: 10
   WhatCanThisEnemyAttack:
     serializedVersion: 2
@@ -13872,8 +13884,6 @@ MonoBehaviour:
   - TreasonGuard
   currentTarget: {fileID: 0}
   CombatRange: 2
-  blockTime: 0
-  changingState: 0
 --- !u!208 &1474046198
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -16602,6 +16612,7 @@ MonoBehaviour:
   shield: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96, type: 2}
   isBlocking: 0
   attackCooldown: 0
+  shieldCooldown: 0
   isInvincible: 0
   isDead: 0
   WeaponBoneL: {fileID: 0}
@@ -16667,6 +16678,9 @@ MonoBehaviour:
   attackPoint: {fileID: 0}
   ShowDebugMessages: 0
   VisualiseAgentActions: 0
+  VisionMask:
+    serializedVersion: 2
+    m_Bits: 0
   VisionRange: 15
   WhatCanThisEnemyAttack:
     serializedVersion: 2
@@ -17226,6 +17240,7 @@ MonoBehaviour:
   shield: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96, type: 2}
   isBlocking: 0
   attackCooldown: 0
+  shieldCooldown: 0
   isInvincible: 0
   isDead: 0
   WeaponBoneL: {fileID: 0}
@@ -17291,6 +17306,9 @@ MonoBehaviour:
   attackPoint: {fileID: 0}
   ShowDebugMessages: 0
   VisualiseAgentActions: 0
+  VisionMask:
+    serializedVersion: 2
+    m_Bits: 0
   VisionRange: 15
   WhatCanThisEnemyAttack:
     serializedVersion: 2

@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AnimationController : MonoBehaviour
 {
@@ -32,12 +34,13 @@ public class AnimationController : MonoBehaviour
 
     string[] LayerPrefixs;
 
-    string[] Layers;
+    Dictionary<int, string> Layers;
     bool[] Block;
 
     const int layersNumber = 3;
 
     public Animator animator;
+    NavMeshAgent agent;
 
     public AnimationController(Animator anim)
     {
@@ -46,10 +49,34 @@ public class AnimationController : MonoBehaviour
 
     private void Start()
     {
-        Layers = new string[layersNumber];
+        Layers = new();
         Block = new bool[layersNumber];
         LayerPrefixs = new string[] { "LowerBody.", "UpperBody.", "Weapon." };
         animator = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
+    }
+
+    private void LateUpdate()
+    {
+        //Manage animations
+        if (agent.velocity.magnitude == 0)
+        {
+            //Idle animation if npc isn't moving
+            ChangeAnimation(IDLE, AnimatorLayers.ALL);
+        }
+        else
+        {
+            if (agent.velocity.magnitude < 2.5f)
+            {
+                //Walk animation if npc is moving slow
+                ChangeAnimation(WALK, AnimatorLayers.ALL);
+            }
+            else
+            {
+                //Walk animation if npc is moving fast
+                ChangeAnimation(RUN, AnimatorLayers.ALL);
+            }
+        }
     }
 
     /// <summary>
@@ -108,4 +135,11 @@ public class AnimationController : MonoBehaviour
     }
 }
 
-public enum AnimatorLayers { DOWN, UP, WEAPON, ALL }
+[Flags]
+public enum AnimatorLayers : byte
+{
+    DOWN = 1,
+    UP = 2,
+    WEAPON = 4,
+    ALL = 8
+}

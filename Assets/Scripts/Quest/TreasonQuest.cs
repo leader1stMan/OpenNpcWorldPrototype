@@ -284,9 +284,9 @@ public class TreasonQuest : Quest
         agent.SetDestination(transform.position);
 
         GetComponent<DialogueManager>().currentSentence = executedNoble;
-        target.GetComponent<PlayerActions>().ReceiveInteraction(gameObject);
+        target.GetComponent<PlayerActions>().StartConversation(gameObject);
 
-        this.enabled = false;
+        enabled = false;
     }
 
     void getRewardFromNoble()

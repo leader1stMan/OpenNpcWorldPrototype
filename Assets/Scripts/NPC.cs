@@ -11,8 +11,6 @@ public class NPC : NpcData, IAttackable, IDestructible
 {
     public bool ShowDebugMessages;
     
-    private AnimationController controller;
-
     //Navigation
     public NavMeshAgent agent { get; private set; }
     public float movementSpeed;
@@ -36,7 +34,6 @@ public class NPC : NpcData, IAttackable, IDestructible
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        controller = GetComponentInChildren<AnimationController>();
         text = GetComponentInChildren<TMP_Text>();
 
         FindObjectOfType<DayAndNightControl>().OnMorningHandler += GoToWork; //Connects with the day and night controller
@@ -57,26 +54,6 @@ public class NPC : NpcData, IAttackable, IDestructible
         }
 
         WatchEnvironment();
-
-        //Manage animations
-        if (agent.velocity.magnitude == 0)
-        {
-            //Idle animation if npc isn't moving
-            controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.ALL);
-        }
-        else
-        {
-            if (agent.velocity.magnitude < 2.5f)
-            {
-                //Walk animation if npc is moving slow
-                controller.ChangeAnimation(AnimationController.WALK, AnimatorLayers.ALL);
-            }
-            else
-            {
-                //Walk animation if npc is moving fast
-                controller.ChangeAnimation(AnimationController.RUN, AnimatorLayers.ALL);
-            }
-        }
     }
 
     //Check environment to run if another npc is attacking or being attacked
