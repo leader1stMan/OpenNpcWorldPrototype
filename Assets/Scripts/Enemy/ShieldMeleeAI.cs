@@ -21,55 +21,64 @@ public class ShieldMeleeAI : MeleeAI
 
     public override void Attack(GameObject target)
     {
-        agent.SetDestination(target.transform.position);
+        if (agent.enabled)
+            agent.SetDestination(target.transform.position);
 
         if (changingState)
             return;
 
-        if (CanHit(gameObject, target.transform))
+        Debug.Log(true);
+        int random = Random.Range(0, 5);
+        if (CanHit(gameObject, target.transform) && random == 0)
         {
             if (stats.isBlocking)
             {
                 StartCoroutine(StopBlock());
+                return;
             }
             else
             {
                 base.Attack(target);
             }
-            return;
         }
 
-        if (CanHit(target, transform, 2) && stats.shieldCooldown <= 0 && !target.GetComponent<CharacterStats>().isBlocking)
+        if (CanHit(target, transform) && stats.shieldCooldown <= 0 && !target.GetComponent<CharacterStats>().isBlocking)
         {
             if (!stats.isBlocking)
             {
                 StartCoroutine(StartBlock());
+                return;
             }
-            return;
         }
         else if (stats.isBlocking)
         {
             StartCoroutine(StopBlock());
+            return;
         }
     }
 
     IEnumerator StartBlock()
     {
+        Debug.Log("isBlocking");
         changingState = true;
         stats.isBlocking = true;
         agent.speed /= stats.shield.ShieldDeceleration;
         controller.ChangeAnimation(AnimationController.SHIELD_READY, AnimatorLayers.UP, true);
+        Debug.Log(controller.GetAnimationLength(AnimatorLayers.UP));
+        Debug.Log(controller.animator.GetCurrentAnimatorStateInfo(1).ToString());
         yield return new WaitForSeconds(controller.GetAnimationLength(AnimatorLayers.UP));
         changingState = false;
     }
 
     IEnumerator StopBlock()
     {
+        Debug.Log("not");
         changingState = true;
         stats.isBlocking = false;
         agent.speed *= stats.shield.ShieldDeceleration;
         controller.ChangeAnimation(AnimationController.SHILD_UNEQUIP, AnimatorLayers.UP, true);
         yield return new WaitForSeconds(controller.GetAnimationLength(AnimatorLayers.UP));
+        controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
         changingState = false;
     }
 

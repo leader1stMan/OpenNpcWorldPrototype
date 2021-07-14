@@ -45,7 +45,8 @@ public class CharacterStats : MonoBehaviour, IDestructible
     public void TakeDamage(GameObject attacker, float damage)
     {
         if (damage <= 0f) return;
-        
+        Debug.Log(attacker.name + this.gameObject.name);
+        Debug.Log(currentHealth);
         currentHealth.SetValue(currentHealth.GetValue() - damage);
 
         OnHealthValueChanged?.Invoke();

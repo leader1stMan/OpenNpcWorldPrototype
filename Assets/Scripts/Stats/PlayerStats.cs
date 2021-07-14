@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerStats : CharacterStats
 {
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         EquipmentController.instance.onEquipmentChanged += OnEquipmentChanged;
     }
 

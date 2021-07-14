@@ -34,7 +34,7 @@ public class AnimationController : MonoBehaviour
 
     string[] LayerPrefixs;
 
-    Dictionary<int, string> Layers;
+    string[] Layers;
     bool[] Block;
 
     const int layersNumber = 3;
@@ -49,11 +49,11 @@ public class AnimationController : MonoBehaviour
 
     private void Start()
     {
-        Layers = new();
+        Layers = new string[layersNumber];
         Block = new bool[layersNumber];
         LayerPrefixs = new string[] { "LowerBody.", "UpperBody.", "Weapon." };
         animator = GetComponent<Animator>();
-        agent = GetComponent<NavMeshAgent>();
+        agent = GetComponentInParent<NavMeshAgent>();
     }
 
     private void LateUpdate()
@@ -138,8 +138,8 @@ public class AnimationController : MonoBehaviour
 [Flags]
 public enum AnimatorLayers : byte
 {
-    DOWN = 1,
-    UP = 2,
+    DOWN = 0,
+    UP = 1,
     WEAPON = 4,
-    ALL = 8
+    ALL = 2
 }

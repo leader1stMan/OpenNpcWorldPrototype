@@ -1008,6 +1008,7 @@ MonoBehaviour:
   Tags: []
   currentTarget: {fileID: 0}
   CombatRange: 0
+  changingState: 0
   RaysPerMeter: 1
   MinShootingRange: 0
   layersToIgnore:
@@ -3106,6 +3107,7 @@ MonoBehaviour:
   Tags: []
   currentTarget: {fileID: 0}
   CombatRange: 0
+  changingState: 0
 --- !u!195 &371236415
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4344,6 +4346,7 @@ MonoBehaviour:
   Tags: []
   currentTarget: {fileID: 0}
   CombatRange: 0
+  changingState: 0
 --- !u!195 &465457741
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -13819,41 +13822,6 @@ MonoBehaviour:
   numberOfGuardsDead: 0
   numberOfRioteersDead: 0
   state: 0
---- !u!114 &1474046187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1474046185}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41aa3d3a9dba71d4cbacf8fffb879c16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 0}
-  controller: {fileID: 0}
-  stats: {fileID: 0}
-  PatrolArea: {fileID: 0}
-  attackPoint: {fileID: 0}
-  ShowDebugMessages: 0
-  VisualiseAgentActions: 0
-  VisionMask:
-    serializedVersion: 2
-    m_Bits: 0
-  VisionRange: 0
-  WhatCanThisEnemyAttack:
-    serializedVersion: 2
-    m_Bits: 0
-  Tags: []
-  currentTarget: {fileID: 0}
-  CombatRange: 0
-  RaysPerMeter: 1
-  MinShootingRange: 0
-  layersToIgnore:
-    serializedVersion: 2
-    m_Bits: 0
-  CalculatingStep: 0
 --- !u!114 &1474046188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13875,15 +13843,16 @@ MonoBehaviour:
   VisualiseAgentActions: 0
   VisionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   VisionRange: 10
   WhatCanThisEnemyAttack:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 256
   Tags:
-  - TreasonGuard
+  - Player
   currentTarget: {fileID: 0}
   CombatRange: 2
+  changingState: 0
 --- !u!208 &1474046198
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -16688,6 +16657,7 @@ MonoBehaviour:
   Tags: []
   currentTarget: {fileID: 0}
   CombatRange: 0
+  changingState: 0
 --- !u!195 &1781499117
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -17316,6 +17286,7 @@ MonoBehaviour:
   Tags: []
   currentTarget: {fileID: 0}
   CombatRange: 0
+  changingState: 0
 --- !u!195 &1861797427
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -20671,6 +20642,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 340976799474820994, guid: 345fccf1aa215da4d8ebb68901fd4bda,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 340976799474820998, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
       propertyPath: m_Controller
@@ -20697,6 +20673,11 @@ PrefabInstance:
       propertyPath: staminaInternal
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1157490264679279900, guid: 345fccf1aa215da4d8ebb68901fd4bda,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4242600388388332656, guid: 345fccf1aa215da4d8ebb68901fd4bda,
         type: 3}
       propertyPath: defaultAttack
@@ -20720,6 +20701,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: a3b5899fafbbe3f468d72e3afd014f96,
         type: 2}
+    - target: {fileID: 4242600388388332656, guid: 345fccf1aa215da4d8ebb68901fd4bda,
+        type: 3}
+      propertyPath: maxHealth.BaseValue
+      value: 10000
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
     - {fileID: 340976799474820999, guid: 345fccf1aa215da4d8ebb68901fd4bda, type: 3}
@@ -20810,6 +20796,11 @@ PrefabInstance:
       propertyPath: interactions.Array.data[2]
       value: 
       objectReference: {fileID: 4900000, guid: c0adaf5557641b249bf19f41c642924b, type: 3}
+    - target: {fileID: 2820446562284331888, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2820446562284331889, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
       propertyPath: m_Radius
@@ -20918,6 +20909,21 @@ PrefabInstance:
       propertyPath: WeaponBoneL
       value: 
       objectReference: {fileID: 1312967351}
+    - target: {fileID: 4364848039031525940, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: attackCooldown
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4364848039031525940, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: isInvincible
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4364848039031525940, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
+        type: 3}
+      propertyPath: shieldCooldown
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4842082879910106037, guid: 7b2ae5c70ce5cee40835f02d129fdba2,
         type: 3}
       propertyPath: m_ConnectedAnchor.x
@@ -21077,6 +21083,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LumberjackNPC
+      objectReference: {fileID: 0}
+    - target: {fileID: 3650326406362613892, guid: 6cdfc5fdeea853549a62180b010a3f72,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3650326406362613893, guid: 6cdfc5fdeea853549a62180b010a3f72,
         type: 3}
@@ -22859,6 +22870,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FishermanNPC
+      objectReference: {fileID: 0}
+    - target: {fileID: 3227924253082711377, guid: d2f58f1ca95fd3b43917d67023dded37,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3227924253082711378, guid: d2f58f1ca95fd3b43917d67023dded37,
         type: 3}
@@ -25858,6 +25874,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FarmerNPC2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6598780603943041308, guid: db78526ad1b84a84383ecf5bf5bb69a5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6598780603943041309, guid: db78526ad1b84a84383ecf5bf5bb69a5,
         type: 3}

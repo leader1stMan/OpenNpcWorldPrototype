@@ -31,6 +31,9 @@ public class NPC : NpcData, IAttackable, IDestructible
     public List<TextAsset> interactions;
     public List<string> DialoguePaths;
 
+    SkinnedMeshRenderer[] skin;
+    Rigidbody[] rig;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -43,6 +46,22 @@ public class NPC : NpcData, IAttackable, IDestructible
         {
             DialoguePaths.Add(AssetDatabase.GetAssetPath(interaction));
         }
+
+        skin = GetComponentsInChildren<SkinnedMeshRenderer>();
+        rig = GetComponentsInChildren<Rigidbody>();
+
+        foreach (SkinnedMeshRenderer skinned in skin)
+        {
+            skinned.updateWhenOffscreen = false; //has to be enabled when ragdoll is in. Otherwise the character sometimes does not render
+        }
+
+        foreach (Rigidbody rigidbody in rig)
+        {
+            rigidbody.GetComponent<Collider>().enabled = false; //Make sure colliders for the ragdoll are disabled while npc is still alive
+            rigidbody.isKinematic = true;
+        }
+
+        GetComponent<CapsuleCollider>().enabled = true;
     }
 
     void Update()

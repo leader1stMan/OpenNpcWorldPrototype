@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MeleeAI : CombatBase
 {
-    protected bool changingState;
+    public bool changingState;
 
     protected override void Start()
     {
@@ -30,18 +30,18 @@ public class MeleeAI : CombatBase
         {
             StartCoroutine(AttackState(target));
         }
+        return;
     }
 
     IEnumerator AttackState(GameObject target)
     {
         changingState = true;
-
         controller.ChangeAnimation(AnimationController.SWORD_ATTACK, AnimatorLayers.UP, true);
         stats.GetWeapon().ExecuteAttack(gameObject, target);
         attackCooldown = controller.GetAnimationLength(AnimatorLayers.UP);
-
         yield return new WaitForSeconds(attackCooldown);
 
+        controller.ChangeAnimation(AnimationController.IDLE, AnimatorLayers.UP);
         changingState = false;
     }
 
