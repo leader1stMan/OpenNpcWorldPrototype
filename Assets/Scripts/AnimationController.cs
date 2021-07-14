@@ -32,15 +32,13 @@ public class AnimationController : MonoBehaviour
 
     public static readonly string SHILD_UNEQUIP = "Shield_Unequip";
 
+    const int LayersNumber = 3;
     string[] LayerPrefixs;
 
-    Dictionary<int, string> Layers;
+    string[] Layers;
     bool[] Block;
 
-    const int layersNumber = 3;
-
     public Animator animator;
-    NavMeshAgent agent;
 
     public AnimationController(Animator anim)
     {
@@ -49,34 +47,12 @@ public class AnimationController : MonoBehaviour
 
     private void Start()
     {
-        Layers = new();
-        Block = new bool[layersNumber];
-        LayerPrefixs = new string[] { "LowerBody.", "UpperBody.", "Weapon." };
-        animator = GetComponent<Animator>();
-        agent = GetComponent<NavMeshAgent>();
-    }
+        Layers = new string[LayersNumber];
+        Block = new bool[LayersNumber];
 
-    private void LateUpdate()
-    {
-        //Manage animations
-        if (agent.velocity.magnitude == 0)
-        {
-            //Idle animation if npc isn't moving
-            ChangeAnimation(IDLE, AnimatorLayers.ALL);
-        }
-        else
-        {
-            if (agent.velocity.magnitude < 2.5f)
-            {
-                //Walk animation if npc is moving slow
-                ChangeAnimation(WALK, AnimatorLayers.ALL);
-            }
-            else
-            {
-                //Walk animation if npc is moving fast
-                ChangeAnimation(RUN, AnimatorLayers.ALL);
-            }
-        }
+        LayerPrefixs = new string[] { "LowerBody.", "UpperBody.", "Weapon." };
+
+        animator = GetComponent<Animator>();
     }
 
     /// <summary>
@@ -87,51 +63,47 @@ public class AnimationController : MonoBehaviour
     /// <param name="block">If true, blocks chosen layer, so animation can't be changed, before current animation executes</param>
     public void ChangeAnimation(string newAnimation, AnimatorLayers layer, bool block = false)
     {
-        bool AllLayers = layer == AnimatorLayers.ALL;
-
-        if (AllLayers)
-            layer = 0;
-
-        while (true)
+        foreach (AnimatorLayers value in Enum.GetValues(typeof(AnimatorLayers)))
         {
-            int chosenLayer = (int)layer;
-            string animation = LayerPrefixs[chosenLayer] + newAnimation;
-
-            if (Layers[chosenLayer] != animation && !Block[chosenLayer])
+            if (layer.HasFlag(value) && value != AnimatorLayers.ALL)
             {
-                if (layer != AnimatorLayers.WEAPON)
+                int chosenLayer = ConvertToInt((int)value);
+                string animation = LayerPrefixs[chosenLayer] + newAnimation;
+                if (Layers[chosenLayer] != animation && !Block[chosenLayer])
                 {
-                    animator.CrossFade(animation, 0.5f);
-                }
-                else
-                {
-                    animator.Play(animation);
-                }
+                    Layers[chosenLayer] = animation;
 
-                Layers[chosenLayer] = animation;
-                if (block)
-                    StartCoroutine(BlockAnimator(layer, animator.GetCurrentAnimatorStateInfo(chosenLayer).length));
+                    if (value == AnimatorLayers.WEAPON)
+                        animator.Play(animation);
+                    else
+                        animator.CrossFade(animation, 0.5f);
+
+                    if (block)
+                    {
+                        StartCoroutine(BlockAnimator(layer, animator.GetCurrentAnimatorStateInfo(ConvertToInt((int)value)).length));
+                    }
+                }
             }
-            if (AllLayers)
-            {
-                if (++layer == AnimatorLayers.ALL)
-                    break;
-            }
-            else
-                break;
         }
     }
 
     public float GetAnimationLength(AnimatorLayers layer)
     {
-        return animator.GetCurrentAnimatorClipInfo((int)layer).Length;
+        return animator.GetCurrentAnimatorClipInfo(ConvertToInt((int)layer)).Length;
     }
 
     IEnumerator BlockAnimator(AnimatorLayers layer, float time)
     {
-        Block[(int)layer] = true;
+        int number = ConvertToInt((int)layer);
+        Block[number] = true;
         yield return new WaitForSeconds(time);
-        Block[(int)layer] = false;
+        Block[number] = false;
+    }
+
+    int ConvertToInt(int number)
+    {
+        byte[] bytes = { 0, 0, 0, (byte)number };
+        return BitConverter.ToInt32(bytes, 0);
     }
 }
 
@@ -141,5 +113,5 @@ public enum AnimatorLayers : byte
     DOWN = 1,
     UP = 2,
     WEAPON = 4,
-    ALL = 8
+    ALL = 7
 }
